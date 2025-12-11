@@ -11,3 +11,7 @@ desktop.ini
 *.tmp
 *.temp
 *.log
+
+# Local config (API keys, secrets)
+.env
+.config.json
