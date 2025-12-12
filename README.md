@@ -1,6 +1,6 @@
 # NanoArcade Manager
 
-A beautiful, browser-based tool to manage your retro game collection for RG Nano, Miyoo Mini, and other handheld devices.
+A beautiful, browser-based tool to manage your retro game collection for RG Nano, Miyoo Mini, Trimui Brick, and other handheld devices.
 
 ![NanoArcade](assets/images/logo.png)
 
@@ -17,14 +17,15 @@ Or download this repository for offline use.
 - **RG Nano** - Anbernic's tiny retro handheld
 - **Miyoo Mini / Mini+** - With Onion OS support
 - **Miyoo Flip** - With Onion OS support
-- **TrimUI Smart Pro** - Coming soon
+- **Trimui Brick** - With Mustard OS support (NEW in v1.3!)
 
 ## Features
 
 ### Device Support
 - **Multi-Device Selector** - Switch between device profiles with different folder structures and image sizes
 - **Onion OS Integration** - Full support for Onion OS folder structure (`Roms/[Console]/Imgs/`)
-- **Auto-Resize** - Images automatically resized to optimal dimensions per device (240px for RG Nano, 250px for Miyoo)
+- **Mustard OS Integration** - Full support for Mustard OS catalogue structure (`MUOS/info/catalogue/<System>/box/`)
+- **Auto-Resize** - Images automatically resized to optimal dimensions per device (240px for RG Nano, 250px for Miyoo, 354px for Trimui Brick)
 
 ### Top 25 Must-Have Games
 - **Curated Lists** - Top 25 rated games for 16 different consoles
@@ -91,6 +92,19 @@ Roms/
 └── NES/
 ```
 
+### Trimui Brick (Mustard OS)
+```
+MUOS/
+└── info/
+    └── catalogue/
+        ├── gba/
+        │   ├── Pokemon Emerald.gba
+        │   └── box/
+        │       └── Pokemon Emerald.png  (box art in box subfolder)
+        ├── snes/
+        └── nes/
+```
+
 ## Supported Consoles
 
 The app recognizes and displays icons for:
@@ -113,6 +127,14 @@ The app recognizes and displays icons for:
 - JavaScript enabled
 
 ## Changelog
+
+### v1.3
+- **Trimui Brick support** - Added full Mustard OS integration
+- Mustard OS catalogue structure support (`MUOS/info/catalogue/<System>/box/`)
+- 354px image resolution for Trimui Brick's 1024x768 display
+- Automatic 3-tier folder structure creation
+- 30+ Mustard OS system mappings (GB, GBA, NES, SNES, PS1, etc.)
+- Validation for Mustard OS folder structure
 
 ### v1.2
 - Added device selector (RG Nano, Miyoo Mini, Miyoo Flip)

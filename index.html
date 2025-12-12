@@ -1060,7 +1060,7 @@
 						<li><a href="#intro">Home</a></li>
 					</ul>
 				</nav>
-				<div style="position: absolute; bottom: 15px; left: 15px; font-size: 12px; color: #fff; font-style: italic; text-shadow: 0 0 8px rgba(96, 165, 250, 0.6), 0 0 15px rgba(59, 130, 246, 0.4);">Version 1.2</div>
+				<div style="position: absolute; bottom: 15px; left: 15px; font-size: 12px; color: #fff; font-style: italic; text-shadow: 0 0 8px rgba(96, 165, 250, 0.6), 0 0 15px rgba(59, 130, 246, 0.4);">Version 1.3</div>
 			</div>
 		</section>
 
@@ -1077,7 +1077,12 @@
 							<span class="icon solid fa-gamepad"></span> Select Device
 						</button>
 					</div>
-					<p style="font-size: 0.75em; color: rgba(255,255,255,0.5); margin-top: 1em;">Select Device, then select your ROMs folder</p>
+					<div style="margin-top: 1.5em; padding: 1em 1.5em; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto;">
+						<p style="font-size: 0.85em; color: rgba(255,255,255,0.8); margin: 0; line-height: 1.5;">
+							<span class="icon solid fa-info-circle" style="color: #3b82f6; margin-right: 0.5em;"></span>
+							<strong>Browser Requirements:</strong> This app requires Chrome, Edge, or Opera. You'll need to grant file access permission when prompted.
+						</p>
+					</div>
 					<div class="hero-stats" id="statsRow" style="display:none;">
 						<div class="hero-stat clickable" style="cursor: default; pointer-events: none;">
 							<div class="value" id="statConsoles">0</div>
@@ -1349,6 +1354,42 @@
 						<div class="device-name">Generic</div>
 						<div class="device-desc">Standard folder names</div>
 					</div>
+					<div class="device-card" onclick="selectDevice('trimuibrick')">
+						<img src="assets/images/devices/trimuibrick.png" alt="Trimui Brick" class="device-image">
+						<div class="device-name">Trimui Brick</div>
+						<div class="device-desc">Mustard OS (354px)</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Folder Selection Instructions Modal -->
+		<div class="modal-overlay" id="folderInstructionsModal">
+			<div class="modal-box" style="max-width: 550px;">
+				<div class="modal-header">
+					<h3><span class="icon solid fa-folder-open"></span> Select Folder</h3>
+				</div>
+				<div style="padding: 2em; text-align: center;">
+					<p id="folderInstructionText" style="font-size: 1.1em; line-height: 1.6; color: rgba(255,255,255,0.9); margin-bottom: 2em;"></p>
+					<button class="btn-3d green" onclick="closeInstructionsAndScan()" style="width: 100%; padding: 16px 32px;">
+						<span class="icon solid fa-check"></span> OK, Let's Go!
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Error Modal -->
+		<div class="modal-overlay" id="errorModal">
+			<div class="modal-box" style="max-width: 500px;">
+				<div class="modal-header">
+					<h3><span class="icon solid fa-exclamation-triangle" style="color: #ef4444;"></span> Error</h3>
+					<button class="close-btn" onclick="closeModal('errorModal')">&times;</button>
+				</div>
+				<div style="padding: 2em; text-align: center;">
+					<p id="errorMessage" style="font-size: 1em; line-height: 1.6; color: rgba(255,255,255,0.9); margin-bottom: 2em;"></p>
+					<button class="btn-3d red" onclick="closeModal('errorModal')" style="padding: 12px 24px;">
+						<span class="icon solid fa-times"></span> Close
+					</button>
 				</div>
 			</div>
 		</div>
@@ -1356,7 +1397,7 @@
 		<!-- Footer -->
 		<footer id="footer" class="wrapper style1-alt">
 			<div class="inner">
-				<span class="version-number">v1.2</span>
+				<span class="version-number">v1.3</span>
 			</div>
 		</footer>
 
@@ -1523,6 +1564,48 @@
 						'Amiga': ['amiga', 'Amiga'],
 						'DOS': ['dos', 'DOS', 'dosbox', 'DOSBox'],
 						'ScummVM': ['scummvm', 'ScummVM', 'SCUMMVM']
+					}
+				},
+				trimuibrick: {
+					name: 'Trimui Brick',
+					emoji: '🧱',
+					imageSize: 354,
+					catalogueStructure: true,  // Flag for 3-tier folder handling (MUOS/info/catalogue/<System>/box/)
+					folderMap: {
+						'GB': ['gb'],
+						'GBC': ['gbc'],
+						'GBA': ['gba'],
+						'NES': ['nes', 'fc'],
+						'SNES': ['snes', 'sfc'],
+						'Genesis': ['genesis', 'md'],
+						'Game Gear': ['gamegear', 'gg'],
+						'Master System': ['mastersystem', 'sms'],
+						'PS1': ['psx', 'ps', 'ps1'],
+						'N64': ['n64'],
+						'PCE': ['pcengine', 'pce'],
+						'Arcade': ['arcade', 'mame', 'fba', 'fbneo'],
+						'Neo Geo': ['neogeo', 'neocd'],
+						'Atari 2600': ['atari2600'],
+						'Atari 7800': ['atari7800'],
+						'Atari 5200': ['atari5200'],
+						'Atari Lynx': ['atarilynx', 'lynx'],
+						'Virtual Boy': ['virtualboy', 'vb'],
+						'WonderSwan': ['wonderswan', 'wonderswancolor', 'ws', 'wsc'],
+						'Neo Geo Pocket': ['ngp', 'ngpc'],
+						'NDS': ['nds', 'ds'],
+						'PSP': ['psp'],
+						'Sega CD': ['segacd', 'mdcd'],
+						'Sega 32X': ['sega32x'],
+						'Dreamcast': ['dreamcast', 'dc'],
+						'Saturn': ['saturn'],
+						'Coleco': ['coleco'],
+						'Intellivision': ['intellivision', 'intv'],
+						'Vectrex': ['vectrex'],
+						'MSX': ['msx', 'msx2'],
+						'Commodore 64': ['c64'],
+						'Amiga': ['amiga'],
+						'DOS': ['dos'],
+						'ScummVM': ['scummvm']
 					}
 				}
 			};
@@ -2070,6 +2153,29 @@
 				directoryHandle = null;
 				consoles = {};
 				renderConsoleList();
+
+				// Show device-specific folder selection instructions in modal
+				const profile = deviceProfiles[deviceType];
+				let message = '';
+				if (profile.catalogueStructure) {
+					// Trimui Brick / Mustard OS
+					message = 'Please select the <strong>ROOT of your SD card</strong> (the folder containing the MUOS folder)';
+				} else if (profile.emoji === '🧅') {
+					// Miyoo devices with Onion OS
+					message = 'Please select the <strong>Roms folder</strong> on your SD card<br><small style="color: rgba(255,255,255,0.6);">Path: SD:/Roms/ (contains subfolders like GB, GBA, FC, MD, etc.)</small>';
+				} else if (deviceType === 'rgnano') {
+					// RG Nano with Drum78 CFW
+					message = 'Please select the <strong>ROOT of your SD card</strong><br><small style="color: rgba(255,255,255,0.6);">Your system folders (GB, GBA, NES, etc.) should be at the root level</small>';
+				} else {
+					// Generic device
+					message = 'Please select your <strong>ROMs folder</strong> (the folder containing your console subfolders like GB, GBA, SNES, etc.)';
+				}
+				document.getElementById('folderInstructionText').innerHTML = message;
+				document.getElementById('folderInstructionsModal').classList.add('active');
+			}
+
+			async function closeInstructionsAndScan() {
+				closeModal('folderInstructionsModal');
 				await scanDrive();
 			}
 
@@ -2078,59 +2184,135 @@
 				consoles = {};
 				const profile = deviceProfiles[currentDevice];
 				const usesImgsFolder = profile.emoji === '🧅'; // Onion OS devices use Imgs subfolder
+				const usesCatalogueStructure = profile.catalogueStructure === true; // Trimui Brick / Mustard OS
 
-				for await (const entry of directoryHandle.values()) {
-					if (entry.kind === 'directory') {
-						const consoleName = entry.name;
-						const games = [];
-						try {
-							const consoleDir = await directoryHandle.getDirectoryHandle(consoleName);
-							// Check for Imgs subfolder (Onion OS style)
-							let imgsDir = null;
-							if (usesImgsFolder) {
+				if (usesCatalogueStructure) {
+					// Mustard OS: Scan MUOS/info/catalogue/<system>/ structure
+					try {
+						const muosDir = await directoryHandle.getDirectoryHandle('MUOS');
+						const infoDir = await muosDir.getDirectoryHandle('info');
+						const catalogueDir = await infoDir.getDirectoryHandle('catalogue');
+
+						// Iterate through system folders
+						for await (const systemEntry of catalogueDir.values()) {
+							if (systemEntry.kind === 'directory') {
+								const systemName = systemEntry.name;
+								const games = [];
 								try {
-									imgsDir = await consoleDir.getDirectoryHandle('Imgs');
-								} catch {}
-							}
-							const imageDir = imgsDir || consoleDir;
+									const systemDir = await catalogueDir.getDirectoryHandle(systemName);
 
-							for await (const file of consoleDir.values()) {
-								if (file.kind === 'file') {
-									// Skip files without extensions (cache files, etc)
-									if (!file.name.includes('.')) continue;
-									const ext = '.' + file.name.split('.').pop().toLowerCase();
-									// Skip non-ROM files: images, metadata, saves, cache files
-									const skipExts = ['.png', '.jpg', '.jpeg', '.txt', '.cue', '.m3u', '.srm', '.sav', '.xml', '.json', '.db'];
-									const skipNames = ['gamelist', 'miyoogamelist'];
-									const lowerName = file.name.toLowerCase();
-									const isSkipName = skipNames.some(s => lowerName.startsWith(s));
-									if (!skipExts.includes(ext) && !isSkipName) {
-										const baseName = file.name.substring(0, file.name.lastIndexOf('.'));
-										let hasImage = false;
-										let imageExt = null;
-										try {
-											await imageDir.getFileHandle(baseName + '.png');
-											hasImage = true;
-											imageExt = '.png';
-										} catch {
-											try {
-												await imageDir.getFileHandle(baseName + '.jpg');
-												hasImage = true;
-												imageExt = '.jpg';
-											} catch {}
+									// Get or create box art directory
+									let boxDir = null;
+									try {
+										boxDir = await systemDir.getDirectoryHandle('box');
+									} catch {
+										// Box folder doesn't exist yet, will be created on save
+									}
+
+									// Scan system directory for ROM files
+									for await (const file of systemDir.values()) {
+										if (file.kind === 'file') {
+											if (!file.name.includes('.')) continue;
+											const ext = '.' + file.name.split('.').pop().toLowerCase();
+											const skipExts = ['.png', '.jpg', '.jpeg', '.txt', '.cue', '.m3u', '.srm', '.sav', '.xml', '.json', '.db'];
+											const skipNames = ['gamelist', 'miyoogamelist'];
+											const lowerName = file.name.toLowerCase();
+											const isSkipName = skipNames.some(s => lowerName.startsWith(s));
+
+											if (!skipExts.includes(ext) && !isSkipName) {
+												const baseName = file.name.substring(0, file.name.lastIndexOf('.'));
+												let hasImage = false;
+												let imageExt = null;
+
+												// Check for existing images in box folder
+												if (boxDir) {
+													try {
+														await boxDir.getFileHandle(baseName + '.png');
+														hasImage = true;
+														imageExt = '.png';
+													} catch {
+														try {
+															await boxDir.getFileHandle(baseName + '.jpg');
+															hasImage = true;
+															imageExt = '.jpg';
+														} catch {}
+													}
+												}
+												games.push({ name: file.name, baseName, hasImage, imageExt });
+											}
 										}
-										games.push({ name: file.name, baseName, hasImage, imageExt });
+									}
+
+									if (games.length > 0) {
+										consoles[systemName] = {
+											handle: systemDir,
+											boxHandle: boxDir,
+											systemName: systemName,
+											games: games.sort((a, b) => a.baseName.localeCompare(b.baseName))
+										};
+									}
+								} catch (e) { /* Could not access system directory */ }
+							}
+						}
+					} catch (e) {
+						showError('Mustard OS catalogue structure not found. Please select the root of your SD card (where the MUOS folder is located).');
+						return;
+					}
+				} else {
+					// Standard scanning for other devices
+					for await (const entry of directoryHandle.values()) {
+						if (entry.kind === 'directory') {
+							const consoleName = entry.name;
+							const games = [];
+							try {
+								const consoleDir = await directoryHandle.getDirectoryHandle(consoleName);
+								// Check for Imgs subfolder (Onion OS style)
+								let imgsDir = null;
+								if (usesImgsFolder) {
+									try {
+										imgsDir = await consoleDir.getDirectoryHandle('Imgs');
+									} catch {}
+								}
+								const imageDir = imgsDir || consoleDir;
+
+								for await (const file of consoleDir.values()) {
+									if (file.kind === 'file') {
+										// Skip files without extensions (cache files, etc)
+										if (!file.name.includes('.')) continue;
+										const ext = '.' + file.name.split('.').pop().toLowerCase();
+										// Skip non-ROM files: images, metadata, saves, cache files
+										const skipExts = ['.png', '.jpg', '.jpeg', '.txt', '.cue', '.m3u', '.srm', '.sav', '.xml', '.json', '.db'];
+										const skipNames = ['gamelist', 'miyoogamelist'];
+										const lowerName = file.name.toLowerCase();
+										const isSkipName = skipNames.some(s => lowerName.startsWith(s));
+										if (!skipExts.includes(ext) && !isSkipName) {
+											const baseName = file.name.substring(0, file.name.lastIndexOf('.'));
+											let hasImage = false;
+											let imageExt = null;
+											try {
+												await imageDir.getFileHandle(baseName + '.png');
+												hasImage = true;
+												imageExt = '.png';
+											} catch {
+												try {
+													await imageDir.getFileHandle(baseName + '.jpg');
+													hasImage = true;
+													imageExt = '.jpg';
+												} catch {}
+											}
+											games.push({ name: file.name, baseName, hasImage, imageExt });
+										}
 									}
 								}
-							}
-							if (games.length > 0) {
-								consoles[consoleName] = {
-									handle: consoleDir,
-									imgsHandle: imgsDir,
-									games: games.sort((a, b) => a.baseName.localeCompare(b.baseName))
-								};
-							}
-						} catch (e) { /* Could not access directory */ }
+								if (games.length > 0) {
+									consoles[consoleName] = {
+										handle: consoleDir,
+										imgsHandle: imgsDir,
+										games: games.sort((a, b) => a.baseName.localeCompare(b.baseName))
+									};
+								}
+							} catch (e) { /* Could not access directory */ }
+						}
 					}
 				}
 				renderConsoleList();
@@ -2262,7 +2444,19 @@
 					directoryHandle = handle;
 					await saveHandle(directoryHandle);
 					await scanExistingDirectory();
-				} catch (e) { alert('Error scanning directory: ' + e.message); }
+				} catch (e) {
+					// User cancelled the folder picker - don't show error
+					if (e.name === 'AbortError') {
+						return;
+					}
+					// Show error modal for other errors
+					showError('Error scanning directory: ' + e.message);
+				}
+			}
+
+			function showError(message) {
+				document.getElementById('errorMessage').textContent = message;
+				document.getElementById('errorModal').classList.add('active');
 			}
 
 			function renderConsoleList() {
@@ -2459,7 +2653,29 @@
 					// Get the correct handle for this game (important for "All Games" view)
 					const gameConsoleName = game.consoleName || currentConsole;
 					const consoleData = consoles[gameConsoleName];
-					const imageHandle = consoleData?.imgsHandle || consoleData?.handle;
+					const profile = deviceProfiles[currentDevice];
+
+					// Determine correct image handle based on device type
+					let imageHandle;
+					if (profile.catalogueStructure) {
+						// Trimui Brick / Mustard OS: Look in box folder
+						if (consoleData?.boxHandle) {
+							imageHandle = consoleData.boxHandle;
+						} else if (consoleData?.handle) {
+							// Try to get box folder if it exists now
+							try {
+								const boxDir = await consoleData.handle.getDirectoryHandle('box');
+								consoleData.boxHandle = boxDir;
+								imageHandle = boxDir;
+							} catch {
+								imageHandle = consoleData.handle;
+							}
+						}
+					} else {
+						// Other devices: Imgs folder or console folder
+						imageHandle = consoleData?.imgsHandle || consoleData?.handle;
+					}
+
 					if (game.hasImage && game.imageExt && imageHandle) {
 						try {
 							const f = await imageHandle.getFileHandle(game.baseName + game.imageExt);
@@ -2693,7 +2909,30 @@
 				if (!targetConsole || !consoles[targetConsole]) {
 					preview.innerHTML = '<span class="no-image">?</span>'; return;
 				}
-				const imageHandle = consoles[targetConsole].imgsHandle || consoles[targetConsole].handle;
+
+				const profile = deviceProfiles[currentDevice];
+				let imageHandle;
+
+				if (profile.catalogueStructure) {
+					// Trimui Brick / Mustard OS: Look in box folder
+					if (consoles[targetConsole].boxHandle) {
+						imageHandle = consoles[targetConsole].boxHandle;
+					} else {
+						// Try to get box folder if it exists now (may have been created after initial scan)
+						try {
+							const boxDir = await consoles[targetConsole].handle.getDirectoryHandle('box');
+							consoles[targetConsole].boxHandle = boxDir;
+							imageHandle = boxDir;
+						} catch {
+							// Box folder doesn't exist, fallback to system folder
+							imageHandle = consoles[targetConsole].handle;
+						}
+					}
+				} else {
+					// Other devices: Imgs folder or console folder
+					imageHandle = consoles[targetConsole].imgsHandle || consoles[targetConsole].handle;
+				}
+
 				// Try PNG first, then JPG
 				try {
 					const f = await imageHandle.getFileHandle(baseName + '.png');
@@ -3180,15 +3419,29 @@
 					const resized = await new Promise(r => canvas.toBlob(r, 'image/png'));
 
 					const baseName = currentGame.substring(0, currentGame.lastIndexOf('.'));
-					// Save to Imgs folder if it exists (Onion OS), otherwise save to console folder
-					let imageDir = consoles[targetConsole].imgsHandle || consoles[targetConsole].handle;
-					// Create Imgs folder if using Onion OS device and folder doesn't exist yet
-					if (!consoles[targetConsole].imgsHandle && deviceProfiles[currentDevice].emoji === '🧅') {
-						try {
+					let imageDir;
+
+					if (profile.catalogueStructure) {
+						// Trimui Brick / Mustard OS: Create/get box folder
+						if (consoles[targetConsole].boxHandle) {
+							imageDir = consoles[targetConsole].boxHandle;
+						} else {
+							const boxDir = await consoles[targetConsole].handle.getDirectoryHandle('box', { create: true });
+							consoles[targetConsole].boxHandle = boxDir;
+							imageDir = boxDir;
+						}
+					} else if (profile.emoji === '🧅') {
+						// Onion OS: Create/get Imgs folder
+						imageDir = consoles[targetConsole].imgsHandle || consoles[targetConsole].handle;
+						if (!consoles[targetConsole].imgsHandle) {
 							imageDir = await consoles[targetConsole].handle.getDirectoryHandle('Imgs', { create: true });
 							consoles[targetConsole].imgsHandle = imageDir;
-						} catch {}
+						}
+					} else {
+						// RG Nano / Generic: Save directly to console folder
+						imageDir = consoles[targetConsole].handle;
 					}
+
 					const fh = await imageDir.getFileHandle(baseName + '.png', { create: true });
 					const w = await fh.createWritable();
 					await w.write(resized);
