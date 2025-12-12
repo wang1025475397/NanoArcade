@@ -127,9 +127,7 @@ The app recognizes and displays icons for:
 
 ## Credits
 
-- UI based on [Hyperspace](https://html5up.net/hyperspace) by HTML5 UP
-- Box art from [TheGamesDB](https://thegamesdb.net/) and [The Cover Project](https://www.thecoverproject.net/)
-- Console icons included in the `icons` folder
+- Box art from [TheGamesDB](https://thegamesdb.net/)
 
 ## License
 
