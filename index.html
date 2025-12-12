@@ -1394,11 +1394,19 @@
 									if (!['.png', '.jpg', '.jpeg', '.txt', '.cue', '.m3u', '.srm', '.sav'].includes(ext)) {
 										const baseName = file.name.substring(0, file.name.lastIndexOf('.'));
 										let hasImage = false;
+										let imageExt = null;
 										try {
 											await consoleDir.getFileHandle(baseName + '.png');
 											hasImage = true;
-										} catch {}
-										games.push({ name: file.name, baseName, hasImage });
+											imageExt = '.png';
+										} catch {
+											try {
+												await consoleDir.getFileHandle(baseName + '.jpg');
+												hasImage = true;
+												imageExt = '.jpg';
+											} catch {}
+										}
+										games.push({ name: file.name, baseName, hasImage, imageExt });
 									}
 								}
 							}
@@ -1678,9 +1686,9 @@
 				const handle = consoles[currentConsole].handle;
 				const cards = await Promise.all(filtered.map(async game => {
 					let imgSrc = '';
-					if (game.hasImage) {
+					if (game.hasImage && game.imageExt) {
 						try {
-							const f = await handle.getFileHandle(game.baseName + '.png');
+							const f = await handle.getFileHandle(game.baseName + game.imageExt);
 							imgSrc = URL.createObjectURL(await f.getFile());
 						} catch {}
 					}
@@ -1729,10 +1737,18 @@
 				if (!currentConsole || !consoles[currentConsole]) {
 					preview.innerHTML = '<span class="no-image">?</span>'; return;
 				}
+				// Try PNG first, then JPG
 				try {
 					const f = await consoles[currentConsole].handle.getFileHandle(baseName + '.png');
 					preview.innerHTML = `<img src="${URL.createObjectURL(await f.getFile())}">`;
-				} catch { preview.innerHTML = '<span class="no-image">?</span>'; }
+				} catch {
+					try {
+						const f = await consoles[currentConsole].handle.getFileHandle(baseName + '.jpg');
+						preview.innerHTML = `<img src="${URL.createObjectURL(await f.getFile())}">`;
+					} catch {
+						preview.innerHTML = '<span class="no-image">?</span>';
+					}
+				}
 			}
 
 			let selectedPickerUrl = null;
@@ -2017,22 +2033,35 @@
 					// Delete old ROM file
 					await consoleHandle.removeEntry(oldFileName);
 
-					// Try to rename art file if it exists
+					// Try to rename art file if it exists (check PNG first, then JPG)
+					let artExt = null;
 					try {
-						const oldArtHandle = await consoleHandle.getFileHandle(oldBaseName + '.png');
-						const oldArtFile = await oldArtHandle.getFile();
-						const artData = await oldArtFile.arrayBuffer();
+						await consoleHandle.getFileHandle(oldBaseName + '.png');
+						artExt = '.png';
+					} catch {
+						try {
+							await consoleHandle.getFileHandle(oldBaseName + '.jpg');
+							artExt = '.jpg';
+						} catch {}
+					}
 
-						// Create new art file
-						const newArtHandle = await consoleHandle.getFileHandle(newName + '.png', { create: true });
-						const artWriter = await newArtHandle.createWritable();
-						await artWriter.write(artData);
-						await artWriter.close();
+					if (artExt) {
+						try {
+							const oldArtHandle = await consoleHandle.getFileHandle(oldBaseName + artExt);
+							const oldArtFile = await oldArtHandle.getFile();
+							const artData = await oldArtFile.arrayBuffer();
 
-						// Delete old art file
-						await consoleHandle.removeEntry(oldBaseName + '.png');
-					} catch (e) {
-						// Art file doesn't exist, that's okay
+							// Create new art file (keep same extension)
+							const newArtHandle = await consoleHandle.getFileHandle(newName + artExt, { create: true });
+							const artWriter = await newArtHandle.createWritable();
+							await artWriter.write(artData);
+							await artWriter.close();
+
+							// Delete old art file
+							await consoleHandle.removeEntry(oldBaseName + artExt);
+						} catch (e) {
+							// Art file error, continue anyway
+						}
 					}
 
 					status.className = 'status-msg success';
