@@ -2167,22 +2167,16 @@
 							const gameHtml = await gameResponse.text();
 							const gameDoc = parser.parseFromString(gameHtml, 'text/html');
 
-							// Find cover download links
-							const coverLinks = gameDoc.querySelectorAll('a[href*="cover_id="]');
-							coverLinks.forEach(link => {
-								const match = link.getAttribute('href').match(/cover_id=(\d+)/);
-								if (match) {
-									const coverId = match[1];
-									// Find the corresponding thumbnail
-									const thumbImg = gameDoc.querySelector(`img[src*="_thumb.jpg"]`);
-									const thumbUrl = thumbImg ? thumbImg.getAttribute('src') : null;
-
-									// Full image URL (the download redirects to this)
-									const fullUrl = `https://corsproxy.io/?${encodeURIComponent(`https://www.thecoverproject.net/download_cover.php?src=cdn&cover_id=${coverId}`)}`;
-
+							// Find thumbnail images with CDN URLs
+							const thumbImgs = gameDoc.querySelectorAll('img[src*="coverproject.sfo2.cdn.digitaloceanspaces.com"]');
+							thumbImgs.forEach(img => {
+								const thumbUrl = img.getAttribute('src');
+								if (thumbUrl && thumbUrl.includes('_thumb.jpg')) {
+									// Convert thumbnail URL to full image URL (remove _thumb)
+									const fullUrl = thumbUrl.replace('_thumb.jpg', '.jpg');
 									if (!images.find(i => i.full === fullUrl)) {
 										images.push({
-											thumb: thumbUrl || fullUrl,
+											thumb: thumbUrl,
 											full: fullUrl
 										});
 									}
