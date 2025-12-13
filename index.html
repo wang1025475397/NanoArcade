@@ -2892,8 +2892,8 @@
 					// Trimui Brick / Mustard OS
 					message = 'Please select the <strong>ROOT of your SD card</strong> (the folder containing the MUOS folder)';
 				} else if (profile.emoji === '🧅') {
-					// Miyoo devices with Onion OS
-					message = 'Please select the <strong>Roms folder</strong> on your SD card<br><small style="color: rgba(255,255,255,0.6);">Path: SD:/Roms/ (contains subfolders like GB, GBA, FC, MD, etc.)</small>';
+					// Miyoo devices with Onion OS - select root so we can access Saves folder too
+					message = 'Please select the <strong>ROOT of your SD card</strong><br><small style="color: rgba(255,255,255,0.6);">The folder containing Roms, Saves, RetroArch, etc.</small>';
 				} else if (deviceType === 'rgnano') {
 					// RG Nano with Drum78 CFW
 					message = 'Please select the <strong>ROOT of your SD card</strong><br><small style="color: rgba(255,255,255,0.6);">Your system folders (GB, GBA, NES, etc.) should be at the root level</small>';
@@ -3070,10 +3070,30 @@
 					// Skip folders that are apps/system folders, not console ROM folders
 					const skipFolders = [
 						'funkey', '.picoarch', 'wolfenstein 3d', 'doom', 'quake',
-						'system', 'bios', 'save', 'saves', 'config', 'retroarch'
+						'system', 'bios', 'save', 'saves', 'config', 'retroarch',
+						'app', 'miyoo', 'retroarch', 'themes', 'media', 'emu', 'screenshots', 'icons', '.tmp_update'
 					];
 
-					for await (const entry of directoryHandle.values()) {
+					// For Onion OS devices, scan the Roms subfolder instead of root
+					let scanDir = directoryHandle;
+					if (usesImgsFolder) {
+						try {
+							scanDir = await directoryHandle.getDirectoryHandle('Roms');
+						} catch {
+							try {
+								scanDir = await directoryHandle.getDirectoryHandle('ROMS');
+							} catch {
+								try {
+									scanDir = await directoryHandle.getDirectoryHandle('roms');
+								} catch {
+									showError('Roms folder not found. Please select the root of your SD card (the folder containing Roms, Saves, RetroArch, etc.).');
+									return;
+								}
+							}
+						}
+					}
+
+					for await (const entry of scanDir.values()) {
 						if (entry.kind === 'directory') {
 							const consoleName = entry.name;
 							// Skip known non-console folders
@@ -3081,7 +3101,7 @@
 
 							const games = [];
 							try {
-								const consoleDir = await directoryHandle.getDirectoryHandle(consoleName);
+								const consoleDir = await scanDir.getDirectoryHandle(consoleName);
 								// Check for Imgs subfolder (Onion OS style)
 								let imgsDir = null;
 								if (usesImgsFolder) {
@@ -3945,9 +3965,11 @@
 				// Fetch GameFAQs info (async, non-blocking)
 				fetchGameFAQsInfo(baseName, gameConsole);
 				// Show/hide saves button and local image rows based on device
+				// Saves supported for RG Nano and Onion OS devices (Miyoo Mini, Miyoo Flip)
 				const savesBtn = document.getElementById('savesButtonRow');
 				const noSavesRow = document.getElementById('noSavesButtonRow');
-				if (currentDevice === 'rgnano') {
+				const supportsSaves = currentDevice === 'rgnano' || isOnionOS(currentDevice);
+				if (supportsSaves) {
 					savesBtn.style.display = 'block';
 					noSavesRow.style.display = 'none';
 				} else {
@@ -4927,10 +4949,10 @@
 			}
 
 			// ============================================
-			// Save Manager (RG Nano only)
+			// Save Manager
 			// ============================================
 
-			// RG Nano emulator to console mapping
+			// RG Nano emulator to console mapping (lowercase, .sav files)
 			const rgNanoEmulatorMap = {
 				'gambatte': ['Game Boy', 'Game Boy Color', 'GB', 'GBC'],
 				'gpsp': ['Game Boy Advance', 'GBA'],
@@ -4940,8 +4962,40 @@
 				'pcsx_rearmed': ['PS1', 'PlayStation', 'PSX', 'PS']
 			};
 
-			function getEmulatorForConsole(consoleName) {
-				for (const [emulator, consoleNames] of Object.entries(rgNanoEmulatorMap)) {
+			// Onion OS emulator to console mapping (mixed case, .srm files)
+			// Used by Miyoo Mini, Miyoo Mini+, Miyoo Flip
+			const onionEmulatorMap = {
+				'Gambatte': ['Game Boy', 'Game Boy Color', 'GB', 'GBC'],
+				'gpSP': ['Game Boy Advance', 'GBA'],
+				'FCEUmm': ['NES', 'Nintendo Entertainment System', 'FC', 'Famicom'],
+				'Supafaust': ['SNES', 'Super Nintendo', 'SFC', 'Super Famicom'],
+				'Snes9x 2005 Plus': ['SNES', 'Super Nintendo', 'SFC', 'Super Famicom'],
+				'PicoDrive': ['Sega Genesis', 'Genesis', 'Mega Drive', 'MD', 'Game Gear', 'GG', 'Sega Master System', 'Master System', 'MS'],
+				'Genesis Plus GX': ['Sega Genesis', 'Genesis', 'Mega Drive', 'MD', 'Game Gear', 'GG', 'Sega Master System', 'Master System', 'MS'],
+				'PCSX-ReARMed': ['PS1', 'PlayStation', 'PSX', 'PS'],
+				'Beetle PCE Fast': ['PC Engine', 'TurboGrafx-16', 'PCE', 'PCECD'],
+				'Mednafen PCE Fast': ['PC Engine', 'TurboGrafx-16', 'PCE', 'PCECD'],
+				'FinalBurn Neo': ['Arcade', 'Neo Geo', 'NEOGEO', 'CPS1', 'CPS2', 'CPS3'],
+				'FB Alpha 2012': ['Arcade', 'Neo Geo', 'NEOGEO'],
+				'FB Alpha 2012 CPS-3': ['CPS3'],
+				'MAME 2003-Plus': ['Arcade', 'MAME'],
+				'Beetle NeoPop': ['Neo Geo Pocket', 'Neo Geo Pocket Color', 'NGP', 'NGPC'],
+				'Beetle WonderSwan': ['WonderSwan', 'WonderSwan Color', 'WS', 'WSC'],
+				'Stella 2014': ['Atari 2600', 'Atari', '2600'],
+				'Handy': ['Atari Lynx', 'Lynx']
+			};
+
+			function isOnionOS(deviceType) {
+				return deviceType === 'onion' || deviceType === 'miyooflip';
+			}
+
+			function getSaveExtension(deviceType) {
+				return isOnionOS(deviceType) ? '.srm' : '.sav';
+			}
+
+			function getEmulatorForConsole(consoleName, deviceType) {
+				const emulatorMap = isOnionOS(deviceType) ? onionEmulatorMap : rgNanoEmulatorMap;
+				for (const [emulator, consoleNames] of Object.entries(emulatorMap)) {
 					if (consoleNames.some(c => c.toLowerCase() === consoleName.toLowerCase())) {
 						return emulator;
 					}
@@ -4957,51 +5011,67 @@
 				loadLocalSaves(baseName);
 			}
 
+			// Get the save folder handle based on device type
+			async function getSaveFolderHandle(deviceType, emulator, create = false) {
+				if (isOnionOS(deviceType)) {
+					// Onion OS: Saves/CurrentProfile/saves/[emulator]/
+					const savesHandle = await directoryHandle.getDirectoryHandle('Saves', { create }).catch(() => null);
+					if (!savesHandle) return null;
+					const profileHandle = await savesHandle.getDirectoryHandle('CurrentProfile', { create }).catch(() => null);
+					if (!profileHandle) return null;
+					const savesFolderHandle = await profileHandle.getDirectoryHandle('saves', { create }).catch(() => null);
+					if (!savesFolderHandle) return null;
+					return await savesFolderHandle.getDirectoryHandle(emulator, { create }).catch(() => null);
+				} else {
+					// RG Nano: FunKey/.picoarch/data/[emulator]/
+					const funKeyHandle = await directoryHandle.getDirectoryHandle('FunKey', { create }).catch(() => null);
+					if (!funKeyHandle) return null;
+					const picoarchHandle = await funKeyHandle.getDirectoryHandle('.picoarch', { create }).catch(() => null);
+					if (!picoarchHandle) return null;
+					const dataHandle = await picoarchHandle.getDirectoryHandle('data', { create }).catch(() => null);
+					if (!dataHandle) return null;
+					return await dataHandle.getDirectoryHandle(emulator, { create }).catch(() => null);
+				}
+			}
+
+			function getSaveLocationText(deviceType, emulator) {
+				if (isOnionOS(deviceType)) {
+					return `Saves/CurrentProfile/saves/${emulator}/`;
+				} else {
+					return `FunKey/.picoarch/data/${emulator}/`;
+				}
+			}
+
 			async function loadLocalSaves(baseName) {
 				const list = document.getElementById('localSavesList');
 				list.innerHTML = '<div class="loading-container" style="padding: 2em;"><div class="spinner"></div><div class="loading-text">Checking for saves...</div></div>';
 
-				if (!directoryHandle || currentDevice !== 'rgnano') {
-					list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2em;">Save management is only available for RG Nano devices.</p>';
+				// Check if device supports save management
+				const supportsSaves = currentDevice === 'rgnano' || isOnionOS(currentDevice);
+				if (!directoryHandle || !supportsSaves) {
+					list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2em;">Save management is not available for this device.</p>';
 					return;
 				}
 
-				const emulator = getEmulatorForConsole(gameConsole || currentConsole);
+				const emulator = getEmulatorForConsole(gameConsole || currentConsole, currentDevice);
 				if (!emulator) {
 					list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2em;">Console not supported for save management.</p>';
 					return;
 				}
 
+				const saveExt = getSaveExtension(currentDevice);
+
 				try {
-					// Navigate to FunKey/.picoarch/data/[emulator]/
-					const funKeyHandle = await directoryHandle.getDirectoryHandle('FunKey', { create: false }).catch(() => null);
-					if (!funKeyHandle) {
-						list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2em;">No saves found.</p>';
-						return;
-					}
-
-					const picoarchHandle = await funKeyHandle.getDirectoryHandle('.picoarch', { create: false }).catch(() => null);
-					if (!picoarchHandle) {
-						list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2em;">No saves found. Picoarch folder not detected.</p>';
-						return;
-					}
-
-					const dataHandle = await picoarchHandle.getDirectoryHandle('data', { create: false }).catch(() => null);
-					if (!dataHandle) {
-						list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2em;">No saves found.</p>';
-						return;
-					}
-
-					const emulatorHandle = await dataHandle.getDirectoryHandle(emulator, { create: false }).catch(() => null);
+					const emulatorHandle = await getSaveFolderHandle(currentDevice, emulator, false);
 					if (!emulatorHandle) {
-						list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2em;">No saves found for this console.</p>';
+						list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2em;">No saves found.</p>';
 						return;
 					}
 
 					// Look for save files matching the game name
 					const saves = [];
 					for await (const entry of emulatorHandle.values()) {
-						if (entry.kind === 'file' && entry.name.endsWith('.sav')) {
+						if (entry.kind === 'file' && entry.name.endsWith(saveExt)) {
 							const saveBaseName = entry.name.substring(0, entry.name.lastIndexOf('.'));
 							// Check if this save matches the current game (fuzzy match)
 							if (saveBaseName.toLowerCase() === baseName.toLowerCase() ||
@@ -5019,11 +5089,12 @@
 					}
 
 					if (saves.length === 0) {
+						const saveLocation = getSaveLocationText(currentDevice, emulator);
 						list.innerHTML = `
 							<div style="text-align: center; padding: 2em; color: rgba(255,255,255,0.6);">
 								<span class="icon solid fa-folder-open" style="font-size: 2em; margin-bottom: 0.5em; display: block;"></span>
 								<p>No save files found for this game.</p>
-								<p style="font-size: 0.85em;">Save location: FunKey/.picoarch/data/${emulator}/</p>
+								<p style="font-size: 0.85em;">Save location: ${saveLocation}</p>
 							</div>
 						`;
 						return;
@@ -5059,12 +5130,13 @@
 			}
 
 			async function downloadSave(saveName) {
-				const emulator = getEmulatorForConsole(gameConsole || currentConsole);
+				const emulator = getEmulatorForConsole(gameConsole || currentConsole, currentDevice);
 				try {
-					const funKeyHandle = await directoryHandle.getDirectoryHandle('FunKey');
-					const picoarchHandle = await funKeyHandle.getDirectoryHandle('.picoarch');
-					const dataHandle = await picoarchHandle.getDirectoryHandle('data');
-					const emulatorHandle = await dataHandle.getDirectoryHandle(emulator);
+					const emulatorHandle = await getSaveFolderHandle(currentDevice, emulator, false);
+					if (!emulatorHandle) {
+						alert('Save folder not found.');
+						return;
+					}
 					const fileHandle = await emulatorHandle.getFileHandle(saveName);
 					const file = await fileHandle.getFile();
 
@@ -5092,12 +5164,13 @@
 				if (!pendingDeleteSave) return;
 
 				const saveName = pendingDeleteSave;
-				const emulator = getEmulatorForConsole(gameConsole || currentConsole);
+				const emulator = getEmulatorForConsole(gameConsole || currentConsole, currentDevice);
 				try {
-					const funKeyHandle = await directoryHandle.getDirectoryHandle('FunKey');
-					const picoarchHandle = await funKeyHandle.getDirectoryHandle('.picoarch');
-					const dataHandle = await picoarchHandle.getDirectoryHandle('data');
-					const emulatorHandle = await dataHandle.getDirectoryHandle(emulator);
+					const emulatorHandle = await getSaveFolderHandle(currentDevice, emulator, false);
+					if (!emulatorHandle) {
+						alert('Save folder not found.');
+						return;
+					}
 					await emulatorHandle.removeEntry(saveName);
 
 					closeModal('deleteSaveModal');
@@ -5119,7 +5192,7 @@
 				const file = event.target.files[0];
 				if (!file) return;
 
-				const emulator = getEmulatorForConsole(gameConsole || currentConsole);
+				const emulator = getEmulatorForConsole(gameConsole || currentConsole, currentDevice);
 				if (!emulator) {
 					alert('Console not supported for save management.');
 					return;
@@ -5127,10 +5200,11 @@
 
 				try {
 					// Navigate to save folder, creating if needed
-					const funKeyHandle = await directoryHandle.getDirectoryHandle('FunKey', { create: true });
-					const picoarchHandle = await funKeyHandle.getDirectoryHandle('.picoarch', { create: true });
-					const dataHandle = await picoarchHandle.getDirectoryHandle('data', { create: true });
-					const emulatorHandle = await dataHandle.getDirectoryHandle(emulator, { create: true });
+					const emulatorHandle = await getSaveFolderHandle(currentDevice, emulator, true);
+					if (!emulatorHandle) {
+						alert('Could not create save folder.');
+						return;
+					}
 
 					// Write save file
 					const fileHandle = await emulatorHandle.getFileHandle(file.name, { create: true });
