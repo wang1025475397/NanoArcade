@@ -755,6 +755,14 @@
 				display: inline-flex;
 			}
 
+			/* Floating install PWA button */
+			.floating-install {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				z-index: 1000;
+			}
+
 			/* Modern Hero Section */
 			.hero-section {
 				display: flex;
@@ -1056,6 +1064,11 @@
 			<span class="icon solid fa-upload"></span> Upload
 		</button>
 
+		<!-- Floating Install PWA Button -->
+		<button class="btn-3d green floating-install" id="installPwaBtn" style="display: none;" onclick="installPwa()">
+			<span class="icon solid fa-download"></span> Install App
+		</button>
+
 		<!-- Sidebar -->
 		<section id="sidebar">
 			<div class="inner">
@@ -1082,9 +1095,6 @@
 					<div style="display: flex; gap: 1em; justify-content: center; flex-wrap: wrap;">
 						<button class="btn-3d purple" onclick="showDeviceSelector()">
 							<span class="icon solid fa-gamepad"></span> Select Device
-						</button>
-						<button class="btn-3d green" id="installPwaBtn" style="display: none;" onclick="installPwa()">
-							<span class="icon solid fa-download"></span> Install App
 						</button>
 					</div>
 					<div style="margin-top: 1.5em; padding: 1em 1.5em; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto;">
