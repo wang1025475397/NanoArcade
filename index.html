@@ -44,6 +44,8 @@
 				width: 32px;
 				height: 32px;
 				object-fit: contain;
+				vertical-align: middle;
+				margin-right: 8px;
 			}
 
 			#sidebar nav ul li .game-count {
@@ -2989,6 +2991,94 @@
 				return consoleIcons['default'];
 			}
 
+			// Display names for console folders (abbreviation -> full name)
+			const consoleDisplayNames = {
+				'gb': 'Game Boy',
+				'gbc': 'Game Boy Color',
+				'gba': 'Game Boy Advance',
+				'sgb': 'Super Game Boy',
+				'nes': 'NES',
+				'fc': 'Famicom',
+				'fds': 'Famicom Disk System',
+				'snes': 'SNES',
+				'sfc': 'Super Famicom',
+				'n64': 'Nintendo 64',
+				'nds': 'Nintendo DS',
+				'ds': 'Nintendo DS',
+				'vb': 'Virtual Boy',
+				'ms': 'Master System',
+				'sms': 'Master System',
+				'md': 'Mega Drive',
+				'genesis': 'Genesis',
+				'gg': 'Game Gear',
+				'gamegear': 'Game Gear',
+				'dc': 'Dreamcast',
+				'segacd': 'Sega CD',
+				'32x': 'Sega 32X',
+				'ps': 'PlayStation',
+				'psx': 'PlayStation',
+				'ps1': 'PlayStation',
+				'psp': 'PSP',
+				'pce': 'PC Engine',
+				'pcengine': 'PC Engine',
+				'pcecd': 'PC Engine CD',
+				'sgfx': 'SuperGrafx',
+				'neogeo': 'Neo Geo',
+				'neocd': 'Neo Geo CD',
+				'ngp': 'Neo Geo Pocket',
+				'ngpc': 'Neo Geo Pocket Color',
+				'arcade': 'Arcade',
+				'mame': 'Arcade (MAME)',
+				'fbneo': 'Arcade (FBNeo)',
+				'cps1': 'CPS1',
+				'cps2': 'CPS2',
+				'cps3': 'CPS3',
+				'lynx': 'Atari Lynx',
+				'atarilynx': 'Atari Lynx',
+				'atari2600': 'Atari 2600',
+				'a5200': 'Atari 5200',
+				'atari5200': 'Atari 5200',
+				'a7800': 'Atari 7800',
+				'atari7800': 'Atari 7800',
+				'atari800': 'Atari 800',
+				'atarist': 'Atari ST',
+				'ws': 'WonderSwan',
+				'wsc': 'WonderSwan Color',
+				'col': 'ColecoVision',
+				'colecovision': 'ColecoVision',
+				'intv': 'Intellivision',
+				'itv': 'Intellivision',
+				'vectrex': 'Vectrex',
+				'ody': 'Odyssey',
+				'fairchild': 'Fairchild Channel F',
+				'amiga': 'Amiga',
+				'c64': 'Commodore 64',
+				'dos': 'DOS',
+				'msx': 'MSX',
+				'x68000': 'X68000',
+				'zxs': 'ZX Spectrum',
+				'cpc': 'Amstrad CPC',
+				'pico': 'PICO-8',
+				'pico8': 'PICO-8',
+				'poke': 'Pokemon Mini',
+				'pokemini': 'Pokemon Mini',
+				'gw': 'Game & Watch',
+				'arduboy': 'Arduboy',
+				'scummvm': 'ScummVM',
+				'openbor': 'OpenBOR',
+				'tic': 'TIC-80',
+				'doom': 'Doom',
+				'quake': 'Quake',
+				'supervision': 'Supervision',
+				'megaduck': 'Mega Duck',
+				'ports': 'Ports'
+			};
+
+			function getConsoleDisplayName(folderName) {
+				const lower = folderName.toLowerCase();
+				return consoleDisplayNames[lower] || folderName;
+			}
+
 			// Name cleanup patterns
 			const cleanupPatterns = [
 				/\s*\(USA\)/gi, /\s*\(Europe\)/gi, /\s*\(Japan\)/gi, /\s*\(World\)/gi,
@@ -3059,9 +3149,10 @@
 					const count = consoles[name].games.length;
 					const missing = consoles[name].games.filter(g => !g.hasImage).length;
 					const icon = getConsoleIcon(name);
+					const displayName = getConsoleDisplayName(name);
 					html += `<li><a href="javascript:void(0)" onclick="selectConsole('${name.replace(/'/g, "\\'")}')">
-						<img src="${icon}" class="console-icon" alt="${name}">
-						<span>${name}</span>
+						<img src="${icon}" class="console-icon" alt="${displayName}">
+						<span>${displayName}</span>
 						<span class="game-count">${count}${missing > 0 ? ' <span class="warning">!' + missing + '</span>' : ''}</span>
 					</a></li>`;
 				}
@@ -3070,7 +3161,7 @@
 
 				const uploadSelect = document.getElementById('uploadConsoleSelect');
 				uploadSelect.innerHTML = '<option value="">Select a console...</option>' +
-					allFolders.map(n => `<option value="${n}">${n}</option>`).join('');
+					allFolders.map(n => `<option value="${n}">${getConsoleDisplayName(n)}</option>`).join('');
 			}
 
 			function updateStats() {
