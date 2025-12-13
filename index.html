@@ -3193,31 +3193,49 @@
 
 			function getConsoleKey(consoleName) {
 				// Map folder names to topGamesData keys
+				// Includes MustardOS folder names (lowercase) for Trimui Brick support
 				const mapping = {
 					// Nintendo Handhelds
-					'Game Boy': 'GB', 'GB': 'GB', 'gameboy': 'GB', 'Gameboy': 'GB',
-					'Game Boy Color': 'GBC', 'GBC': 'GBC', 'gameboycolor': 'GBC',
-					'Game Boy Advance': 'GBA', 'GBA': 'GBA', 'gameboyadvance': 'GBA',
+					'Game Boy': 'GB', 'GB': 'GB', 'gameboy': 'GB', 'Gameboy': 'GB', 'gb': 'GB',
+					'Game Boy Color': 'GBC', 'GBC': 'GBC', 'gameboycolor': 'GBC', 'gbc': 'GBC',
+					'Game Boy Advance': 'GBA', 'GBA': 'GBA', 'gameboyadvance': 'GBA', 'gba': 'GBA',
+					'NDS': 'NDS', 'Nintendo DS': 'NDS', 'nds': 'NDS', 'DS': 'NDS', 'ds': 'NDS',
 					// Nintendo Home
-					'NES': 'NES', 'FC': 'NES', 'Famicom': 'NES', 'famicom': 'NES',
-					'SNES': 'SNES', 'SFC': 'SNES', 'Super Famicom': 'SNES', 'superfamicom': 'SNES',
-					'N64': 'N64', 'Nintendo 64': 'N64', 'nintendo64': 'N64',
+					'NES': 'NES', 'FC': 'NES', 'Famicom': 'NES', 'famicom': 'NES', 'nes': 'NES', 'fds': 'NES', 'fc': 'NES',
+					'SNES': 'SNES', 'SFC': 'SNES', 'Super Famicom': 'SNES', 'superfamicom': 'SNES', 'snes': 'SNES', 'sfc': 'SNES',
+					'N64': 'N64', 'Nintendo 64': 'N64', 'nintendo64': 'N64', 'n64': 'N64',
+					'Virtual Boy': 'Virtual Boy', 'VB': 'Virtual Boy', 'virtualboy': 'Virtual Boy', 'vb': 'Virtual Boy',
 					// Sega
-					'Genesis': 'Genesis', 'MD': 'Genesis', 'Sega Genesis': 'Genesis', 'Mega Drive': 'Genesis', 'megadrive': 'Genesis',
-					'Game Gear': 'Game Gear', 'GG': 'Game Gear', 'gamegear': 'Game Gear',
-					'Master System': 'Master System', 'MS': 'Master System', 'Sega Master System': 'Master System', 'SMS': 'Master System',
+					'Genesis': 'Genesis', 'MD': 'Genesis', 'Sega Genesis': 'Genesis', 'Mega Drive': 'Genesis', 'megadrive': 'Genesis', 'segamd': 'Genesis', 'genesis': 'Genesis', 'md': 'Genesis',
+					'Game Gear': 'Game Gear', 'GG': 'Game Gear', 'gamegear': 'Game Gear', 'gg': 'Game Gear',
+					'Master System': 'Master System', 'MS': 'Master System', 'Sega Master System': 'Master System', 'SMS': 'Master System', 'mastersystem': 'Master System', 'sms': 'Master System',
+					'Sega CD': 'Sega CD', 'segacd': 'Sega CD', 'mdcd': 'Sega CD', 'Mega CD': 'Sega CD', 'segamdcd': 'Sega CD',
+					'Sega 32X': 'Sega 32X', 'sega32x': 'Sega 32X', '32X': 'Sega 32X',
+					'Saturn': 'Saturn', 'saturn': 'Saturn', 'Sega Saturn': 'Saturn',
+					'Dreamcast': 'Dreamcast', 'dreamcast': 'Dreamcast', 'DC': 'Dreamcast', 'dc': 'Dreamcast',
 					// Sony
-					'PS1': 'PS1', 'PSX': 'PS1', 'PlayStation': 'PS1', 'PS': 'PS1', 'playstation': 'PS1',
+					'PS1': 'PS1', 'PSX': 'PS1', 'PlayStation': 'PS1', 'PS': 'PS1', 'playstation': 'PS1', 'ps1': 'PS1', 'psx': 'PS1', 'ps': 'PS1',
+					'PSP': 'PSP', 'psp': 'PSP',
 					// NEC
-					'PCE': 'PCE', 'PC Engine': 'PCE', 'TurboGrafx-16': 'PCE', 'TurboGrafx': 'PCE', 'pcengine': 'PCE', 'turbografx': 'PCE',
+					'PCE': 'PCE', 'PC Engine': 'PCE', 'TurboGrafx-16': 'PCE', 'TurboGrafx': 'PCE', 'pcengine': 'PCE', 'turbografx': 'PCE', 'pce': 'PCE',
 					// SNK
 					'Neo Geo': 'Neo Geo', 'NEOGEO': 'Neo Geo', 'neogeo': 'Neo Geo', 'NeoGeo': 'Neo Geo',
-					'Neo Geo Pocket': 'Neo Geo Pocket', 'NGP': 'Neo Geo Pocket', 'NGPC': 'Neo Geo Pocket', 'neogeopocket': 'Neo Geo Pocket',
+					'Neo Geo Pocket': 'Neo Geo Pocket', 'NGP': 'Neo Geo Pocket', 'NGPC': 'Neo Geo Pocket', 'neogeopocket': 'Neo Geo Pocket', 'ngp': 'Neo Geo Pocket', 'ngpc': 'Neo Geo Pocket',
 					// Atari
 					'Atari 2600': 'Atari 2600', 'atari2600': 'Atari 2600', 'ATARI': 'Atari 2600', 'Atari': 'Atari 2600',
-					'Atari Lynx': 'Atari Lynx', 'LYNX': 'Atari Lynx', 'Lynx': 'Atari Lynx', 'atarilynx': 'Atari Lynx',
+					'Atari 5200': 'Atari 5200', 'atari5200': 'Atari 5200', 'a5200': 'Atari 5200',
+					'Atari 7800': 'Atari 7800', 'atari7800': 'Atari 7800', 'a7800': 'Atari 7800',
+					'Atari Lynx': 'Atari Lynx', 'LYNX': 'Atari Lynx', 'Lynx': 'Atari Lynx', 'atarilynx': 'Atari Lynx', 'lynx': 'Atari Lynx',
 					// Bandai
-					'WonderSwan': 'WonderSwan', 'WS': 'WonderSwan', 'wonderswan': 'WonderSwan'
+					'WonderSwan': 'WonderSwan', 'WS': 'WonderSwan', 'wonderswan': 'WonderSwan', 'ws': 'WonderSwan', 'wsc': 'WonderSwan',
+					// Other Consoles
+					'Coleco': 'Coleco', 'coleco': 'Coleco', 'ColecoVision': 'Coleco', 'colecovision': 'Coleco',
+					'Intellivision': 'Intellivision', 'intellivision': 'Intellivision', 'INTV': 'Intellivision', 'intv': 'Intellivision',
+					'Vectrex': 'Vectrex', 'vectrex': 'Vectrex',
+					'3DO': '3DO', '3do': '3DO',
+					// Computers
+					'Amiga': 'Amiga', 'amiga': 'Amiga',
+					'Commodore 64': 'Commodore 64', 'C64': 'Commodore 64', 'c64': 'Commodore 64'
 				};
 				return mapping[consoleName] || consoleName;
 			}
