@@ -237,9 +237,18 @@
 				flex-shrink: 0;
 			}
 
-			#sidebar nav ul li .warning {
-				color: #60a5fa;
+			#sidebar nav ul li .missing-art-count {
+				color: #f59e0b;
+				font-size: 0.85em;
+				opacity: 0.8;
 				flex-shrink: 0;
+				display: inline-flex;
+				align-items: center;
+				gap: 2px;
+			}
+
+			#sidebar nav ul li .missing-art-count .icon {
+				font-size: 0.9em;
 			}
 
 			#sidebar nav ul li a .icon.fa-home {
@@ -1050,14 +1059,19 @@
 			}
 
 			#sidebar nav ul {
-				max-height: calc(100vh - 100px);
+				max-height: calc(100vh - 180px);
 				overflow-y: auto;
 				-ms-overflow-style: none;
 				scrollbar-width: none;
+				padding-bottom: 10px;
 			}
 
 			#sidebar nav ul::-webkit-scrollbar {
 				display: none;
+			}
+
+			#sidebar > .inner {
+				padding-bottom: 80px;
 			}
 
 			/* Ultrawide monitor support - expand games section */
@@ -1131,6 +1145,88 @@
 				max-width: 400px;
 				margin: 0 auto 1.5em auto;
 				line-height: 1.5;
+			}
+
+			/* Browser Requirements Section */
+			.browser-requirements {
+				margin-top: 2em;
+				padding: 1.5em 2em;
+				background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+				border: 1px solid rgba(255,255,255,0.1);
+				border-radius: 16px;
+				max-width: 400px;
+				margin-left: auto;
+				margin-right: auto;
+				backdrop-filter: blur(10px);
+				overflow: visible;
+			}
+
+			.browser-req-title {
+				font-size: 0.8em;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 1.5px;
+				color: rgba(255,255,255,0.5);
+				margin-bottom: 0.5em;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 0.5em;
+			}
+
+			.browser-req-title .icon {
+				color: #22c55e;
+			}
+
+			.browser-icons {
+				display: flex;
+				justify-content: center;
+				gap: 2em;
+				margin-bottom: 1em;
+				padding: 1em 0;
+				overflow: visible;
+			}
+
+			.browser-icon {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 0.5em;
+				opacity: 0.8;
+				transition: all 0.2s ease;
+				cursor: default;
+				overflow: visible;
+			}
+
+			.browser-icon:hover {
+				opacity: 1;
+				transform: translateY(-3px);
+			}
+
+			.browser-icon img {
+				display: block;
+				border-radius: 8px;
+			}
+
+			.browser-icon span {
+				font-size: 0.7em;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+				color: rgba(255,255,255,0.6);
+			}
+
+			.browser-req-note {
+				font-size: 0.75em;
+				color: rgba(255,255,255,0.4);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 0.5em;
+			}
+
+			.browser-req-note .icon {
+				color: var(--theme-primary, #3b82f6);
 			}
 
 			.hero-stats {
@@ -1483,6 +1579,39 @@
 				}
 			}
 
+			/* Button press animation synced with logo float (3s cycle) */
+			/* Logo: 0%=bottom, 50%=top, 100%=bottom */
+			/* Button: 0%=pressed, 50%=raised, 100%=pressed */
+			@keyframes button-press {
+				0%, 100% {
+					transform: skew(-10deg) translateY(4px);
+					box-shadow: 0 2px 0 var(--btn-shadow);
+				}
+				50% {
+					transform: skew(-10deg) translateY(0);
+					box-shadow: 0 6px 0 var(--btn-shadow);
+				}
+			}
+
+			@keyframes pulse-glow {
+				0%, 100% { box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.3); }
+				50% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+			}
+
+			.pulse-attention {
+				position: relative;
+				animation: button-press 3s ease-in-out infinite;
+			}
+
+			.pulse-attention::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				border-radius: inherit;
+				animation: pulse-glow 3s ease-in-out infinite;
+				pointer-events: none;
+			}
+
 		</style>
 	</head>
 	<body class="is-preload">
@@ -1500,9 +1629,6 @@
 		<!-- Sidebar -->
 		<section id="sidebar">
 			<div class="inner">
-				<div id="deviceIndicator" class="current-device" style="display: none;" onclick="showDeviceSelector()">
-					<span class="device-emoji">🎮</span> Anbernic RG Nano
-				</div>
 				<nav>
 					<ul id="consoleList">
 						<li><a href="#intro">Home</a></li>
@@ -1524,15 +1650,31 @@
 					<img src="assets/images/logo.png" alt="NanoArcade" class="hero-logo">
 					<p class="hero-tagline">Your retro game collection, beautifully organized. Browse by console, manage box art, and keep your library sharp.</p>
 					<div style="display: flex; gap: 1em; justify-content: center; flex-wrap: wrap;">
-						<button class="btn-3d purple" onclick="showDeviceSelector()">
+						<button class="btn-3d purple pulse-attention" id="selectDeviceBtn" onclick="showDeviceSelector()">
 							<span class="icon solid fa-gamepad"></span> Select Device
 						</button>
 					</div>
-					<div style="margin-top: 1.5em; padding: 1em 1.5em; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto;">
-						<p style="font-size: 0.85em; color: rgba(255,255,255,0.8); margin: 0; line-height: 1.5;">
-							<span class="icon solid fa-info-circle" style="color: #3b82f6; margin-right: 0.5em;"></span>
-							<strong>Browser Requirements:</strong> This app requires Chrome, Edge, or Opera. You'll need to grant file access permission when prompted.
-						</p>
+					<div class="browser-requirements">
+						<div class="browser-req-title">
+							<span class="icon solid fa-check-circle"></span> Supported Browsers
+						</div>
+						<div class="browser-icons">
+							<div class="browser-icon" title="Google Chrome">
+								<img src="assets/images/browsers/chrome.png" alt="Chrome" width="36" height="36">
+								<span>Chrome</span>
+							</div>
+							<div class="browser-icon" title="Microsoft Edge">
+								<img src="assets/images/browsers/edge.png" alt="Edge" width="36" height="36">
+								<span>Edge</span>
+							</div>
+							<div class="browser-icon" title="Opera">
+								<img src="assets/images/browsers/opera.png" alt="Opera" width="36" height="36">
+								<span>Opera</span>
+							</div>
+						</div>
+						<div class="browser-req-note">
+							<span class="icon solid fa-folder-open"></span> File access permission required
+						</div>
 					</div>
 					<div class="hero-stats" id="statsRow" style="display:none;">
 						<div class="hero-stat clickable" style="cursor: default; pointer-events: none;">
@@ -3193,12 +3335,8 @@
 			}
 
 			function updateDeviceIndicator() {
-				const profile = deviceProfiles[currentDevice];
-				const indicator = document.getElementById('deviceIndicator');
-				if (indicator) {
-					indicator.innerHTML = `<span class="device-emoji">${profile.emoji}</span> ${profile.name}`;
-					indicator.style.display = 'flex';
-				}
+				// Device name is now shown in the sidebar Home link
+				renderConsoleList();
 			}
 
 			// Show device selection modal
@@ -3829,14 +3967,17 @@
 					totalMissing += consoles[name].games.filter(g => !g.hasImage).length;
 				}
 
-				let html = '<li><a href="javascript:void(0)" onclick="showHome()"><span class="icon solid fa-home"></span> Home</a></li>';
+				// Show device name next to Home if a device is selected
+			const profile = currentDevice ? deviceProfiles[currentDevice] : null;
+			const deviceLabel = profile ? ` <span style="opacity: 0.6; font-size: 0.9em;">- ${profile.emoji} ${profile.name}</span>` : '';
+			let html = `<li><a href="javascript:void(0)" onclick="showHome()"><span class="icon solid fa-home"></span> Home${deviceLabel}</a></li>`;
 
 				// Add "All Games" option if there are any games
 				if (totalGames > 0) {
 					html += `<li><a href="javascript:void(0)" onclick="selectAllGames()">
-						<span class="icon solid fa-gamepad" style="margin-right: 8px;"></span>
+						<span class="icon solid fa-gamepad" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 1.5em; flex-shrink: 0;"></span>
 						<span>All Games</span>
-						<span class="game-count">${totalGames}${totalMissing > 0 ? ' <span class="warning">!' + totalMissing + '</span>' : ''}</span>
+						<span class="game-count">${totalGames}${totalMissing > 0 ? ' <span class="missing-art-count" title="' + totalMissing + ' games missing box art"><span class="icon solid fa-image"></span>' + totalMissing + '</span>' : ''}</span>
 					</a></li>`;
 				}
 
@@ -3849,7 +3990,7 @@
 					html += `<li><a href="javascript:void(0)" onclick="selectConsole('${name.replace(/'/g, "\\'")}')">
 						<img src="${icon}" class="console-icon" alt="${displayName}">
 						<span>${displayName}</span>
-						<span class="game-count">${count}${missing > 0 ? ' <span class="warning">!' + missing + '</span>' : ''}</span>
+						<span class="game-count">${count}${missing > 0 ? ' <span class="missing-art-count" title="' + missing + ' games missing box art"><span class="icon solid fa-image"></span>' + missing + '</span>' : ''}</span>
 					</a></li>`;
 				}
 
