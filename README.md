@@ -142,6 +142,30 @@ The app recognizes and displays icons for:
 
 ## Changelog
 
+### v1.5
+:art: **Theme Customization** - Choose from 7 color themes (Blue, Purple, Green, Red, Cyan, Orange, Pink) with persistent localStorage saving
+
+:iphone: **Responsive Mobile Menu** - Hamburger menu at ≤1292px with fullscreen overlay for phones/tablets
+
+:globe_with_meridians: **Browser Detection** - Friendly modal for unsupported browsers (Firefox) with logos for Chrome/Edge/Opera
+
+:floppy_disk: **Onion OS Save Manager** - Full save management for Miyoo Mini/Mini+/Flip with emulator core mapping
+
+:file_folder: **Recursive Subfolder Scanning** - Automatically detects ROMs in nested folders with visual indicators
+
+**UI/UX Improvements:**
+- :sparkles: Missing art indicator changed to picture icon with tooltip
+- :sparkles: Synced pulse animation on SELECT DEVICE button (matches logo)
+- :sparkles: Modernized browser requirements section with PNG icons
+- :sparkles: Fixed sidebar layout - no more theme/version overlap
+- :sparkles: Device name shown next to Home in sidebar
+- :sparkles: Centered "Home" link when no device selected
+
+**Bug Fixes:**
+- :wrench: Images now save to correct standard device locations (not game subfolders)
+- :wrench: Subfolder paths moved to tooltips for cleaner UI
+- :wrench: Fixed sidebar height/overflow issues on small screens
+
 ### v1.4
 - **GameFAQs Integration** - Additional box art source searching in parallel with TheGamesDB
 - **Game Info Display** - Rating, Difficulty, and Length from GameFAQs shown in game modal
