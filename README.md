@@ -27,13 +27,18 @@ Or download this repository for offline use.
 - **Mustard OS Integration** - Full support for Mustard OS catalogue structure (`MUOS/info/catalogue/<System>/box/`)
 - **Auto-Resize** - Images automatically resized to optimal dimensions per device (240px for RG Nano, 250px for Miyoo, 354px for Trimui Brick)
 
-### GameFAQs Integration (NEW in v1.4!)
+### Theme System (NEW in v1.5!)
+- **7 Color Themes** - Choose from Blue, Purple, Green, Red, Cyan, Orange, Pink
+- **Persistent Selection** - Theme saves via localStorage
+
+### GameFAQs Integration
 - **Dual Search** - Box art searched from both TheGamesDB and GameFAQs simultaneously
 - **Game Info Display** - Rating, Difficulty, and Length shown in game modal
 - **Styled Tooltips** - Hover for detailed breakdowns (votes, verdicts, playtime)
 
-### Save Manager (NEW in v1.4!)
-- **RG Nano Save Management** - Backup, restore, and delete game saves
+### Save Manager
+- **Multi-Device Support** - Backup, restore, and delete game saves for RG Nano and Miyoo devices (Onion OS)
+- **Emulator Core Mapping** - Automatic save path detection for Gambatte, gpSP, FCEUmm, Supafaust, and more
 - **Delete Confirmation** - Modal confirmation prevents accidental deletions
 
 ### Top 25 Must-Have Games
@@ -62,6 +67,9 @@ Or download this repository for offline use.
 - **Rename & Delete** - Manage your ROM files directly
 
 ### User Experience
+- **Responsive Design** - Mobile-friendly hamburger menu for screens ≤1292px
+- **Browser Detection** - Friendly warning for unsupported browsers (Firefox)
+- **Subfolder Support** - Automatically scans nested ROM folders with visual indicators
 - **Press Start 2P Font** - Retro pixel font for game titles and console names
 - **Responsive Modal** - Game modal scales for smaller screens (1080p and below)
 - **Button Hover Effects** - Pop-up animation on all buttons
