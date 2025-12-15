@@ -47,7 +47,7 @@ Or download this repository for offline use.
 - **Quick Upload** - Drag & drop missing ROMs directly into the Top 25 modal
 - **Supported Consoles**: GB, GBC, GBA, NES, SNES, N64, Genesis, Game Gear, Master System, PS1, PC Engine, Neo Geo, Neo Geo Pocket, Atari 2600, Atari Lynx, WonderSwan
 
-### :frame_with_picture: Box Art Management
+### :framed_picture: Box Art Management
 - **Dual Image Search** - Search TheGamesDB and GameFAQs for box art
 - **Upload Local Images** - Drag & drop or browse for local artwork
 - **URL Import** - Paste image URLs directly with automatic download
