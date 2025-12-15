@@ -346,6 +346,18 @@
 				margin-top: -5px;
 			}
 
+			.game-card .game-subfolder {
+				font-size: 0.65em;
+				color: rgba(255,255,255,0.4);
+				text-align: center;
+				padding: 0 10px 5px;
+				margin-top: -5px;
+				font-style: italic;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
 			.game-card .missing-badge {
 				position: absolute;
 				top: 5px;
@@ -3381,6 +3393,48 @@
 				await scanDrive();
 			}
 
+			// Recursive helper to scan for ROM files in a directory and its subdirectories
+			async function scanForRomFiles(dirHandle, basePath = '', depth = 0) {
+				const MAX_DEPTH = 10; // Prevent infinite recursion
+				if (depth > MAX_DEPTH) return [];
+
+				const files = [];
+				const skipExts = ['.png', '.jpg', '.jpeg', '.txt', '.cue', '.m3u', '.srm', '.sav', '.xml', '.json', '.db', '.cfg'];
+				const skipNames = ['gamelist', 'miyoogamelist'];
+
+				for await (const entry of dirHandle.values()) {
+					if (entry.kind === 'file') {
+						// Skip files without extensions
+						if (!entry.name.includes('.')) continue;
+
+						const ext = '.' + entry.name.split('.').pop().toLowerCase();
+						const lowerName = entry.name.toLowerCase();
+						const isSkipName = skipNames.some(s => lowerName.startsWith(s));
+
+						if (!skipExts.includes(ext) && !isSkipName) {
+							const relativePath = basePath ? basePath + '/' + entry.name : entry.name;
+							files.push({
+								name: entry.name,
+								relativePath: relativePath,
+								dirHandle: dirHandle
+							});
+						}
+					} else if (entry.kind === 'directory') {
+						// Recursively scan subdirectories
+						try {
+							const subDir = await dirHandle.getDirectoryHandle(entry.name);
+							const subPath = basePath ? basePath + '/' + entry.name : entry.name;
+							const subFiles = await scanForRomFiles(subDir, subPath, depth + 1);
+							files.push(...subFiles);
+						} catch (e) {
+							// Skip inaccessible directories
+						}
+					}
+				}
+
+				return files;
+			}
+
 			async function scanExistingDirectory() {
 				if (!directoryHandle) return;
 				consoles = {};
@@ -3484,38 +3538,41 @@
 										}
 									}
 
-									// Scan for ROM files
-									for await (const file of romFolder.values()) {
-										if (file.kind === 'file') {
-											if (!file.name.includes('.')) continue;
-											const ext = '.' + file.name.split('.').pop().toLowerCase();
-											const skipExts = ['.png', '.jpg', '.jpeg', '.txt', '.cue', '.m3u', '.srm', '.sav', '.xml', '.json', '.db', '.cfg'];
-											const skipNames = ['gamelist', 'miyoogamelist'];
-											const lowerName = file.name.toLowerCase();
-											const isSkipName = skipNames.some(s => lowerName.startsWith(s));
+									// Scan for ROM files (including subdirectories)
+									const romFiles = await scanForRomFiles(romFolder);
+									for (const fileInfo of romFiles) {
+										const baseName = fileInfo.name.substring(0, fileInfo.name.lastIndexOf('.'));
+										let hasImage = false;
+										let imageExt = null;
 
-											if (!skipExts.includes(ext) && !isSkipName) {
-												const baseName = file.name.substring(0, file.name.lastIndexOf('.'));
-												let hasImage = false;
-												let imageExt = null;
+										// Check for images in multiple locations:
+										// 1. Box folder (MustardOS standard location)
+										// 2. Same directory as the ROM file (for games in subfolders)
+										const imageDirs = boxDir ? [boxDir, fileInfo.dirHandle] : [fileInfo.dirHandle];
 
-												// Check for existing images in box folder
-												if (boxDir) {
-													try {
-														await boxDir.getFileHandle(baseName + '.png');
-														hasImage = true;
-														imageExt = '.png';
-													} catch {
-														try {
-															await boxDir.getFileHandle(baseName + '.jpg');
-															hasImage = true;
-															imageExt = '.jpg';
-														} catch {}
-													}
-												}
-												games.push({ name: file.name, baseName, hasImage, imageExt });
+										for (const imgDir of imageDirs) {
+											if (hasImage) break;
+											try {
+												await imgDir.getFileHandle(baseName + '.png');
+												hasImage = true;
+												imageExt = '.png';
+											} catch {
+												try {
+													await imgDir.getFileHandle(baseName + '.jpg');
+													hasImage = true;
+													imageExt = '.jpg';
+												} catch {}
 											}
 										}
+
+										games.push({
+											name: fileInfo.name,
+											baseName,
+											hasImage,
+											imageExt,
+											relativePath: fileInfo.relativePath,
+											dirHandle: fileInfo.dirHandle
+										});
 									}
 
 									if (games.length > 0) {
@@ -3582,34 +3639,41 @@
 								}
 								const imageDir = imgsDir || consoleDir;
 
-								for await (const file of consoleDir.values()) {
-									if (file.kind === 'file') {
-										// Skip files without extensions (cache files, etc)
-										if (!file.name.includes('.')) continue;
-										const ext = '.' + file.name.split('.').pop().toLowerCase();
-										// Skip non-ROM files: images, metadata, saves, cache files
-										const skipExts = ['.png', '.jpg', '.jpeg', '.txt', '.cue', '.m3u', '.srm', '.sav', '.xml', '.json', '.db'];
-										const skipNames = ['gamelist', 'miyoogamelist'];
-										const lowerName = file.name.toLowerCase();
-										const isSkipName = skipNames.some(s => lowerName.startsWith(s));
-										if (!skipExts.includes(ext) && !isSkipName) {
-											const baseName = file.name.substring(0, file.name.lastIndexOf('.'));
-											let hasImage = false;
-											let imageExt = null;
+								// Scan for ROM files (including subdirectories)
+								const romFiles = await scanForRomFiles(consoleDir);
+								for (const fileInfo of romFiles) {
+									const baseName = fileInfo.name.substring(0, fileInfo.name.lastIndexOf('.'));
+									let hasImage = false;
+									let imageExt = null;
+
+									// Check for images in multiple locations:
+									// 1. Same directory as the ROM file (for games in subfolders)
+									// 2. Standard image directory (Imgs folder or console root)
+									const imageDirs = [fileInfo.dirHandle, imageDir];
+
+									for (const imgDir of imageDirs) {
+										if (hasImage) break;
+										try {
+											await imgDir.getFileHandle(baseName + '.png');
+											hasImage = true;
+											imageExt = '.png';
+										} catch {
 											try {
-												await imageDir.getFileHandle(baseName + '.png');
+												await imgDir.getFileHandle(baseName + '.jpg');
 												hasImage = true;
-												imageExt = '.png';
-											} catch {
-												try {
-													await imageDir.getFileHandle(baseName + '.jpg');
-													hasImage = true;
-													imageExt = '.jpg';
-												} catch {}
-											}
-											games.push({ name: file.name, baseName, hasImage, imageExt });
+												imageExt = '.jpg';
+											} catch {}
 										}
 									}
+
+									games.push({
+										name: fileInfo.name,
+										baseName,
+										hasImage,
+										imageExt,
+										relativePath: fileInfo.relativePath,
+										dirHandle: fileInfo.dirHandle
+									});
 								}
 								if (games.length > 0) {
 									consoles[consoleName] = {
@@ -4192,20 +4256,34 @@
 						imageHandle = consoleData?.imgsHandle || consoleData?.handle;
 					}
 
-					if (game.hasImage && game.imageExt && imageHandle) {
-						try {
-							const f = await imageHandle.getFileHandle(game.baseName + game.imageExt);
-							imgSrc = await createObjectURL(await f.getFile());
-						} catch {}
+					if (game.hasImage && game.imageExt) {
+						// Try multiple locations for the image file:
+						// 1. Standard image location (imageHandle)
+						// 2. Same directory as the ROM (game.dirHandle) for games in subfolders
+						const imageHandles = imageHandle ? [imageHandle, game.dirHandle] : [game.dirHandle];
+
+						for (const imgHandle of imageHandles) {
+							if (imgSrc || !imgHandle) continue;
+							try {
+								const f = await imgHandle.getFileHandle(game.baseName + game.imageExt);
+								imgSrc = await createObjectURL(await f.getFile());
+								break;
+							} catch {}
+						}
 					}
 					// For "All Games" view, include console name in the card
 					const consoleLabel = currentConsole === '__all__' ? `<div class="game-console-label">${gameConsoleName}</div>` : '';
+					// Show subfolder path if game is in a subdirectory
+					const subfolderPath = game.relativePath && game.relativePath.includes('/')
+						? `<div class="game-subfolder" title="${game.relativePath}">${game.relativePath.substring(0, game.relativePath.lastIndexOf('/'))}</div>`
+						: '';
 					return `<div class="game-card" onclick="openGameModal('${game.name.replace(/'/g, "\\'")}', '${gameConsoleName.replace(/'/g, "\\'")}')" oncontextmenu="showContextMenu(event, '${game.name.replace(/'/g, "\\'")}', '${gameConsoleName.replace(/'/g, "\\'")}')">
 						<div class="image-container">
 							${imgSrc ? `<img src="${imgSrc}">` : '<span class="no-image">?</span>'}
 							${!game.hasImage ? '<span class="missing-badge">No Image</span>' : ''}
 						</div>
 						<div class="game-name" title="${game.baseName}">${game.baseName}</div>
+						${subfolderPath}
 						${consoleLabel}
 					</div>`;
 				}));
@@ -4483,17 +4561,34 @@
 					imageHandle = consoles[targetConsole].imgsHandle || consoles[targetConsole].handle;
 				}
 
-				// Try PNG first, then JPG
-				try {
-					const f = await imageHandle.getFileHandle(baseName + '.png');
-					preview.innerHTML = `<img src="${await createObjectURL(await f.getFile())}">`;
-				} catch {
+				// Find the game object to get its directory handle
+				const game = consoles[targetConsole].games.find(g => g.name === currentGame);
+				const gameDir = game && game.dirHandle ? game.dirHandle : null;
+
+				// Try multiple locations: standard image location and game's directory
+				const imageHandles = gameDir ? [imageHandle, gameDir] : [imageHandle];
+				let imageLoaded = false;
+
+				for (const imgHandle of imageHandles) {
+					if (imageLoaded || !imgHandle) continue;
+					// Try PNG first, then JPG
 					try {
-						const f = await imageHandle.getFileHandle(baseName + '.jpg');
+						const f = await imgHandle.getFileHandle(baseName + '.png');
 						preview.innerHTML = `<img src="${await createObjectURL(await f.getFile())}">`;
+						imageLoaded = true;
+						break;
 					} catch {
-						preview.innerHTML = '<span class="no-image">?</span>';
+						try {
+							const f = await imgHandle.getFileHandle(baseName + '.jpg');
+							preview.innerHTML = `<img src="${await createObjectURL(await f.getFile())}">`;
+							imageLoaded = true;
+							break;
+						} catch {}
 					}
+				}
+
+				if (!imageLoaded) {
+					preview.innerHTML = '<span class="no-image">?</span>';
 				}
 			}
 
@@ -4933,8 +5028,12 @@
 					const consoleHandle = consoles[consoleName].handle;
 					const imageHandle = consoles[consoleName].imgsHandle || consoleHandle;
 
+					// Find the game object to get its directory handle (for subfolder support)
+					const game = consoles[consoleName].games.find(g => g.name === gameFileName);
+					const gameDir = game && game.dirHandle ? game.dirHandle : consoleHandle;
+
 					// Delete the ROM file
-					await consoleHandle.removeEntry(gameFileName);
+					await gameDir.removeEntry(gameFileName);
 
 					// Delete the image file if it exists (try both png and jpg)
 					try {
@@ -5104,19 +5203,23 @@
 					const consoleHandle = consoles[targetConsole].handle;
 					const imageHandle = consoles[targetConsole].imgsHandle || consoleHandle;
 
+					// Find the game object to get its directory handle (for subfolder support)
+					const game = consoles[targetConsole].games.find(g => g.name === oldFileName);
+					const gameDir = game && game.dirHandle ? game.dirHandle : consoleHandle;
+
 					// Read the old ROM file
-					const oldRomHandle = await consoleHandle.getFileHandle(oldFileName);
+					const oldRomHandle = await gameDir.getFileHandle(oldFileName);
 					const oldRomFile = await oldRomHandle.getFile();
 					const romData = await oldRomFile.arrayBuffer();
 
-					// Create new ROM file with new name
-					const newRomHandle = await consoleHandle.getFileHandle(newFileName, { create: true });
+					// Create new ROM file with new name (in same directory)
+					const newRomHandle = await gameDir.getFileHandle(newFileName, { create: true });
 					const romWriter = await newRomHandle.createWritable();
 					await romWriter.write(romData);
 					await romWriter.close();
 
 					// Delete old ROM file
-					await consoleHandle.removeEntry(oldFileName);
+					await gameDir.removeEntry(oldFileName);
 
 					// Try to rename art file if it exists (check PNG first, then JPG)
 					let artExt = null;
@@ -5276,9 +5379,17 @@
 					const resized = await new Promise(r => canvas.toBlob(r, 'image/png'));
 
 					const baseName = currentGame.substring(0, currentGame.lastIndexOf('.'));
+
+					// Find the game object to get its directory (for subfolder support)
+					const game = consoles[targetConsole].games.find(g => g.name === currentGame);
+					const isInSubfolder = game && game.dirHandle && game.relativePath && game.relativePath.includes('/');
+
 					let imageDir;
 
-					if (profile.catalogueStructure) {
+					// If game is in a subfolder, save image there. Otherwise use standard location.
+					if (isInSubfolder) {
+						imageDir = game.dirHandle;
+					} else if (profile.catalogueStructure) {
 						// Trimui Brick / MustardOS: Box art goes in MUOS/info/catalogue/<system>/box/
 						if (consoles[targetConsole].boxHandle) {
 							imageDir = consoles[targetConsole].boxHandle;
@@ -5318,7 +5429,7 @@
 					await w.close();
 
 					document.getElementById('modalImagePreview').innerHTML = `<img src="${await createObjectURL(resized)}">`;
-					const game = consoles[targetConsole].games.find(g => g.name === currentGame);
+					// Update game metadata (game variable already declared above)
 					if (game) {
 						game.hasImage = true;
 						game.imageExt = '.png';
