@@ -5366,17 +5366,9 @@
 					const resized = await new Promise(r => canvas.toBlob(r, 'image/png'));
 
 					const baseName = currentGame.substring(0, currentGame.lastIndexOf('.'));
-
-					// Find the game object to get its directory (for subfolder support)
-					const game = consoles[targetConsole].games.find(g => g.name === currentGame);
-					const isInSubfolder = game && game.dirHandle && game.relativePath && game.relativePath.includes('/');
-
 					let imageDir;
 
-					// If game is in a subfolder, save image there. Otherwise use standard location.
-					if (isInSubfolder) {
-						imageDir = game.dirHandle;
-					} else if (profile.catalogueStructure) {
+					if (profile.catalogueStructure) {
 						// Trimui Brick / MustardOS: Box art goes in MUOS/info/catalogue/<system>/box/
 						if (consoles[targetConsole].boxHandle) {
 							imageDir = consoles[targetConsole].boxHandle;
@@ -5416,7 +5408,8 @@
 					await w.close();
 
 					document.getElementById('modalImagePreview').innerHTML = `<img src="${await createObjectURL(resized)}">`;
-					// Update game metadata (game variable already declared above)
+					// Update game metadata
+					const game = consoles[targetConsole].games.find(g => g.name === currentGame);
 					if (game) {
 						game.hasImage = true;
 						game.imageExt = '.png';
