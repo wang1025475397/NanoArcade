@@ -18,6 +18,8 @@ Or download this repository for offline use.
 - **Miyoo Mini / Mini+** - With Onion OS support
 - **Miyoo Flip** - With Onion OS support
 - **Trimui Brick** - With Mustard OS support
+- **MinUI** - Multi-device OS (480p and High-Res support)
+- **NextUI** - Fork of MinUI for Trimui Brick/Smart Pro
 
 ## Features
 
@@ -25,7 +27,9 @@ Or download this repository for offline use.
 - **Multi-Device Selector** - Switch between device profiles with different folder structures and image sizes
 - **Onion OS Integration** - Full support for Onion OS folder structure (`Roms/[Console]/Imgs/`)
 - **Mustard OS Integration** - Full support for Mustard OS catalogue structure (`MUOS/info/catalogue/<System>/box/`)
-- **Auto-Resize** - Images automatically resized to optimal dimensions per device (240px for RG Nano, 250px for Miyoo, 354px for Trimui Brick)
+- **MinUI Integration** - Full support for MinUI folder structure with `.res` folders and console tags
+- **NextUI Integration** - Full support for NextUI folder structure with `.media` folders
+- **Auto-Resize** - Images automatically resized to optimal dimensions per device (240px for RG Nano, 250px for Miyoo, 354px for Trimui Brick, 200px/300px for MinUI/NextUI)
 
 ### :art: Theme System (NEW in v1.5!)
 - **7 Color Themes** - Choose from Blue, Purple, Green, Red, Cyan, Orange, Pink
@@ -37,8 +41,9 @@ Or download this repository for offline use.
 - **Styled Tooltips** - Hover for detailed breakdowns (votes, verdicts, playtime)
 
 ### :floppy_disk: Save Manager
-- **Multi-Device Support** - Backup, restore, and delete game saves for RG Nano and Miyoo devices (Onion OS)
+- **Multi-Device Support** - Backup, restore, and delete game saves for RG Nano, Miyoo devices (Onion OS), MinUI, and NextUI
 - **Emulator Core Mapping** - Automatic save path detection for Gambatte, gpSP, FCEUmm, Supafaust, and more
+- **MinUI/NextUI Support** - Manages saves in `.userdata/[system]/Saves/` folders
 - **Delete Confirmation** - Modal confirmation prevents accidental deletions
 
 ### :trophy: Top 25 Must-Have Games
@@ -127,6 +132,32 @@ MUOS/
         └── nes/
 ```
 
+### MinUI (480p / High-Res)
+```
+Roms/
+├── Game Boy (GB)/
+│   ├── Pokemon Red.gb
+│   ├── Pokemon Blue.gb
+│   └── .res/
+│       ├── Pokemon Red.gb.png  (box art with ROM extension)
+│       └── Pokemon Blue.gb.png
+├── Super Nintendo (SFC)/
+└── Nintendo Entertainment System (FC)/
+```
+
+### NextUI (Trimui Brick/Smart Pro)
+```
+Roms/
+├── Game Boy (GB)/
+│   ├── Pokemon Red.gb
+│   ├── Pokemon Blue.gb
+│   └── .media/
+│       ├── Pokemon Red.png  (box art without ROM extension)
+│       └── Pokemon Blue.png
+├── Super Nintendo (SFC)/
+└── Nintendo Entertainment System (FC)/
+```
+
 ## Supported Consoles
 
 The app recognizes and displays icons for:
@@ -149,6 +180,29 @@ The app recognizes and displays icons for:
 - JavaScript enabled
 
 ## Changelog
+
+### v1.6
+:rocket: **MinUI Support** - Full support for MinUI operating system with `.res` folder structure and console tag parsing (e.g., "Game Boy (GB)")
+
+:zap: **NextUI Support** - Full support for NextUI (MinUI fork) with `.media` folder structure for Trimui Brick/Smart Pro
+
+:framed_picture: **Dual Resolution Support** - MinUI devices can choose between 480p (200px) or High-Res (300px) image sizes via resolution selector modal
+
+:art: **Smart Image Naming** - MinUI images saved with ROM extension (`Pokemon Red.gb.png`), NextUI without (`Pokemon Red.png`)
+
+:floppy_disk: **MinUI/NextUI Save Manager** - Full save management for MinUI and NextUI devices with automatic system mapping (`.userdata/[system]/Saves/`) - 18 supported consoles
+
+**UI/UX Improvements:**
+- :sparkles: Device selector modal optimized for 1080p displays with hidden scrollbar
+- :sparkles: Generic device option moved to compact button below device grid
+- :sparkles: Responsive device grid (3-column on desktop, 2-column on tablets, 1-column on mobile)
+- :sparkles: Device selector description moved to tooltip for cleaner layout
+
+**Bug Fixes:**
+- :wrench: Fixed MinUI/NextUI folder scanning to properly detect Roms subfolder
+- :wrench: Fixed image rendering for MinUI/NextUI devices in game grid
+- :wrench: Fixed image detection and loading for all device types
+- :wrench: Added WonderSwan support to MinUI/NextUI folder mappings
 
 ### v1.5
 :art: **Theme Customization** - Choose from 7 color themes (Blue, Purple, Green, Red, Cyan, Orange, Pink) with persistent localStorage saving

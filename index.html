@@ -643,10 +643,18 @@
 				padding: 1.5em;
 				border-radius: 20px;
 				max-width: 600px;
+				max-height: 90vh;
 				width: 90%;
 				border: 2px solid var(--theme-primary);
 				box-shadow: 0 0 30px var(--theme-primary-glow), 0 0 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
 				position: relative;
+				overflow-y: auto;
+				scrollbar-width: none; /* Firefox */
+				-ms-overflow-style: none; /* IE/Edge */
+			}
+
+			.modal-box::-webkit-scrollbar {
+				display: none; /* Chrome/Safari/Opera */
 			}
 
 			/* Responsive modal - scale content to fit screen without scrolling */
@@ -1545,14 +1553,14 @@
 			.device-grid {
 				display: grid;
 				grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-				gap: 1em;
+				gap: 0.75em;
 			}
 
 			.device-card {
 				background: rgba(255,255,255,0.05);
 				border: 2px solid rgba(255,255,255,0.1);
 				border-radius: 12px;
-				padding: 1.5em 1em;
+				padding: 1em 0.75em;
 				text-align: center;
 				cursor: pointer;
 				transition: all 0.2s ease;
@@ -1570,21 +1578,22 @@
 			}
 
 			.device-card .device-image {
-				width: 80px;
-				height: 80px;
+				width: 65px;
+				height: 65px;
 				object-fit: contain;
-				margin-bottom: 0.5em;
+				margin-bottom: 0.35em;
 				border-radius: 8px;
 			}
 
 			.device-card .device-name {
 				font-weight: 600;
 				color: #fff;
-				margin-bottom: 0.25em;
+				margin-bottom: 0.15em;
+				font-size: 0.95em;
 			}
 
 			.device-card .device-desc {
-				font-size: 0.75em;
+				font-size: 0.7em;
 				color: rgba(255,255,255,0.5);
 			}
 
@@ -1690,9 +1699,42 @@
 				}
 			}
 
+			@media screen and (max-width: 900px) {
+				#deviceModal .modal-box {
+					max-width: 500px !important;
+				}
+
+				.device-grid {
+					grid-template-columns: repeat(2, 1fr);
+					gap: 0.5em;
+				}
+
+				.device-card .device-image {
+					width: 55px;
+					height: 55px;
+				}
+
+				.device-card {
+					padding: 0.75em 0.5em;
+				}
+
+				.device-card .device-name {
+					font-size: 0.85em;
+				}
+
+				.device-card .device-desc {
+					font-size: 0.65em;
+				}
+			}
+
 			@media screen and (max-width: 600px) {
 				.device-grid {
 					grid-template-columns: 1fr;
+				}
+
+				.device-card .device-image {
+					width: 80px;
+					height: 80px;
 				}
 			}
 
@@ -1892,7 +1934,7 @@
 				<button class="btn-3d purple" onclick="showThemeSelector(); toggleMobileMenu();" style="margin-bottom: 10px;">
 					<span class="icon solid fa-palette"></span> Theme
 				</button>
-				<div style="font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.5</div>
+				<div style="font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.6</div>
 			</div>
 		</div>
 
@@ -1917,7 +1959,7 @@
 				<div class="theme-btn" onclick="showThemeSelector()" style="position: absolute; bottom: 45px; left: 15px; right: 15px;">
 					<span class="icon solid fa-palette"></span> Theme
 				</div>
-				<div style="position: absolute; bottom: 15px; left: 15px; font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.5</div>
+				<div style="position: absolute; bottom: 15px; left: 15px; font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.6</div>
 			</div>
 		</section>
 
@@ -2259,10 +2301,9 @@
 		<div class="modal-overlay" id="deviceModal">
 			<div class="modal-box" style="max-width: 650px;">
 				<div class="modal-header">
-					<h3><span class="icon solid fa-gamepad"></span> Select Your Device</h3>
+					<h3 title="Choose your handheld device to ensure correct folder structure and box art sizing"><span class="icon solid fa-gamepad"></span> Select Your Device</h3>
 					<button class="close-btn" onclick="closeModal('deviceModal')">&times;</button>
 				</div>
-				<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5em; text-align: center;">Choose your handheld device to ensure correct folder structure and box art sizing.</p>
 				<div class="device-grid">
 					<div class="device-card" onclick="selectDevice('rgnano')">
 						<img src="assets/images/devices/rgnano.png" alt="RG Nano" class="device-image">
@@ -2279,15 +2320,50 @@
 						<div class="device-name">Miyoo Flip / Mini Flip</div>
 						<div class="device-desc">Onion OS (280px)</div>
 					</div>
-					<div class="device-card" onclick="selectDevice('stock')">
-						<div class="device-icon">📁</div>
-						<div class="device-name">Generic</div>
-						<div class="device-desc">Standard folder names</div>
-					</div>
 					<div class="device-card" onclick="selectDevice('trimuibrick')">
 						<img src="assets/images/devices/trimuibrick.png" alt="Trimui Brick" class="device-image">
 						<div class="device-name">Trimui Brick</div>
 						<div class="device-desc">Mustard OS (354px)</div>
+					</div>
+					<div class="device-card" onclick="showMinUIResolutionModal()">
+						<img src="assets/images/devices/minui.png" alt="MinUI" class="device-image">
+						<div class="device-name">MinUI</div>
+						<div class="device-desc">Multi-device OS</div>
+					</div>
+					<div class="device-card" onclick="selectDevice('nextui')">
+						<img src="assets/images/devices/nextui.png" alt="NextUI" class="device-image">
+						<div class="device-name">NextUI</div>
+						<div class="device-desc">Brick/Smart Pro (300px)</div>
+					</div>
+				</div>
+				<div style="margin-top: 1.5em; text-align: center;">
+					<button class="btn-3d" onclick="selectDevice('stock')" style="padding: 8px 16px; font-size: 0.9em; opacity: 0.7;">
+						<span class="icon solid fa-folder"></span> Generic / Other Device
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- MinUI Resolution Selector Modal -->
+		<div class="modal-overlay" id="minuiResolutionModal">
+			<div class="modal-box" style="max-width: 600px;">
+				<div class="modal-header">
+					<h3><span class="icon solid fa-display"></span> Select MinUI Resolution</h3>
+					<button class="close-btn" onclick="closeModal('minuiResolutionModal')">&times;</button>
+				</div>
+				<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5em; text-align: center;">Choose the image resolution for your MinUI device.</p>
+				<div class="device-grid" style="grid-template-columns: 1fr 1fr;">
+					<div class="device-card" onclick="selectMinUIResolution('minui480')">
+						<div class="device-icon">📱</div>
+						<div class="device-name">480p</div>
+						<div class="device-desc">200px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">For RGB30, RG35XX, Trimui Smart</div>
+					</div>
+					<div class="device-card" onclick="selectMinUIResolution('minui1080')">
+						<div class="device-icon">🖥️</div>
+						<div class="device-name">High-Res</div>
+						<div class="device-desc">300px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">For RG353 series, RG405 series</div>
 					</div>
 				</div>
 			</div>
@@ -2732,6 +2808,86 @@
 						'Wolfenstein 3D': ['wolfenstein'],
 						'CHIP-8': ['chip8'],
 						'Uzebox': ['uzebox']
+					}
+				},
+				minui480: {
+					name: 'MinUI (480p)',
+					emoji: '🎮',
+					imageSize: 200,
+					isMinUI: true,
+					resolution: '480p',
+					folderMap: {
+						'GB': ['Game Boy (GB)'],
+						'GBC': ['Game Boy Color (GBC)'],
+						'GBA': ['Game Boy Advance (GBA)'],
+						'NES': ['NES (NES)', 'Nintendo (NES)', 'Nintendo Entertainment System (FC)'],
+						'FDS': ['Famicom Disk System (FDS)'],
+						'SNES': ['Super Nintendo (SFC)', 'SNES (SFC)'],
+						'N64': ['Nintendo 64 (N64)'],
+						'Genesis': ['Sega Genesis (MD)', 'Genesis (MD)'],
+						'Master System': ['Sega Master System (SMS)', 'Master System (SMS)'],
+						'Game Gear': ['Game Gear (GG)'],
+						'PS1': ['PlayStation (PS)', 'PS1 (PS)'],
+						'PCE': ['PC Engine (PCE)', 'TurboGrafx-16 (PCE)', 'NEC PC Engine (PCE)'],
+						'Neo Geo': ['Neo Geo (NEOGEO)'],
+						'Neo Geo Pocket': ['Neo Geo Pocket (NGP)', 'Neo Geo Pocket Color (NGP)', 'SNK Neo Geo Pocket (NGP)'],
+						'Virtual Boy': ['Virtual Boy (VB)'],
+						'Pokemon Mini': ['Pokemon Mini (POKE)'],
+						'Pico-8': ['Pico-8 (PICO)'],
+						'WonderSwan': ['Bandai WonderSwan (WS)', 'WonderSwan (WS)', 'WonderSwan Color (WS)']
+					}
+				},
+				minui1080: {
+					name: 'MinUI (High-Res)',
+					emoji: '🎮',
+					imageSize: 300,
+					isMinUI: true,
+					resolution: 'high-res',
+					folderMap: {
+						'GB': ['Game Boy (GB)'],
+						'GBC': ['Game Boy Color (GBC)'],
+						'GBA': ['Game Boy Advance (GBA)'],
+						'NES': ['NES (NES)', 'Nintendo (NES)', 'Nintendo Entertainment System (FC)'],
+						'FDS': ['Famicom Disk System (FDS)'],
+						'SNES': ['Super Nintendo (SFC)', 'SNES (SFC)'],
+						'N64': ['Nintendo 64 (N64)'],
+						'Genesis': ['Sega Genesis (MD)', 'Genesis (MD)'],
+						'Master System': ['Sega Master System (SMS)', 'Master System (SMS)'],
+						'Game Gear': ['Game Gear (GG)'],
+						'PS1': ['PlayStation (PS)', 'PS1 (PS)'],
+						'PCE': ['PC Engine (PCE)', 'TurboGrafx-16 (PCE)', 'NEC PC Engine (PCE)'],
+						'Neo Geo': ['Neo Geo (NEOGEO)'],
+						'Neo Geo Pocket': ['Neo Geo Pocket (NGP)', 'Neo Geo Pocket Color (NGP)', 'SNK Neo Geo Pocket (NGP)'],
+						'Virtual Boy': ['Virtual Boy (VB)'],
+						'Pokemon Mini': ['Pokemon Mini (POKE)'],
+						'Pico-8': ['Pico-8 (PICO)'],
+						'WonderSwan': ['Bandai WonderSwan (WS)', 'WonderSwan (WS)', 'WonderSwan Color (WS)']
+					}
+				},
+				nextui: {
+					name: 'NextUI (Brick/Smart Pro)',
+					emoji: '⚡',
+					imageSize: 300,
+					isNextUI: true,
+					folderMap: {
+						'GB': ['Game Boy (GB)'],
+						'GBC': ['Game Boy Color (GBC)'],
+						'GBA': ['Game Boy Advance (GBA)'],
+						'NES': ['NES (NES)', 'Nintendo (NES)', 'Nintendo Entertainment System (FC)'],
+						'FDS': ['Famicom Disk System (FDS)'],
+						'SNES': ['Super Nintendo (SFC)', 'SNES (SFC)'],
+						'N64': ['Nintendo 64 (N64)'],
+						'Genesis': ['Sega Genesis (MD)', 'Genesis (MD)'],
+						'Master System': ['Sega Master System (SMS)', 'Master System (SMS)'],
+						'Game Gear': ['Game Gear (GG)'],
+						'PS1': ['PlayStation (PS)', 'PS1 (PS)'],
+						'PCE': ['PC Engine (PCE)', 'TurboGrafx-16 (PCE)', 'NEC PC Engine (PCE)'],
+						'Neo Geo': ['Neo Geo (NEOGEO)'],
+						'Neo Geo Pocket': ['Neo Geo Pocket (NGP)', 'Neo Geo Pocket Color (NGP)', 'SNK Neo Geo Pocket (NGP)'],
+						'Virtual Boy': ['Virtual Boy (VB)'],
+						'Pokemon Mini': ['Pokemon Mini (POKE)'],
+						'Pico-8': ['Pico-8 (PICO)'],
+						'WonderSwan': ['Bandai WonderSwan (WS)', 'WonderSwan (WS)', 'WonderSwan Color (WS)']
 					}
 				}
 			};
@@ -3670,6 +3826,16 @@
 			}
 
 			// Select device and continue with folder scan
+			function showMinUIResolutionModal() {
+				closeModal('deviceModal');
+				document.getElementById('minuiResolutionModal').classList.add('active');
+			}
+
+			function selectMinUIResolution(deviceType) {
+				closeModal('minuiResolutionModal');
+				selectDevice(deviceType);
+			}
+
 			async function selectDevice(deviceType) {
 				currentDevice = deviceType;
 				await saveDevice(deviceType);
@@ -3687,6 +3853,9 @@
 				if (profile.catalogueStructure) {
 					// Trimui Brick / Mustard OS
 					message = 'Please select the <strong>ROOT of your SD card</strong> (the folder containing the MUOS folder)';
+				} else if (profile.isMinUI || profile.isNextUI) {
+					// MinUI / NextUI
+					message = 'Please select the <strong>ROOT of your SD card</strong><br><small style="color: rgba(255,255,255,0.6);">The folder containing the Roms folder</small>';
 				} else if (profile.emoji === '🧅') {
 					// Miyoo devices with Onion OS - select root so we can access Saves folder too
 					message = 'Please select the <strong>ROOT of your SD card</strong><br><small style="color: rgba(255,255,255,0.6);">The folder containing Roms, Saves, RetroArch, etc.</small>';
@@ -3915,9 +4084,9 @@
 						'app', 'miyoo', 'retroarch', 'themes', 'media', 'emu', 'screenshots', 'icons', '.tmp_update'
 					];
 
-					// For Onion OS devices, scan the Roms subfolder instead of root
+					// For Onion OS and MinUI/NextUI devices, scan the Roms subfolder instead of root
 					let scanDir = directoryHandle;
-					if (usesImgsFolder) {
+					if (usesImgsFolder || profile.isMinUI || profile.isNextUI) {
 						try {
 							scanDir = await directoryHandle.getDirectoryHandle('Roms');
 						} catch {
@@ -3927,7 +4096,7 @@
 								try {
 									scanDir = await directoryHandle.getDirectoryHandle('roms');
 								} catch {
-									showError('Roms folder not found. Please select the root of your SD card (the folder containing Roms, Saves, RetroArch, etc.).');
+									showError('Roms folder not found. Please select the root of your SD card (the folder containing the Roms folder).');
 									return;
 								}
 							}
@@ -3943,14 +4112,29 @@
 							const games = [];
 							try {
 								const consoleDir = await scanDir.getDirectoryHandle(consoleName);
-								// Check for Imgs subfolder (Onion OS style)
+								// Check for device-specific image folders
 								let imgsDir = null;
+								let resDir = null;
+								let mediaDir = null;
+
 								if (usesImgsFolder) {
+									// Onion OS: Check for Imgs subfolder
 									try {
 										imgsDir = await consoleDir.getDirectoryHandle('Imgs');
 									} catch {}
+								} else if (profile.isMinUI) {
+									// MinUI: Check for .res subfolder
+									try {
+										resDir = await consoleDir.getDirectoryHandle('.res');
+									} catch {}
+								} else if (profile.isNextUI) {
+									// NextUI: Check for .media subfolder
+									try {
+										mediaDir = await consoleDir.getDirectoryHandle('.media');
+									} catch {}
 								}
-								const imageDir = imgsDir || consoleDir;
+
+								const imageDir = imgsDir || resDir || mediaDir || consoleDir;
 
 								// Scan for ROM files (including subdirectories)
 								const romFiles = await scanForRomFiles(consoleDir);
@@ -3961,21 +4145,40 @@
 
 									// Check for images in multiple locations:
 									// 1. Same directory as the ROM file (for games in subfolders)
-									// 2. Standard image directory (Imgs folder or console root)
+									// 2. Standard image directory (Imgs/.res/.media folder or console root)
 									const imageDirs = [fileInfo.dirHandle, imageDir];
 
 									for (const imgDir of imageDirs) {
 										if (hasImage) break;
-										try {
-											await imgDir.getFileHandle(baseName + '.png');
-											hasImage = true;
-											imageExt = '.png';
-										} catch {
+
+										// For MinUI, check with ROM extension included (e.g., "Pokemon Red.gb.png")
+										if (profile.isMinUI) {
 											try {
-												await imgDir.getFileHandle(baseName + '.jpg');
+												await imgDir.getFileHandle(fileInfo.name + '.png');
 												hasImage = true;
-												imageExt = '.jpg';
-											} catch {}
+												imageExt = '.png';
+											} catch {
+												try {
+													await imgDir.getFileHandle(fileInfo.name + '.jpg');
+													hasImage = true;
+													imageExt = '.jpg';
+												} catch {}
+											}
+										}
+
+										// For all other devices (including NextUI), check without ROM extension
+										if (!hasImage) {
+											try {
+												await imgDir.getFileHandle(baseName + '.png');
+												hasImage = true;
+												imageExt = '.png';
+											} catch {
+												try {
+													await imgDir.getFileHandle(baseName + '.jpg');
+													hasImage = true;
+													imageExt = '.jpg';
+												} catch {}
+											}
 										}
 									}
 
@@ -3992,6 +4195,8 @@
 									consoles[consoleName] = {
 										handle: consoleDir,
 										imgsHandle: imgsDir,
+										resHandle: resDir,
+										mediaHandle: mediaDir,
 										games: games.sort((a, b) => a.baseName.localeCompare(b.baseName))
 									};
 								}
@@ -4569,6 +4774,34 @@
 								imageHandle = consoleData.handle;
 							}
 						}
+					} else if (profile.isMinUI) {
+						// MinUI: Look in .res folder
+						if (consoleData?.resHandle) {
+							imageHandle = consoleData.resHandle;
+						} else if (consoleData?.handle) {
+							// Try to get .res folder if it exists
+							try {
+								const resDir = await consoleData.handle.getDirectoryHandle('.res');
+								consoleData.resHandle = resDir;
+								imageHandle = resDir;
+							} catch {
+								imageHandle = consoleData.handle;
+							}
+						}
+					} else if (profile.isNextUI) {
+						// NextUI: Look in .media folder
+						if (consoleData?.mediaHandle) {
+							imageHandle = consoleData.mediaHandle;
+						} else if (consoleData?.handle) {
+							// Try to get .media folder if it exists
+							try {
+								const mediaDir = await consoleData.handle.getDirectoryHandle('.media');
+								consoleData.mediaHandle = mediaDir;
+								imageHandle = mediaDir;
+							} catch {
+								imageHandle = consoleData.handle;
+							}
+						}
 					} else {
 						// Other devices: Imgs folder or console folder
 						imageHandle = consoleData?.imgsHandle || consoleData?.handle;
@@ -4582,11 +4815,22 @@
 
 						for (const imgHandle of imageHandles) {
 							if (imgSrc || !imgHandle) continue;
-							try {
-								const f = await imgHandle.getFileHandle(game.baseName + game.imageExt);
-								imgSrc = await createObjectURL(await f.getFile());
-								break;
-							} catch {}
+							// For MinUI, try with full ROM filename first (e.g., "Pokemon Blue.gb.png")
+							if (profile.isMinUI) {
+								try {
+									const f = await imgHandle.getFileHandle(game.name + game.imageExt);
+									imgSrc = await createObjectURL(await f.getFile());
+									break;
+								} catch {}
+							}
+							// For all other devices (including NextUI), use basename
+							if (!imgSrc) {
+								try {
+									const f = await imgHandle.getFileHandle(game.baseName + game.imageExt);
+									imgSrc = await createObjectURL(await f.getFile());
+									break;
+								} catch {}
+							}
 						}
 					}
 					// For "All Games" view, include console name in the card
@@ -4873,6 +5117,36 @@
 							imageHandle = consoles[targetConsole].handle;
 						}
 					}
+				} else if (profile.isMinUI) {
+					// MinUI: Look in .res folder
+					if (consoles[targetConsole].resHandle) {
+						imageHandle = consoles[targetConsole].resHandle;
+					} else {
+						// Try to get .res folder if it exists now
+						try {
+							const resDir = await consoles[targetConsole].handle.getDirectoryHandle('.res');
+							consoles[targetConsole].resHandle = resDir;
+							imageHandle = resDir;
+						} catch {
+							// .res folder doesn't exist, fallback to console folder
+							imageHandle = consoles[targetConsole].handle;
+						}
+					}
+				} else if (profile.isNextUI) {
+					// NextUI: Look in .media folder
+					if (consoles[targetConsole].mediaHandle) {
+						imageHandle = consoles[targetConsole].mediaHandle;
+					} else {
+						// Try to get .media folder if it exists now
+						try {
+							const mediaDir = await consoles[targetConsole].handle.getDirectoryHandle('.media');
+							consoles[targetConsole].mediaHandle = mediaDir;
+							imageHandle = mediaDir;
+						} catch {
+							// .media folder doesn't exist, fallback to console folder
+							imageHandle = consoles[targetConsole].handle;
+						}
+					}
 				} else {
 					// Other devices: Imgs folder or console folder
 					imageHandle = consoles[targetConsole].imgsHandle || consoles[targetConsole].handle;
@@ -4888,19 +5162,39 @@
 
 				for (const imgHandle of imageHandles) {
 					if (imageLoaded || !imgHandle) continue;
-					// Try PNG first, then JPG
-					try {
-						const f = await imgHandle.getFileHandle(baseName + '.png');
-						preview.innerHTML = `<img src="${await createObjectURL(await f.getFile())}">`;
-						imageLoaded = true;
-						break;
-					} catch {
+
+					// For MinUI, try with ROM extension first (e.g., "Pokemon Red.gb.png")
+					if (profile.isMinUI) {
 						try {
-							const f = await imgHandle.getFileHandle(baseName + '.jpg');
+							const f = await imgHandle.getFileHandle(currentGame + '.png');
 							preview.innerHTML = `<img src="${await createObjectURL(await f.getFile())}">`;
 							imageLoaded = true;
 							break;
-						} catch {}
+						} catch {
+							try {
+								const f = await imgHandle.getFileHandle(currentGame + '.jpg');
+								preview.innerHTML = `<img src="${await createObjectURL(await f.getFile())}">`;
+								imageLoaded = true;
+								break;
+							} catch {}
+						}
+					}
+
+					// For all devices (including NextUI), try without ROM extension
+					if (!imageLoaded) {
+						try {
+							const f = await imgHandle.getFileHandle(baseName + '.png');
+							preview.innerHTML = `<img src="${await createObjectURL(await f.getFile())}">`;
+							imageLoaded = true;
+							break;
+						} catch {
+							try {
+								const f = await imgHandle.getFileHandle(baseName + '.jpg');
+								preview.innerHTML = `<img src="${await createObjectURL(await f.getFile())}">`;
+								imageLoaded = true;
+								break;
+							} catch {}
+						}
 					}
 				}
 
@@ -5518,7 +5812,19 @@
 
 				try {
 					const consoleHandle = consoles[targetConsole].handle;
-					const imageHandle = consoles[targetConsole].imgsHandle || consoleHandle;
+					const profile = deviceProfiles[currentDevice];
+					let imageHandle;
+
+					// Determine the correct image handle based on device type
+					if (profile.catalogueStructure) {
+						imageHandle = consoles[targetConsole].boxHandle || consoleHandle;
+					} else if (profile.isMinUI) {
+						imageHandle = consoles[targetConsole].resHandle || consoleHandle;
+					} else if (profile.isNextUI) {
+						imageHandle = consoles[targetConsole].mediaHandle || consoleHandle;
+					} else {
+						imageHandle = consoles[targetConsole].imgsHandle || consoleHandle;
+					}
 
 					// Find the game object to get its directory handle (for subfolder support)
 					const game = consoles[targetConsole].games.find(g => g.name === oldFileName);
@@ -5540,30 +5846,44 @@
 
 					// Try to rename art file if it exists (check PNG first, then JPG)
 					let artExt = null;
+					let oldArtFileName, newArtFileName;
+
+					// Determine old and new art filenames based on device type
+					if (profile.isMinUI) {
+						// MinUI: Art files include ROM extension (e.g., "Pokemon Red.gb.png")
+						oldArtFileName = oldFileName;
+						newArtFileName = newFileName;
+					} else {
+						// All other devices: Art files use basename only (e.g., "Pokemon Red.png")
+						oldArtFileName = oldBaseName;
+						newArtFileName = newName;
+					}
+
+					// Check if art file exists (PNG first, then JPG)
 					try {
-						await imageHandle.getFileHandle(oldBaseName + '.png');
+						await imageHandle.getFileHandle(oldArtFileName + '.png');
 						artExt = '.png';
 					} catch {
 						try {
-							await imageHandle.getFileHandle(oldBaseName + '.jpg');
+							await imageHandle.getFileHandle(oldArtFileName + '.jpg');
 							artExt = '.jpg';
 						} catch {}
 					}
 
 					if (artExt) {
 						try {
-							const oldArtHandle = await imageHandle.getFileHandle(oldBaseName + artExt);
+							const oldArtHandle = await imageHandle.getFileHandle(oldArtFileName + artExt);
 							const oldArtFile = await oldArtHandle.getFile();
 							const artData = await oldArtFile.arrayBuffer();
 
 							// Create new art file (keep same extension)
-							const newArtHandle = await imageHandle.getFileHandle(newName + artExt, { create: true });
+							const newArtHandle = await imageHandle.getFileHandle(newArtFileName + artExt, { create: true });
 							const artWriter = await newArtHandle.createWritable();
 							await artWriter.write(artData);
 							await artWriter.close();
 
 							// Delete old art file
-							await imageHandle.removeEntry(oldBaseName + artExt);
+							await imageHandle.removeEntry(oldArtFileName + artExt);
 						} catch (e) {
 							// Art file error, continue anyway
 						}
@@ -5697,6 +6017,7 @@
 
 					const baseName = currentGame.substring(0, currentGame.lastIndexOf('.'));
 					let imageDir;
+					let imageFileName;
 
 					if (profile.catalogueStructure) {
 						// Trimui Brick / MustardOS: Box art goes in MUOS/info/catalogue/<system>/box/
@@ -5720,6 +6041,25 @@
 								imageDir = boxDir;
 							}
 						}
+						imageFileName = baseName + '.png';
+					} else if (profile.isMinUI) {
+						// MinUI: Save to .res folder with ROM extension (e.g., "Pokemon Red.gb.png")
+						if (consoles[targetConsole].resHandle) {
+							imageDir = consoles[targetConsole].resHandle;
+						} else {
+							imageDir = await consoles[targetConsole].handle.getDirectoryHandle('.res', { create: true });
+							consoles[targetConsole].resHandle = imageDir;
+						}
+						imageFileName = currentGame + '.png';
+					} else if (profile.isNextUI) {
+						// NextUI: Save to .media folder without ROM extension (e.g., "Pokemon Red.png")
+						if (consoles[targetConsole].mediaHandle) {
+							imageDir = consoles[targetConsole].mediaHandle;
+						} else {
+							imageDir = await consoles[targetConsole].handle.getDirectoryHandle('.media', { create: true });
+							consoles[targetConsole].mediaHandle = imageDir;
+						}
+						imageFileName = baseName + '.png';
 					} else if (profile.emoji === '🧅') {
 						// Onion OS: Create/get Imgs folder
 						imageDir = consoles[targetConsole].imgsHandle || consoles[targetConsole].handle;
@@ -5727,12 +6067,14 @@
 							imageDir = await consoles[targetConsole].handle.getDirectoryHandle('Imgs', { create: true });
 							consoles[targetConsole].imgsHandle = imageDir;
 						}
+						imageFileName = baseName + '.png';
 					} else {
 						// RG Nano / Generic: Save directly to console folder
 						imageDir = consoles[targetConsole].handle;
+						imageFileName = baseName + '.png';
 					}
 
-					const fh = await imageDir.getFileHandle(baseName + '.png', { create: true });
+					const fh = await imageDir.getFileHandle(imageFileName, { create: true });
 					const w = await fh.createWritable();
 					await w.write(resized);
 					await w.close();
@@ -5914,16 +6256,53 @@
 				'Handy': ['Atari Lynx', 'Lynx']
 			};
 
+			// MinUI/NextUI system to console mapping (.sav files)
+			// Uses system folder names from MinUI
+			const minuiEmulatorMap = {
+				'GB': ['Game Boy', 'Game Boy Color', 'GB', 'GBC', 'Game Boy (GB)', 'Game Boy Color (GBC)'],
+				'GBA': ['Game Boy Advance', 'GBA', 'Game Boy Advance (GBA)'],
+				'FC': ['NES', 'Nintendo Entertainment System', 'FC', 'Famicom', 'Nintendo Entertainment System (FC)', 'NES (NES)', 'Nintendo (NES)'],
+				'FDS': ['Famicom Disk System', 'FDS', 'Famicom Disk System (FDS)'],
+				'SFC': ['SNES', 'Super Nintendo', 'SFC', 'Super Famicom', 'Super Nintendo (SFC)', 'SNES (SFC)'],
+				'N64': ['Nintendo 64', 'N64', 'Nintendo 64 (N64)'],
+				'MD': ['Sega Genesis', 'Genesis', 'Mega Drive', 'MD', 'Sega Genesis (MD)', 'Genesis (MD)'],
+				'SMS': ['Sega Master System', 'Master System', 'MS', 'SMS', 'Sega Master System (SMS)', 'Master System (SMS)'],
+				'GG': ['Game Gear', 'GG', 'Game Gear (GG)'],
+				'PS': ['PS1', 'PlayStation', 'PSX', 'PS', 'PlayStation (PS)', 'PS1 (PS)', 'Sony PlayStation (PS)'],
+				'PCE': ['PC Engine', 'TurboGrafx-16', 'PCE', 'PCECD', 'PC Engine (PCE)', 'TurboGrafx-16 (PCE)', 'NEC PC Engine (PCE)'],
+				'NEOGEO': ['Neo Geo', 'NEOGEO', 'Neo Geo (NEOGEO)'],
+				'NGP': ['Neo Geo Pocket', 'Neo Geo Pocket Color', 'NGP', 'NGPC', 'Neo Geo Pocket (NGP)', 'Neo Geo Pocket Color (NGP)', 'SNK Neo Geo Pocket (NGP)'],
+				'VB': ['Virtual Boy', 'VB', 'Virtual Boy (VB)'],
+				'POKE': ['Pokemon Mini', 'POKE', 'Pokemon Mini (POKE)'],
+				'PICO': ['Pico-8', 'PICO-8', 'PICO', 'Pico-8 (PICO)'],
+				'WS': ['WonderSwan', 'WonderSwan Color', 'WS', 'WSC', 'Bandai WonderSwan (WS)']
+			};
+
 			function isOnionOS(deviceType) {
 				return deviceType === 'onion' || deviceType === 'miyooflip';
 			}
 
+			function isMinUIBased(deviceType) {
+				const profile = deviceProfiles[deviceType];
+				return profile && (profile.isMinUI || profile.isNextUI);
+			}
+
 			function getSaveExtension(deviceType) {
-				return isOnionOS(deviceType) ? '.srm' : '.sav';
+				if (isOnionOS(deviceType)) return '.srm';
+				if (isMinUIBased(deviceType)) return '.sav';
+				return '.sav';
 			}
 
 			function getEmulatorForConsole(consoleName, deviceType) {
-				const emulatorMap = isOnionOS(deviceType) ? onionEmulatorMap : rgNanoEmulatorMap;
+				let emulatorMap;
+				if (isOnionOS(deviceType)) {
+					emulatorMap = onionEmulatorMap;
+				} else if (isMinUIBased(deviceType)) {
+					emulatorMap = minuiEmulatorMap;
+				} else {
+					emulatorMap = rgNanoEmulatorMap;
+				}
+
 				for (const [emulator, consoleNames] of Object.entries(emulatorMap)) {
 					if (consoleNames.some(c => c.toLowerCase() === consoleName.toLowerCase())) {
 						return emulator;
@@ -5951,6 +6330,13 @@
 					const savesFolderHandle = await profileHandle.getDirectoryHandle('saves', { create }).catch(() => null);
 					if (!savesFolderHandle) return null;
 					return await savesFolderHandle.getDirectoryHandle(emulator, { create }).catch(() => null);
+				} else if (isMinUIBased(deviceType)) {
+					// MinUI/NextUI: .userdata/[system]/Saves/
+					const userdataHandle = await directoryHandle.getDirectoryHandle('.userdata', { create }).catch(() => null);
+					if (!userdataHandle) return null;
+					const systemHandle = await userdataHandle.getDirectoryHandle(emulator, { create }).catch(() => null);
+					if (!systemHandle) return null;
+					return await systemHandle.getDirectoryHandle('Saves', { create }).catch(() => null);
 				} else {
 					// RG Nano: FunKey/.picoarch/data/[emulator]/
 					const funKeyHandle = await directoryHandle.getDirectoryHandle('FunKey', { create }).catch(() => null);
@@ -5966,6 +6352,8 @@
 			function getSaveLocationText(deviceType, emulator) {
 				if (isOnionOS(deviceType)) {
 					return `Saves/CurrentProfile/saves/${emulator}/`;
+				} else if (isMinUIBased(deviceType)) {
+					return `.userdata/${emulator}/Saves/`;
 				} else {
 					return `FunKey/.picoarch/data/${emulator}/`;
 				}
@@ -5976,7 +6364,7 @@
 				list.innerHTML = '<div class="loading-container" style="padding: 2em;"><div class="spinner"></div><div class="loading-text">Checking for saves...</div></div>';
 
 				// Check if device supports save management
-				const supportsSaves = currentDevice === 'rgnano' || isOnionOS(currentDevice);
+				const supportsSaves = currentDevice === 'rgnano' || isOnionOS(currentDevice) || isMinUIBased(currentDevice);
 				if (!directoryHandle || !supportsSaves) {
 					list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2em;">Save management is not available for this device.</p>';
 					return;
