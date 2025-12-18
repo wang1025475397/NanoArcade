@@ -19,7 +19,7 @@ Or download this repository for offline use.
 - **Miyoo Flip** - With Onion OS support
 - **Trimui Brick** - With Mustard OS support
 - **MinUI** - Multi-device OS (480p and High-Res support)
-- **NextUI** - Fork of MinUI for Trimui Brick/Smart Pro
+- **NextUI** - Fork of MinUI (Standard/High-Res/Ultra support)
 
 ## Features
 
@@ -29,7 +29,7 @@ Or download this repository for offline use.
 - **Mustard OS Integration** - Full support for Mustard OS catalogue structure (`MUOS/info/catalogue/<System>/box/`)
 - **MinUI Integration** - Full support for MinUI folder structure with `.res` folders and console tags
 - **NextUI Integration** - Full support for NextUI folder structure with `.media` folders
-- **Auto-Resize** - Images automatically resized to optimal dimensions per device (240px for RG Nano, 250px for Miyoo, 354px for Trimui Brick, 200px/300px for MinUI/NextUI)
+- **Auto-Resize** - Images automatically resized to optimal dimensions per device (240px for RG Nano, 250px for Miyoo, 354px for Trimui Brick, 200px/300px for MinUI, 200px/300px/400px for NextUI)
 
 ### :art: Theme System
 - **7 Color Themes** - Choose from Blue, Purple, Green, Red, Cyan, Orange, Pink
@@ -181,10 +181,13 @@ The app recognizes and displays icons for:
 
 ## Changelog
 
+### v1.7
+:framed_picture: **NextUI Resolution Selector** - NextUI devices can choose between Standard (200px for RG35XX SP), High-Res (300px for Trimui Brick), or Ultra (400px for Trimui Smart Pro) via resolution selector modal
+
 ### v1.6
 :rocket: **MinUI Support** - Full support for MinUI operating system with `.res` folder structure and console tag parsing (e.g., "Game Boy (GB)")
 
-:zap: **NextUI Support** - Full support for NextUI (MinUI fork) with `.media` folder structure for Trimui Brick/Smart Pro
+:zap: **NextUI Support** - Full support for NextUI (MinUI fork) with `.media` folder structure for Trimui Brick/Smart Pro/RG35XX SP
 
 :framed_picture: **Dual Resolution Support** - MinUI devices can choose between 480p (200px) or High-Res (300px) image sizes via resolution selector modal
 

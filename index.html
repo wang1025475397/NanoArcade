@@ -2330,10 +2330,10 @@
 						<div class="device-name">MinUI</div>
 						<div class="device-desc">Multi-device OS</div>
 					</div>
-					<div class="device-card" onclick="selectDevice('nextui')">
+					<div class="device-card" onclick="showNextUIResolutionModal()">
 						<img src="assets/images/devices/nextui.png" alt="NextUI" class="device-image">
 						<div class="device-name">NextUI</div>
-						<div class="device-desc">Brick/Smart Pro (300px)</div>
+						<div class="device-desc">Resolution selector</div>
 					</div>
 				</div>
 				<div style="margin-top: 1.5em; text-align: center;">
@@ -2364,6 +2364,37 @@
 						<div class="device-name">High-Res</div>
 						<div class="device-desc">300px images</div>
 						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">For RG353 series, RG405 series</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- NextUI Resolution Selector Modal -->
+		<div class="modal-overlay" id="nextuiResolutionModal">
+			<div class="modal-box" style="max-width: 700px;">
+				<div class="modal-header">
+					<h3><span class="icon solid fa-display"></span> Select NextUI Resolution</h3>
+					<button class="close-btn" onclick="closeModal('nextuiResolutionModal')">&times;</button>
+				</div>
+				<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5em; text-align: center;">Choose the image resolution for your NextUI device.</p>
+				<div class="device-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+					<div class="device-card" onclick="selectNextUIResolution('nextui640')">
+						<div class="device-icon">📱</div>
+						<div class="device-name">Standard</div>
+						<div class="device-desc">200px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG35XX SP (640x480)</div>
+					</div>
+					<div class="device-card" onclick="selectNextUIResolution('nextui1024')">
+						<div class="device-icon">🎮</div>
+						<div class="device-name">High-Res</div>
+						<div class="device-desc">300px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Brick (1024x768)</div>
+					</div>
+					<div class="device-card" onclick="selectNextUIResolution('nextui1280')">
+						<div class="device-icon">🖥️</div>
+						<div class="device-name">Ultra</div>
+						<div class="device-desc">400px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Smart Pro (1280x720)</div>
 					</div>
 				</div>
 			</div>
@@ -2864,11 +2895,12 @@
 						'WonderSwan': ['Bandai WonderSwan (WS)', 'WonderSwan (WS)', 'WonderSwan Color (WS)']
 					}
 				},
-				nextui: {
-					name: 'NextUI (Brick/Smart Pro)',
+				nextui640: {
+					name: 'NextUI (Standard)',
 					emoji: '⚡',
-					imageSize: 300,
+					imageSize: 200,
 					isNextUI: true,
+					resolution: 'standard',
 					folderMap: {
 						'GB': ['Game Boy (GB)'],
 						'GBC': ['Game Boy Color (GBC)'],
@@ -2889,10 +2921,64 @@
 						'Pico-8': ['Pico-8 (PICO)'],
 						'WonderSwan': ['Bandai WonderSwan (WS)', 'WonderSwan (WS)', 'WonderSwan Color (WS)']
 					}
+				},
+			nextui1024: {
+				name: 'NextUI (High-Res)',
+				emoji: '⚡',
+				imageSize: 300,
+				isNextUI: true,
+				resolution: 'high-res',
+				folderMap: {
+					'GB': ['Game Boy (GB)'],
+					'GBC': ['Game Boy Color (GBC)'],
+					'GBA': ['Game Boy Advance (GBA)'],
+					'NES': ['NES (NES)', 'Nintendo (NES)', 'Nintendo Entertainment System (FC)'],
+					'FDS': ['Famicom Disk System (FDS)'],
+					'SNES': ['Super Nintendo (SFC)', 'SNES (SFC)'],
+					'N64': ['Nintendo 64 (N64)'],
+					'Genesis': ['Sega Genesis (MD)', 'Genesis (MD)'],
+					'Master System': ['Sega Master System (SMS)', 'Master System (SMS)'],
+					'Game Gear': ['Game Gear (GG)'],
+					'PS1': ['PlayStation (PS)', 'PS1 (PS)'],
+					'PCE': ['PC Engine (PCE)', 'TurboGrafx-16 (PCE)', 'NEC PC Engine (PCE)'],
+					'Neo Geo': ['Neo Geo (NEOGEO)'],
+					'Neo Geo Pocket': ['Neo Geo Pocket (NGP)', 'Neo Geo Pocket Color (NGP)', 'SNK Neo Geo Pocket (NGP)'],
+					'Virtual Boy': ['Virtual Boy (VB)'],
+					'Pokemon Mini': ['Pokemon Mini (POKE)'],
+					'Pico-8': ['Pico-8 (PICO)'],
+					'WonderSwan': ['Bandai WonderSwan (WS)', 'WonderSwan (WS)', 'WonderSwan Color (WS)']
 				}
-			};
+			},
+			nextui1280: {
+				name: 'NextUI (Ultra)',
+				emoji: '⚡',
+				imageSize: 400,
+				isNextUI: true,
+				resolution: 'ultra',
+				folderMap: {
+					'GB': ['Game Boy (GB)'],
+					'GBC': ['Game Boy Color (GBC)'],
+					'GBA': ['Game Boy Advance (GBA)'],
+					'NES': ['NES (NES)', 'Nintendo (NES)', 'Nintendo Entertainment System (FC)'],
+					'FDS': ['Famicom Disk System (FDS)'],
+					'SNES': ['Super Nintendo (SFC)', 'SNES (SFC)'],
+					'N64': ['Nintendo 64 (N64)'],
+					'Genesis': ['Sega Genesis (MD)', 'Genesis (MD)'],
+					'Master System': ['Sega Master System (SMS)', 'Master System (SMS)'],
+					'Game Gear': ['Game Gear (GG)'],
+					'PS1': ['PlayStation (PS)', 'PS1 (PS)'],
+					'PCE': ['PC Engine (PCE)', 'TurboGrafx-16 (PCE)', 'NEC PC Engine (PCE)'],
+					'Neo Geo': ['Neo Geo (NEOGEO)'],
+					'Neo Geo Pocket': ['Neo Geo Pocket (NGP)', 'Neo Geo Pocket Color (NGP)', 'SNK Neo Geo Pocket (NGP)'],
+					'Virtual Boy': ['Virtual Boy (VB)'],
+					'Pokemon Mini': ['Pokemon Mini (POKE)'],
+					'Pico-8': ['Pico-8 (PICO)'],
+					'WonderSwan': ['Bandai WonderSwan (WS)', 'WonderSwan (WS)', 'WonderSwan Color (WS)']
+				}
+			}
+		};
 
-			// Top 25 rated games per console (for "must have" list feature)
+		// Top 25 rated games per console (for "must have" list feature)
 			const topGamesData = {
 				'GBA': [
 					'Legend of Zelda, The - The Minish Cap',
@@ -3833,6 +3919,16 @@
 
 			function selectMinUIResolution(deviceType) {
 				closeModal('minuiResolutionModal');
+				selectDevice(deviceType);
+			}
+
+			function showNextUIResolutionModal() {
+				closeModal('deviceModal');
+				document.getElementById('nextuiResolutionModal').classList.add('active');
+			}
+
+			function selectNextUIResolution(deviceType) {
+				closeModal('nextuiResolutionModal');
 				selectDevice(deviceType);
 			}
 
