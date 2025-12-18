@@ -31,7 +31,7 @@ Or download this repository for offline use.
 - **NextUI Integration** - Full support for NextUI folder structure with `.media` folders
 - **Auto-Resize** - Images automatically resized to optimal dimensions per device (240px for RG Nano, 250px for Miyoo, 354px for Trimui Brick, 200px/300px for MinUI/NextUI)
 
-### :art: Theme System (NEW in v1.5!)
+### :art: Theme System
 - **7 Color Themes** - Choose from Blue, Purple, Green, Red, Cyan, Orange, Pink
 - **Persistent Selection** - Theme saves via localStorage
 
