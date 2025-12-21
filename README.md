@@ -1,6 +1,6 @@
 # NanoArcade Manager
 
-A beautiful, browser-based tool to manage your retro game collection for RG Nano, Miyoo Mini, Trimui Brick, and other handheld devices.
+A beautiful, browser-based tool to manage your retro game collection across multiple operating systems and devices.
 
 ![NanoArcade](assets/images/logo.png)
 
@@ -12,14 +12,73 @@ Or download this repository for offline use.
 
 ---
 
-## Supported Devices
+## :joystick: What's New in v1.7
 
-- **RG Nano** - Anbernic's tiny retro handheld
-- **Miyoo Mini / Mini+** - With Onion OS support
-- **Miyoo Flip** - With Onion OS support
-- **Trimui Brick** - With Mustard OS support
-- **MinUI** - Multi-device OS (480p and High-Res support)
-- **NextUI** - Fork of MinUI (Standard/High-Res/Ultra support)
+**OS-First Approach** - Instead of selecting individual devices, NanoArcade now organizes by **operating system** (MustardOS, Onion OS, DrUm78, MinUI, NextUI), with resolution tiers optimized for each OS's supported devices. This provides a more intuitive workflow matching how users actually configure their handhelds.
+
+## Supported Operating Systems & Devices
+
+### :potato: MustardOS (muOS)
+Multi-device custom firmware with 3 resolution tiers:
+
+**Standard (324px)** - 640×480 screens:
+- Anbernic RG28XX H
+- Anbernic RG35XX (original)
+- Anbernic RG35XX Plus
+- Anbernic RG35XX H
+- Anbernic RG35XX SP
+
+**High-Res (380px)** - 720p-1024p screens:
+- Anbernic RG34XX
+- Anbernic RGCUBEXX
+- TrimUI Brick
+
+**Ultra (450px)** - 1280×720 screens:
+- TrimUI Smart Pro
+- Anbernic RG40XX H
+- Anbernic RG40XX V
+
+### :onion: Onion OS
+Custom firmware for Miyoo devices (250px):
+- Miyoo Mini
+- Miyoo Mini Plus
+- Miyoo Flip
+- Miyoo Mini Flip
+
+### :key: DrUm78 (FunKey-OS)
+Custom firmware for micro handhelds (240px):
+- Anbernic RG Nano
+- FunKey S
+- Powkiddy Q36 Mini
+- Powkiddy GBA Mini
+
+### :zap: MinUI
+Minimalist multi-device OS with 2 resolution tiers:
+
+**Standard (200px)**:
+- Anbernic RGB30
+- Anbernic RG35XX series
+- TrimUI Smart
+- GKD Pixel
+- Miyoo Mini series
+
+**High-Res (300px)**:
+- Anbernic RG405
+- Anbernic RG40XX
+- Anbernic RG CubeXX
+- TrimUI Smart Pro
+
+### :rocket: NextUI
+MinUI fork with enhanced features and 3 resolution tiers:
+
+**Standard (200px)**:
+- Anbernic RG35XX SP
+
+**High-Res (300px)**:
+- TrimUI Brick
+
+**Ultra (500px)**:
+- TrimUI Smart Pro
 
 ## Features
 
@@ -98,29 +157,7 @@ Or download this repository for offline use.
 
 ## Folder Structures
 
-### RG Nano
-```
-ROMs/
-├── GBA/
-│   ├── Pokemon Emerald.gba
-│   ├── Pokemon Emerald.png  (box art next to ROM)
-│   └── ...
-├── SNES/
-└── NES/
-```
-
-### Miyoo Mini / Flip (Onion OS)
-```
-Roms/
-├── GBA/
-│   ├── Pokemon Emerald.gba
-│   └── Imgs/
-│       └── Pokemon Emerald.png  (box art in Imgs subfolder)
-├── SNES/
-└── NES/
-```
-
-### Trimui Brick (Mustard OS)
+### MustardOS (muOS)
 ```
 MUOS/
 └── info/
@@ -131,6 +168,28 @@ MUOS/
         │       └── Pokemon Emerald.png  (box art in box subfolder)
         ├── snes/
         └── nes/
+```
+
+### Onion OS
+```
+Roms/
+├── GBA/
+│   ├── Pokemon Emerald.gba
+│   └── Imgs/
+│       └── Pokemon Emerald.png  (box art in Imgs subfolder)
+├── SNES/
+└── NES/
+```
+
+### DrUm78 (FunKey-OS)
+```
+ROMs/
+├── GBA/
+│   ├── Pokemon Emerald.gba
+│   ├── Pokemon Emerald.png  (box art next to ROM)
+│   └── ...
+├── SNES/
+└── NES/
 ```
 
 ### MinUI (480p / High-Res)
@@ -182,8 +241,26 @@ The app recognizes and displays icons for:
 
 ## Changelog
 
-### v1.7
-:framed_picture: **NextUI Resolution Selector** - NextUI devices can choose between Standard (200px for RG35XX SP), High-Res (300px for Trimui Brick), or Ultra (400px for Trimui Smart Pro) via resolution selector modal
+### v1.7 - OS-First Revolution
+
+:star2: **Operating System-Based Organization** - Complete restructure from device-specific selection to OS-based workflow (MustardOS, Onion OS, DrUm78, MinUI, NextUI). This matches the real-world usage pattern where users choose firmware first, then configure for their specific device.
+
+:potato: **MustardOS (muOS) Support** - Full support for MustardOS multi-device firmware with 3 resolution tiers:
+- Standard (324px) for 640×480 devices (RG28XX H, RG35XX series)
+- High-Res (380px) for 720p-1024p devices (RG34XX, RGCUBEXX, TrimUI Brick)
+- Ultra (450px) for 720p devices (TrimUI Smart Pro, RG40XX H/V)
+
+:key: **DrUm78 (FunKey-OS) Support** - Support for micro handheld custom firmware (240px) on RG Nano, FunKey S, Q36 Mini, and GBA Mini
+
+:onion: **Enhanced Onion OS** - Comprehensive device support including Miyoo Mini, Mini Plus, Flip, and Mini Flip (250px)
+
+:zap: **MinUI Enhanced Tiers** - Expanded device coverage with Standard (200px) and High-Res (300px) options
+
+:rocket: **NextUI 3-Tier System** - Enhanced NextUI support with Standard (200px), High-Res (300px), and Ultra (500px) resolution tiers optimized for screen resolutions
+
+:art: **Resolution Optimization** - Each OS tier uses box art sizes scientifically matched to device screen resolutions for optimal display quality
+
+:heart: **Supporter Recognition** - Buy Me a Coffee integration with supporter count display
 
 :see_no_evil: **Hidden File Filtering** - Automatically ignores hidden files and folders (starting with `.`) to prevent scanning ScummVM data and other system files, while preserving `.res` and `.media` folders needed by MinUI/NextUI
 

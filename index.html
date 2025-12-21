@@ -8,7 +8,7 @@
 		<title>NanoArcade</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<meta name="description" content="Box art manager for retro gaming handhelds - RG Nano, Miyoo Mini, Trimui Brick and more">
+		<meta name="description" content="Box art manager for retro gaming handhelds - Support for MustardOS, Onion OS, DrUm78, MinUI, NextUI and more">
 		<meta name="theme-color" content="#6c5ce7">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1934,7 +1934,7 @@
 				<button class="btn-3d purple" onclick="showThemeSelector(); toggleMobileMenu();" style="margin-bottom: 10px;">
 					<span class="icon solid fa-palette"></span> Theme
 				</button>
-				<div style="font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.6</div>
+				<div style="font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.7</div>
 			</div>
 		</div>
 
@@ -1959,7 +1959,7 @@
 				<div class="theme-btn" onclick="showThemeSelector()" style="position: absolute; bottom: 45px; left: 15px; right: 15px;">
 					<span class="icon solid fa-palette"></span> Theme
 				</div>
-				<div style="position: absolute; bottom: 15px; left: 15px; font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.6</div>
+				<div style="position: absolute; bottom: 15px; left: 15px; font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.7</div>
 			</div>
 		</section>
 
@@ -2014,7 +2014,8 @@
 					</div>
 					<!-- Buy Me a Coffee -->
 					<div style="margin-top: 2em;">
-						<a href="https://www.buymeacoffee.com/audioslayer" target="_blank" rel="noopener"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=audioslayer&button_colour=5F7FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" alt="Buy me a coffee" /></a>
+						<a href="https://www.buymeacoffee.com/audioslayer" target="_blank" rel="noopener"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=❤️&slug=audioslayer&button_colour=5F7FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" alt="Buy me a coffee" /></a>
+						<p style="margin-top: 0.5em; font-size: 0.9em; color: rgba(255,255,255,0.6);">❤️ 1 supporter</p>
 					</div>
 				</div>
 			</section>
@@ -2305,25 +2306,20 @@
 					<button class="close-btn" onclick="closeModal('deviceModal')">&times;</button>
 				</div>
 				<div class="device-grid">
-					<div class="device-card" onclick="selectDevice('rgnano')">
-						<img src="assets/images/devices/rgnano.png" alt="RG Nano" class="device-image">
-						<div class="device-name">Anbernic RG Nano</div>
-						<div class="device-desc">Stock OS / Drum78 CFW</div>
+					<div class="device-card" onclick="showMustardOSResolutionModal()">
+						<img src="assets/images/devices/mustardos.png" alt="MustardOS" class="device-image">
+						<div class="device-name">MustardOS</div>
+						<div class="device-desc">Multi-device OS</div>
 					</div>
-					<div class="device-card" onclick="selectDevice('onion')">
-						<img src="assets/images/devices/miyoo-mini.png" alt="Miyoo Mini" class="device-image">
-						<div class="device-name">Miyoo Mini / Plus</div>
-						<div class="device-desc">Onion OS (250px)</div>
+					<div class="device-card" onclick="showOnionOSDeviceModal()">
+						<img src="assets/images/devices/onionos.svg" alt="Onion OS" class="device-image">
+						<div class="device-name">Onion OS</div>
+						<div class="device-desc">Miyoo devices</div>
 					</div>
-					<div class="device-card" onclick="selectDevice('miyooflip')">
-						<img src="assets/images/devices/miyoo-flip.png" alt="Miyoo Flip" class="device-image">
-						<div class="device-name">Miyoo Flip / Mini Flip</div>
-						<div class="device-desc">Onion OS (280px)</div>
-					</div>
-					<div class="device-card" onclick="selectDevice('trimuibrick')">
-						<img src="assets/images/devices/trimuibrick.png" alt="Trimui Brick" class="device-image">
-						<div class="device-name">Trimui Brick</div>
-						<div class="device-desc">Mustard OS (354px)</div>
+					<div class="device-card" onclick="showDrUm78DeviceModal()">
+						<img src="assets/images/devices/rgnano.png" alt="DrUm78" class="device-image">
+						<div class="device-name">DrUm78</div>
+						<div class="device-desc">FunKey-OS compatible</div>
 					</div>
 					<div class="device-card" onclick="showMinUIResolutionModal()">
 						<img src="assets/images/devices/minui.png" alt="MinUI" class="device-image">
@@ -2335,11 +2331,11 @@
 						<div class="device-name">NextUI</div>
 						<div class="device-desc">Multi-device OS</div>
 					</div>
-				</div>
-				<div style="margin-top: 1.5em; text-align: center;">
-					<button class="btn-3d" onclick="selectDevice('stock')" style="padding: 8px 16px; font-size: 0.9em; opacity: 0.7;">
-						<span class="icon solid fa-folder"></span> Generic / Other Device
-					</button>
+					<div class="device-card" onclick="selectDevice('stock')" style="opacity: 0.7;">
+						<img src="assets/images/devices/q36mini.png" alt="Generic Device" class="device-image">
+						<div class="device-name">Generic</div>
+						<div class="device-desc">Any device</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -2356,14 +2352,14 @@
 					<div class="device-card" onclick="selectMinUIResolution('minui480')">
 						<img src="assets/images/devices/trimsmart.png" alt="Trimui Smart" class="device-image">
 						<div class="device-name">Standard</div>
-						<div class="device-desc">200px images</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RGB30, RG35XX, Trimui Smart</div>
+						<div class="device-desc">(200px)</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RGB30, RG35XX, Trimui Smart, GKD Pixel, Miyoo series</div>
 					</div>
 					<div class="device-card" onclick="selectMinUIResolution('minui1080')">
 						<img src="assets/images/devices/rg405.png" alt="RG405" class="device-image">
 						<div class="device-name">High-Res</div>
-						<div class="device-desc">300px images</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG353 series, RG405 series</div>
+						<div class="device-desc">(300px)</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG405, RG40XX, RG CubeXX, Trimui Smart Pro</div>
 					</div>
 				</div>
 			</div>
@@ -2381,20 +2377,109 @@
 					<div class="device-card" onclick="selectNextUIResolution('nextui640')">
 						<img src="assets/images/devices/rg35xxsp.png" alt="RG35XX SP" class="device-image">
 						<div class="device-name">Standard</div>
-						<div class="device-desc">200px images</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG35XX SP (640x480)</div>
+						<div class="device-desc">(200px)</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG35XX SP</div>
 					</div>
 					<div class="device-card" onclick="selectNextUIResolution('nextui1024')">
 						<img src="assets/images/devices/trimuibrick.png" alt="Trimui Brick" class="device-image">
 						<div class="device-name">High-Res</div>
-						<div class="device-desc">300px images</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Brick (1024x768)</div>
+						<div class="device-desc">(300px)</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Brick</div>
 					</div>
 					<div class="device-card" onclick="selectNextUIResolution('nextui1280')">
 						<img src="assets/images/devices/smartpro.png" alt="Trimui Smart Pro" class="device-image">
 						<div class="device-name">Ultra</div>
-						<div class="device-desc">400px images</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Smart Pro (1280x720)</div>
+						<div class="device-desc">(500px)</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Smart Pro</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- MustardOS Resolution Selector Modal -->
+		<div class="modal-overlay" id="mustardosResolutionModal">
+			<div class="modal-box" style="max-width: 800px;">
+				<div class="modal-header">
+					<h3><span class="icon solid fa-display"></span> Select MustardOS Resolution</h3>
+					<button class="close-btn" onclick="closeModal('mustardosResolutionModal')">&times;</button>
+				</div>
+				<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5em; text-align: center;">Choose the image resolution for your MustardOS device.</p>
+				<div class="device-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+					<div class="device-card" onclick="selectMustardOSResolution('muosStandard')">
+						<img src="assets/images/devices/rg35xxsp.png" alt="RG35XX" class="device-image">
+						<div class="device-name">Standard</div>
+						<div class="device-desc">(324px)</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG28XX H, RG35XX series</div>
+					</div>
+					<div class="device-card" onclick="selectMustardOSResolution('muosHigh')">
+						<img src="assets/images/devices/trimuibrick.png" alt="TrimUI Brick" class="device-image">
+						<div class="device-name">High-Res</div>
+						<div class="device-desc">(380px)</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG34XX, RGCUBEXX, TrimUI Brick</div>
+					</div>
+					<div class="device-card" onclick="selectMustardOSResolution('muosUltra')">
+						<img src="assets/images/devices/smartpro.png" alt="Trimui Smart Pro" class="device-image">
+						<div class="device-name">Ultra</div>
+						<div class="device-desc">(450px)</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">TrimUI Smart Pro, RG40XX H/V</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Onion OS Device Selector Modal -->
+		<div class="modal-overlay" id="onionosDeviceModal">
+			<div class="modal-box" style="max-width: 600px;">
+				<div class="modal-header">
+					<h3><span class="icon solid fa-gamepad"></span> Select Onion OS Device</h3>
+					<button class="close-btn" onclick="closeModal('onionosDeviceModal')">&times;</button>
+				</div>
+				<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5em; text-align: center;">All devices use 250×360px box art.</p>
+				<div class="device-grid" style="grid-template-columns: 1fr 1fr;">
+					<div class="device-card" onclick="selectOnionOSDevice('onionStandard')">
+						<img src="assets/images/devices/miyoo-mini.png" alt="Miyoo Mini" class="device-image">
+						<div class="device-name">Miyoo Mini</div>
+					</div>
+					<div class="device-card" onclick="selectOnionOSDevice('onionStandard')">
+						<img src="assets/images/devices/miyoominiplus.png" alt="Miyoo Mini Plus" class="device-image">
+						<div class="device-name">Miyoo Mini Plus</div>
+					</div>
+					<div class="device-card" onclick="selectOnionOSDevice('onionStandard')">
+						<img src="assets/images/devices/miyoo-flip.png" alt="Miyoo Flip" class="device-image">
+						<div class="device-name">Miyoo Flip</div>
+					</div>
+					<div class="device-card" onclick="selectOnionOSDevice('onionStandard')">
+						<img src="assets/images/devices/miyoominiflip.png" alt="Miyoo Mini Flip" class="device-image">
+						<div class="device-name">Miyoo Mini Flip</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- DrUm78 Device Selector Modal -->
+		<div class="modal-overlay" id="drum78DeviceModal">
+			<div class="modal-box" style="max-width: 600px;">
+				<div class="modal-header">
+					<h3><span class="icon solid fa-gamepad"></span> Select DrUm78 Device</h3>
+					<button class="close-btn" onclick="closeModal('drum78DeviceModal')">&times;</button>
+				</div>
+				<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5em; text-align: center;">All devices use 240×240px box art.</p>
+				<div class="device-grid" style="grid-template-columns: 1fr 1fr;">
+					<div class="device-card" onclick="selectDrUm78Device('drum78Micro')">
+						<img src="assets/images/devices/rgnano.png" alt="RG Nano" class="device-image">
+						<div class="device-name">RG Nano</div>
+					</div>
+					<div class="device-card" onclick="selectDrUm78Device('drum78Micro')">
+						<img src="assets/images/devices/funkey.png" alt="FunKey S" class="device-image">
+						<div class="device-name">FunKey S</div>
+					</div>
+					<div class="device-card" onclick="selectDrUm78Device('drum78Micro')">
+						<img src="assets/images/devices/q36mini.png" alt="Q36 Mini" class="device-image">
+						<div class="device-name">Q36 Mini</div>
+					</div>
+					<div class="device-card" onclick="selectDrUm78Device('drum78Micro')">
+						<img src="assets/images/devices/gbamini.png" alt="GBA Mini" class="device-image">
+						<div class="device-name">GBA Mini</div>
 					</div>
 				</div>
 			</div>
@@ -2536,7 +2621,7 @@
 		<!-- Footer -->
 		<footer id="footer" class="wrapper style1-alt">
 			<div class="inner">
-				<span class="version-number">v1.5</span>
+				<span class="version-number">v1.7</span>
 			</div>
 		</footer>
 
@@ -2560,7 +2645,7 @@
 			let currentSort = 'az';
 			let contextMenuTarget = null;
 			let contextMenuConsole = null;
-			let currentDevice = 'rgnano';
+			let currentDevice = 'muosStandard';
 			let objectURLs = []; // Track object URLs for cleanup
 			let currentTheme = 'blue';
 
@@ -2952,7 +3037,7 @@
 			nextui1280: {
 				name: 'NextUI (Ultra)',
 				emoji: '⚡',
-				imageSize: 400,
+				imageSize: 500,
 				isNextUI: true,
 				resolution: 'ultra',
 				folderMap: {
@@ -2974,6 +3059,315 @@
 					'Pokemon Mini': ['Pokemon Mini (POKE)'],
 					'Pico-8': ['Pico-8 (PICO)'],
 					'WonderSwan': ['Bandai WonderSwan (WS)', 'WonderSwan (WS)', 'WonderSwan Color (WS)']
+				}
+			},
+			muosStandard: {
+				name: 'MustardOS (Standard)',
+				emoji: '🥔',
+				imageSize: 324,
+				catalogueStructure: true,
+				resolution: 'standard',
+				folderMap: {
+					// Handheld
+					'GB': ['gameboy', 'gb'],
+					'GBC': ['gbc'],
+					'GBA': ['gba'],
+					'Game Gear': ['gamegear'],
+					'Atari Lynx': ['lynx'],
+					'WonderSwan': ['wonderswan'],
+					'Neo Geo Pocket': ['neogeopocket'],
+					'NDS': ['nds'],
+					'PSP': ['psp'],
+					'Pokemon Mini': ['pokemini'],
+					'Mega Duck': ['megaduck'],
+					'Watara Supervision': ['supervision'],
+					'Arduboy': ['arduboy'],
+					'Game and Watch': ['gameandwatch'],
+					'VeMUlator': ['vemulator'],
+					'TI-83': ['ti83'],
+					'Java J2ME': ['java'],
+					// Home Console
+					'NES': ['nes'],
+					'FDS': ['fds'],
+					'SNES': ['snes'],
+					'N64': ['n64'],
+					'Virtual Boy': ['virtualboy'],
+					'Genesis': ['segamd'],
+					'Master System': ['mastersystem'],
+					'Sega CD': ['segamdcd'],
+					'Sega 32X': ['sega32x'],
+					'Saturn': ['saturn'],
+					'Dreamcast': ['dreamcast'],
+					'SG-1000': ['sg1000'],
+					'Sega Pico': ['segapico'],
+					'PS1': ['ps1'],
+					'PCE': ['pcengine'],
+					'PCE CD': ['pcenginecd'],
+					'SuperGrafx': ['supergrafx'],
+					'PC-FX': ['pcfx'],
+					'Neo Geo': ['neogeo'],
+					'Neo Geo CD': ['neogeocd'],
+					'Atari 2600': ['atari2600'],
+					'Atari 5200': ['atari5200'],
+					'Atari 7800': ['atari7800'],
+					'Atari Jaguar': ['jaguar'],
+					'Coleco': ['colecovision'],
+					'Intellivision': ['intellivision'],
+					'Vectrex': ['vectrex'],
+					'3DO': ['3do'],
+					'CDi': ['cdi'],
+					'Channel F': ['channelf'],
+					'Odyssey': ['odyssey'],
+					// Computer
+					'MSX': ['msx'],
+					'Commodore 64': ['c64'],
+					'Commodore VIC-20': ['vic20'],
+					'Commodore C128': ['c128'],
+					'Commodore PET': ['pet'],
+					'Commodore CBM-II': ['cbm'],
+					'Amiga': ['amiga'],
+					'DOS': ['dos'],
+					'Amstrad': ['amstrad'],
+					'Atari ST': ['atarist'],
+					'ZX Spectrum': ['zxspectrum'],
+					'ZX 81': ['zx81'],
+					'PC-8000/8800': ['pc8000'],
+					'PC98': ['pc98'],
+					'Sharp X1': ['x1'],
+					'Sharp X68000': ['x68000'],
+					'Galaksija': ['galaksija'],
+					'Spectravision SVI': ['svi'],
+					// Arcade
+					'Arcade': ['arcade'],
+					'Atomiswave/Naomi': ['naomi'],
+					// Fantasy Console
+					'PICO-8': ['pico8'],
+					'TIC-80': ['tic80'],
+					'LowRes NX': ['lowresnx'],
+					'Vircon32': ['vircon32'],
+					'WASM-4': ['wasm4'],
+					// Misc
+					'ScummVM': ['scummvm'],
+					'OpenBOR': ['openbor'],
+					'EasyRPG': ['easyrpg'],
+					'Cave Story': ['cavestory'],
+					'Doom': ['doom'],
+					'Quake': ['quake'],
+					'Wolfenstein 3D': ['wolfenstein'],
+					'CHIP-8': ['chip8'],
+					'Uzebox': ['uzebox']
+				}
+			},
+			muosHigh: {
+				name: 'MustardOS (High-Res)',
+				emoji: '🥔',
+				imageSize: 380,
+				catalogueStructure: true,
+				resolution: 'high-res',
+				folderMap: {
+					'GB': ['gameboy', 'gb'],
+					'GBC': ['gbc'],
+					'GBA': ['gba'],
+					'Game Gear': ['gamegear'],
+					'Atari Lynx': ['lynx'],
+					'WonderSwan': ['wonderswan'],
+					'Neo Geo Pocket': ['neogeopocket'],
+					'NDS': ['nds'],
+					'PSP': ['psp'],
+					'Pokemon Mini': ['pokemini'],
+					'Mega Duck': ['megaduck'],
+					'Watara Supervision': ['supervision'],
+					'Arduboy': ['arduboy'],
+					'Game and Watch': ['gameandwatch'],
+					'VeMUlator': ['vemulator'],
+					'TI-83': ['ti83'],
+					'Java J2ME': ['java'],
+					'NES': ['nes'],
+					'FDS': ['fds'],
+					'SNES': ['snes'],
+					'N64': ['n64'],
+					'Virtual Boy': ['virtualboy'],
+					'Genesis': ['segamd'],
+					'Master System': ['mastersystem'],
+					'Sega CD': ['segamdcd'],
+					'Sega 32X': ['sega32x'],
+					'Saturn': ['saturn'],
+					'Dreamcast': ['dreamcast'],
+					'SG-1000': ['sg1000'],
+					'Sega Pico': ['segapico'],
+					'PS1': ['ps1'],
+					'PCE': ['pcengine'],
+					'PCE CD': ['pcenginecd'],
+					'SuperGrafx': ['supergrafx'],
+					'PC-FX': ['pcfx'],
+					'Neo Geo': ['neogeo'],
+					'Neo Geo CD': ['neogeocd'],
+					'Atari 2600': ['atari2600'],
+					'Atari 5200': ['atari5200'],
+					'Atari 7800': ['atari7800'],
+					'Atari Jaguar': ['jaguar'],
+					'Coleco': ['colecovision'],
+					'Intellivision': ['intellivision'],
+					'Vectrex': ['vectrex'],
+					'3DO': ['3do'],
+					'CDi': ['cdi'],
+					'Channel F': ['channelf'],
+					'Odyssey': ['odyssey'],
+					'MSX': ['msx'],
+					'Commodore 64': ['c64'],
+					'Commodore VIC-20': ['vic20'],
+					'Commodore C128': ['c128'],
+					'Commodore PET': ['pet'],
+					'Commodore CBM-II': ['cbm'],
+					'Amiga': ['amiga'],
+					'DOS': ['dos'],
+					'Amstrad': ['amstrad'],
+					'Atari ST': ['atarist'],
+					'ZX Spectrum': ['zxspectrum'],
+					'ZX 81': ['zx81'],
+					'PC-8000/8800': ['pc8000'],
+					'PC98': ['pc98'],
+					'Sharp X1': ['x1'],
+					'Sharp X68000': ['x68000'],
+					'Galaksija': ['galaksija'],
+					'Spectravision SVI': ['svi'],
+					'Arcade': ['arcade'],
+					'Atomiswave/Naomi': ['naomi'],
+					'PICO-8': ['pico8'],
+					'TIC-80': ['tic80'],
+					'LowRes NX': ['lowresnx'],
+					'Vircon32': ['vircon32'],
+					'WASM-4': ['wasm4'],
+					'ScummVM': ['scummvm'],
+					'OpenBOR': ['openbor'],
+					'EasyRPG': ['easyrpg'],
+					'Cave Story': ['cavestory'],
+					'Doom': ['doom'],
+					'Quake': ['quake'],
+					'Wolfenstein 3D': ['wolfenstein'],
+					'CHIP-8': ['chip8'],
+					'Uzebox': ['uzebox']
+				}
+			},
+			muosUltra: {
+				name: 'MustardOS (Ultra)',
+				emoji: '🥔',
+				imageSize: 450,
+				catalogueStructure: true,
+				resolution: 'ultra',
+				folderMap: {
+					'GB': ['gameboy', 'gb'],
+					'GBC': ['gbc'],
+					'GBA': ['gba'],
+					'Game Gear': ['gamegear'],
+					'Atari Lynx': ['lynx'],
+					'WonderSwan': ['wonderswan'],
+					'Neo Geo Pocket': ['neogeopocket'],
+					'NDS': ['nds'],
+					'PSP': ['psp'],
+					'Pokemon Mini': ['pokemini'],
+					'Mega Duck': ['megaduck'],
+					'Watara Supervision': ['supervision'],
+					'Arduboy': ['arduboy'],
+					'Game and Watch': ['gameandwatch'],
+					'VeMUlator': ['vemulator'],
+					'TI-83': ['ti83'],
+					'Java J2ME': ['java'],
+					'NES': ['nes'],
+					'FDS': ['fds'],
+					'SNES': ['snes'],
+					'N64': ['n64'],
+					'Virtual Boy': ['virtualboy'],
+					'Genesis': ['segamd'],
+					'Master System': ['mastersystem'],
+					'Sega CD': ['segamdcd'],
+					'Sega 32X': ['sega32x'],
+					'Saturn': ['saturn'],
+					'Dreamcast': ['dreamcast'],
+					'SG-1000': ['sg1000'],
+					'Sega Pico': ['segapico'],
+					'PS1': ['ps1'],
+					'PCE': ['pcengine'],
+					'PCE CD': ['pcenginecd'],
+					'SuperGrafx': ['supergrafx'],
+					'PC-FX': ['pcfx'],
+					'Neo Geo': ['neogeo'],
+					'Neo Geo CD': ['neogeocd'],
+					'Atari 2600': ['atari2600'],
+					'Atari 5200': ['atari5200'],
+					'Atari 7800': ['atari7800'],
+					'Atari Jaguar': ['jaguar'],
+					'Coleco': ['colecovision'],
+					'Intellivision': ['intellivision'],
+					'Vectrex': ['vectrex'],
+					'3DO': ['3do'],
+					'CDi': ['cdi'],
+					'Channel F': ['channelf'],
+					'Odyssey': ['odyssey'],
+					'MSX': ['msx'],
+					'Commodore 64': ['c64'],
+					'Commodore VIC-20': ['vic20'],
+					'Commodore C128': ['c128'],
+					'Commodore PET': ['pet'],
+					'Commodore CBM-II': ['cbm'],
+					'Amiga': ['amiga'],
+					'DOS': ['dos'],
+					'Amstrad': ['amstrad'],
+					'Atari ST': ['atarist'],
+					'ZX Spectrum': ['zxspectrum'],
+					'ZX 81': ['zx81'],
+					'PC-8000/8800': ['pc8000'],
+					'PC98': ['pc98'],
+					'Sharp X1': ['x1'],
+					'Sharp X68000': ['x68000'],
+					'Galaksija': ['galaksija'],
+					'Spectravision SVI': ['svi'],
+					'Arcade': ['arcade'],
+					'Atomiswave/Naomi': ['naomi'],
+					'PICO-8': ['pico8'],
+					'TIC-80': ['tic80'],
+					'LowRes NX': ['lowresnx'],
+					'Vircon32': ['vircon32'],
+					'WASM-4': ['wasm4'],
+					'ScummVM': ['scummvm'],
+					'OpenBOR': ['openbor'],
+					'EasyRPG': ['easyrpg'],
+					'Cave Story': ['cavestory'],
+					'Doom': ['doom'],
+					'Quake': ['quake'],
+					'Wolfenstein 3D': ['wolfenstein'],
+					'CHIP-8': ['chip8'],
+					'Uzebox': ['uzebox']
+				}
+			},
+			onionStandard: {
+				name: 'Onion OS',
+				emoji: '🧅',
+				imageSize: 250,
+				romsFolder: 'Roms',
+				folderMap: onionFolderMap
+			},
+			drum78Micro: {
+				name: 'DrUm78 (FunKey-OS)',
+				emoji: '🔑',
+				imageSize: 240,
+				folderMap: {
+					'GB': ['GB'],
+					'GBC': ['GBC'],
+					'GBA': ['GBA'],
+					'NES': ['NES'],
+					'SNES': ['SNES'],
+					'Genesis': ['Genesis'],
+					'Game Gear': ['Game Gear'],
+					'Master System': ['SMS'],
+					'PS1': ['PS'],
+					'PCE': ['PCE'],
+					'Neo Geo': ['Neo Geo'],
+					'Atari 2600': ['Atari 2600'],
+					'Atari Lynx': ['Lynx'],
+					'WonderSwan': ['WonderSwan'],
+					'Neo Geo Pocket': ['Neo Geo Pocket'],
+					'Pokemon Mini': ['Pokemon Mini']
 				}
 			}
 		};
@@ -3863,7 +4257,7 @@
 				return new Promise((resolve, reject) => {
 					const tx = db.transaction(STORE_NAME, 'readonly');
 					const request = tx.objectStore(STORE_NAME).get('deviceType');
-					request.onsuccess = () => resolve(request.result || 'rgnano');
+					request.onsuccess = () => resolve(request.result || 'muosStandard');
 					request.onerror = () => reject(request.error);
 				});
 			}
@@ -3932,6 +4326,36 @@
 				selectDevice(deviceType);
 			}
 
+			function showMustardOSResolutionModal() {
+				closeModal('deviceModal');
+				document.getElementById('mustardosResolutionModal').classList.add('active');
+			}
+
+			function selectMustardOSResolution(deviceType) {
+				closeModal('mustardosResolutionModal');
+				selectDevice(deviceType);
+			}
+
+			function showOnionOSDeviceModal() {
+				closeModal('deviceModal');
+				document.getElementById('onionosDeviceModal').classList.add('active');
+			}
+
+			function selectOnionOSDevice(deviceType) {
+				closeModal('onionosDeviceModal');
+				selectDevice(deviceType);
+			}
+
+			function showDrUm78DeviceModal() {
+				closeModal('deviceModal');
+				document.getElementById('drum78DeviceModal').classList.add('active');
+			}
+
+			function selectDrUm78Device(deviceType) {
+				closeModal('drum78DeviceModal');
+				selectDevice(deviceType);
+			}
+
 			async function selectDevice(deviceType) {
 				currentDevice = deviceType;
 				await saveDevice(deviceType);
@@ -3955,8 +4379,8 @@
 				} else if (profile.emoji === '🧅') {
 					// Miyoo devices with Onion OS - select root so we can access Saves folder too
 					message = 'Please select the <strong>ROOT of your SD card</strong><br><small style="color: rgba(255,255,255,0.6);">The folder containing Roms, Saves, RetroArch, etc.</small>';
-				} else if (deviceType === 'rgnano') {
-					// RG Nano with Drum78 CFW
+				} else if (profile.emoji === '🔑' || deviceType === 'rgnano' || deviceType === 'drum78Micro') {
+					// DrUm78 (FunKey-OS) devices
 					message = 'Please select the <strong>ROOT of your SD card</strong><br><small style="color: rgba(255,255,255,0.6);">Your system folders (GB, GBA, NES, etc.) should be at the root level</small>';
 				} else {
 					// Generic device

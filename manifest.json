@@ -1,7 +1,7 @@
 {
   "name": "NanoArcade Manager",
   "short_name": "NanoArcade",
-  "description": "Box art manager for retro gaming handhelds - RG Nano, Miyoo Mini, Trimui Brick and more",
+  "description": "Box art manager for retro gaming handhelds - Support for MustardOS, Onion OS, DrUm78, MinUI, NextUI and more",
   "start_url": "/NanoArcade/",
   "scope": "/NanoArcade/",
   "display": "standalone",
