@@ -8,7 +8,7 @@
 		<title>NanoArcade</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<meta name="description" content="Box art manager for retro gaming handhelds - Support for MustardOS, Onion OS, DrUm78, MinUI, NextUI and more">
+		<meta name="description" content="Box art manager for retro gaming handhelds - RG Nano, Miyoo Mini, Trimui Brick and more">
 		<meta name="theme-color" content="#6c5ce7">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -900,19 +900,30 @@
 				max-width: 500px;
 				margin: 0 2em;
 				align-items: center;
+				flex-wrap: wrap;
 			}
 
 			.image-picker-search input {
 				flex: 1;
-				padding: 0.4em 0.8em;
-				border-radius: 4px;
-				border: 1px solid #475569;
-				background: #1e293b;
-				color: #fff;
-				font-size: 0.85em;
-				height: 32px;
+				min-width: 200px;
+				height: 2.75em;
 				box-sizing: border-box;
 			}
+			
+			.image-picker-search input:focus {
+				border-color: var(--theme-primary);
+				box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+			}
+			
+			.image-picker-search select {
+				min-width: 140px;
+				height: 2.75em;
+				box-sizing: border-box;
+			}
+			
+
+			
+
 
 			.image-picker-search .styled-btn {
 				padding: 0 12px;
@@ -1736,6 +1747,31 @@
 					width: 80px;
 					height: 80px;
 				}
+				
+				.image-picker-search {
+					flex-direction: column;
+					margin: 0 1em;
+					align-items: stretch !important;
+				}
+				
+				.image-picker-search > div {
+					width: 100%;
+					display: flex;
+					gap: 0.5em;
+					align-items: center;
+					margin-bottom: 0.5em;
+				}
+				
+				.image-picker-search select {
+					width: 100%;
+					margin-bottom: 0.5em;
+					min-width: auto;
+				}
+				
+				.image-picker-search input {
+					width: 100%;
+					margin-bottom: 0.5em;
+				}
 			}
 
 			/* Button press animation synced with logo float (3s cycle) */
@@ -1890,6 +1926,38 @@
 				text-align: center;
 			}
 
+			/* Batch loading overlay */
+			.batch-loading-overlay {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(0, 0, 0, 0.8);
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				z-index: 100;
+				border-radius: 10px 10px 0 0;
+			}
+
+			.batch-spinner {
+				width: 30px;
+				height: 30px;
+				border: 3px solid rgba(255, 255, 255, 0.1);
+				border-top-color: #8b5cf6;
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+				margin-bottom: 8px;
+			}
+
+			.batch-loading-text {
+				color: #fff;
+				font-size: 0.75em;
+				text-align: center;
+			}
+
 			/* Show menu toggle on small screens */
 			@media screen and (max-width: 1292px) {
 				.mobile-menu-toggle {
@@ -1934,7 +2002,7 @@
 				<button class="btn-3d purple" onclick="showThemeSelector(); toggleMobileMenu();" style="margin-bottom: 10px;">
 					<span class="icon solid fa-palette"></span> Theme
 				</button>
-				<div style="font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.7</div>
+				<div style="font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.6</div>
 			</div>
 		</div>
 
@@ -1959,7 +2027,7 @@
 				<div class="theme-btn" onclick="showThemeSelector()" style="position: absolute; bottom: 45px; left: 15px; right: 15px;">
 					<span class="icon solid fa-palette"></span> Theme
 				</div>
-				<div style="position: absolute; bottom: 15px; left: 15px; font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.7</div>
+				<div style="position: absolute; bottom: 15px; left: 15px; font-size: 12px; color: rgba(255,255,255,0.5); font-style: italic;">Version 1.6</div>
 			</div>
 		</section>
 
@@ -2014,8 +2082,7 @@
 					</div>
 					<!-- Buy Me a Coffee -->
 					<div style="margin-top: 2em;">
-						<a href="https://www.buymeacoffee.com/audioslayer" target="_blank" rel="noopener"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=❤️&slug=audioslayer&button_colour=5F7FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" alt="Buy me a coffee" /></a>
-						<p style="margin-top: 0.5em; font-size: 0.9em; color: rgba(255,255,255,0.6);">❤️ 1 supporter</p>
+						<a href="https://www.buymeacoffee.com/audioslayer" target="_blank" rel="noopener"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=audioslayer&button_colour=5F7FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" alt="Buy me a coffee" /></a>
 					</div>
 				</div>
 			</section>
@@ -2036,6 +2103,9 @@
 						<button class="btn-3d small cyan" id="filterMissingBtn" onclick="toggleMissingFilter()">
 							<span class="icon solid fa-filter"></span> Missing Art
 						</button>
+						<button class="btn-3d small purple" id="batchLibretroBtn" onclick="batchFetchLibretroImages()" style="display:none;" title="Fetch all missing art from Libretro">
+							<span class="icon solid fa-download"></span> Libretro
+						</button>
 						<button class="btn-3d small gold" id="top25Btn" onclick="openTop25Modal()" style="display:none;">
 							<span class="icon solid fa-trophy"></span> Top 25
 						</button>
@@ -2053,7 +2123,7 @@
 
 		<!-- Game Modal -->
 		<div class="modal-overlay" id="gameModal">
-			<div class="modal-box" style="max-width: 480px;">
+			<div class="modal-box" style="max-width: 550px;">
 				<!-- Header -->
 				<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1em; gap: 0.5em;">
 					<div style="display: flex; align-items: center; gap: 0.5em; min-width: 0; flex: 1;">
@@ -2107,15 +2177,19 @@
 				</div>
 				<!-- RG Nano layout: Find Art full width, then Saves + Local Image -->
 				<div id="savesButtonRow" style="display: none; margin-bottom: 0.75em;">
-					<button class="btn-3d small" onclick="openImagePicker()" style="width: 100%; margin-bottom: 0.75em;"><span class="icon solid fa-search"></span> Find Art</button>
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em; margin-bottom: 0.75em;">
+						<button class="btn-3d small" onclick="openImagePicker()"><span class="icon solid fa-search"></span> Find Art</button>
+						<button class="btn-3d small gold" onclick="downloadLibretroByCRC()" title="Download artwork from Libretro based on CRC32"><span class="icon solid fa-download"></span> Libretro</button>
+					</div>
 					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em;">
 						<button class="btn-3d small cyan" onclick="openSaveManager()"><span class="icon solid fa-save"></span> Manage Saves</button>
 						<button class="btn-3d small gray" onclick="selectLocalImage()"><span class="icon solid fa-folder-open"></span> Local Image</button>
 					</div>
 				</div>
 				<!-- Non-RG Nano layout: Find Art + Local Image side by side -->
-				<div id="noSavesButtonRow" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em; margin-bottom: 0.75em;">
+				<div id="noSavesButtonRow" style="display: grid; grid-template-columns: 1fr 1.2fr 1.3fr; gap: 0.4em; margin-bottom: 0.75em;">
 					<button class="btn-3d small" onclick="openImagePicker()"><span class="icon solid fa-search"></span> Find Art</button>
+					<button class="btn-3d small gold" onclick="downloadLibretroByCRC()" title="Download artwork from Libretro based on CRC32"><span class="icon solid fa-download"></span> Libretro</button>
 					<button class="btn-3d small gray" onclick="selectLocalImage()"><span class="icon solid fa-folder-open"></span> Local Image</button>
 				</div>
 				<!-- URL input section -->
@@ -2242,8 +2316,20 @@
 			<div class="image-picker-header">
 				<h3>Select Box Art</h3>
 				<div class="image-picker-search">
-					<input type="text" id="pickerSearchQuery" placeholder="Search for game..." onkeypress="if(event.key==='Enter')searchImagesInPicker()">
-					<button class="btn-3d small" onclick="searchImagesInPicker()"><span class="icon solid fa-search"></span> Search</button>
+					<div style="display: flex; gap: 0.5em; align-items: center; margin-bottom: 0.5em;">
+						<label for="pickerSearchSource" style="color: rgba(255,255,255,0.7); font-size: 0.8em; white-space: nowrap;">Source:</label>
+					<select id="pickerSearchSource" style="height: 32px; margin-right: 0.5em; font-size: 0.85em;">
+						<option value="rdb">RDB Database</option>
+						<option value="all">All Sources</option>
+						<option value="gamesdb">TheGamesDB</option>
+						<option value="gamefaqs">GameFAQs</option>
+						<option value="coverproject">The Cover Project</option>
+					</select>
+					</div>
+					<div style="display: flex; gap: 0.5em; align-items: center;">
+						<input type="text" id="pickerSearchQuery" placeholder="Enter game name..." style="min-width: 200px; flex: 1;">
+						<button class="btn-3d small" onclick="searchImagesInPicker()"><span class="icon solid fa-search"></span> Search</button>
+					</div>
 				</div>
 				<button class="image-picker-close" onclick="closeImagePicker()">&times;</button>
 			</div>
@@ -2306,20 +2392,25 @@
 					<button class="close-btn" onclick="closeModal('deviceModal')">&times;</button>
 				</div>
 				<div class="device-grid">
-					<div class="device-card" onclick="showMustardOSResolutionModal()">
-						<img src="assets/images/devices/mustardos.png" alt="MustardOS" class="device-image">
-						<div class="device-name">MustardOS</div>
-						<div class="device-desc">Multi-device OS</div>
+					<div class="device-card" onclick="selectDevice('rgnano')">
+						<img src="assets/images/devices/rgnano.png" alt="RG Nano" class="device-image">
+						<div class="device-name">Anbernic RG Nano</div>
+						<div class="device-desc">Stock OS / Drum78 CFW</div>
 					</div>
-					<div class="device-card" onclick="showOnionOSDeviceModal()">
-						<img src="assets/images/devices/onionos.svg" alt="Onion OS" class="device-image">
-						<div class="device-name">Onion OS</div>
-						<div class="device-desc">Miyoo devices</div>
+					<div class="device-card" onclick="selectDevice('onion')">
+						<img src="assets/images/devices/miyoo-mini.png" alt="Miyoo Mini" class="device-image">
+						<div class="device-name">Miyoo Mini / Plus</div>
+						<div class="device-desc">Onion OS (250px)</div>
 					</div>
-					<div class="device-card" onclick="showDrUm78DeviceModal()">
-						<img src="assets/images/devices/rgnano.png" alt="DrUm78" class="device-image">
-						<div class="device-name">DrUm78</div>
-						<div class="device-desc">FunKey-OS compatible</div>
+					<div class="device-card" onclick="selectDevice('miyooflip')">
+						<img src="assets/images/devices/miyoo-flip.png" alt="Miyoo Flip" class="device-image">
+						<div class="device-name">Miyoo Flip / Mini Flip</div>
+						<div class="device-desc">Onion OS (280px)</div>
+					</div>
+					<div class="device-card" onclick="selectDevice('trimuibrick')">
+						<img src="assets/images/devices/trimuibrick.png" alt="Trimui Brick" class="device-image">
+						<div class="device-name">Trimui Brick</div>
+						<div class="device-desc">Mustard OS (354px)</div>
 					</div>
 					<div class="device-card" onclick="showMinUIResolutionModal()">
 						<img src="assets/images/devices/minui.png" alt="MinUI" class="device-image">
@@ -2331,11 +2422,11 @@
 						<div class="device-name">NextUI</div>
 						<div class="device-desc">Multi-device OS</div>
 					</div>
-					<div class="device-card" onclick="selectDevice('stock')" style="opacity: 0.7;">
-						<img src="assets/images/devices/q36mini.png" alt="Generic Device" class="device-image">
-						<div class="device-name">Generic</div>
-						<div class="device-desc">Any device</div>
-					</div>
+				</div>
+				<div style="margin-top: 1.5em; text-align: center;">
+					<button class="btn-3d" onclick="selectDevice('stock')" style="padding: 8px 16px; font-size: 0.9em; opacity: 0.7;">
+						<span class="icon solid fa-folder"></span> Generic / Other Device
+					</button>
 				</div>
 			</div>
 		</div>
@@ -2352,14 +2443,14 @@
 					<div class="device-card" onclick="selectMinUIResolution('minui480')">
 						<img src="assets/images/devices/trimsmart.png" alt="Trimui Smart" class="device-image">
 						<div class="device-name">Standard</div>
-						<div class="device-desc">(200px)</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RGB30, RG35XX, Trimui Smart, GKD Pixel, Miyoo series</div>
+						<div class="device-desc">200px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RGB30, RG35XX, Trimui Smart</div>
 					</div>
 					<div class="device-card" onclick="selectMinUIResolution('minui1080')">
 						<img src="assets/images/devices/rg405.png" alt="RG405" class="device-image">
 						<div class="device-name">High-Res</div>
-						<div class="device-desc">(300px)</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG405, RG40XX, RG CubeXX, Trimui Smart Pro</div>
+						<div class="device-desc">300px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG353 series, RG405 series</div>
 					</div>
 				</div>
 			</div>
@@ -2377,109 +2468,20 @@
 					<div class="device-card" onclick="selectNextUIResolution('nextui640')">
 						<img src="assets/images/devices/rg35xxsp.png" alt="RG35XX SP" class="device-image">
 						<div class="device-name">Standard</div>
-						<div class="device-desc">(200px)</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG35XX SP</div>
+						<div class="device-desc">200px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG35XX SP (640x480)</div>
 					</div>
 					<div class="device-card" onclick="selectNextUIResolution('nextui1024')">
 						<img src="assets/images/devices/trimuibrick.png" alt="Trimui Brick" class="device-image">
 						<div class="device-name">High-Res</div>
-						<div class="device-desc">(300px)</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Brick</div>
+						<div class="device-desc">300px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Brick (1024x768)</div>
 					</div>
 					<div class="device-card" onclick="selectNextUIResolution('nextui1280')">
 						<img src="assets/images/devices/smartpro.png" alt="Trimui Smart Pro" class="device-image">
 						<div class="device-name">Ultra</div>
-						<div class="device-desc">(500px)</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Smart Pro</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- MustardOS Resolution Selector Modal -->
-		<div class="modal-overlay" id="mustardosResolutionModal">
-			<div class="modal-box" style="max-width: 800px;">
-				<div class="modal-header">
-					<h3><span class="icon solid fa-display"></span> Select MustardOS Resolution</h3>
-					<button class="close-btn" onclick="closeModal('mustardosResolutionModal')">&times;</button>
-				</div>
-				<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5em; text-align: center;">Choose the image resolution for your MustardOS device.</p>
-				<div class="device-grid" style="grid-template-columns: 1fr 1fr 1fr;">
-					<div class="device-card" onclick="selectMustardOSResolution('muosStandard')">
-						<img src="assets/images/devices/rg35xxsp.png" alt="RG35XX" class="device-image">
-						<div class="device-name">Standard</div>
-						<div class="device-desc">(324px)</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG28XX H, RG35XX series</div>
-					</div>
-					<div class="device-card" onclick="selectMustardOSResolution('muosHigh')">
-						<img src="assets/images/devices/trimuibrick.png" alt="TrimUI Brick" class="device-image">
-						<div class="device-name">High-Res</div>
-						<div class="device-desc">(380px)</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">RG34XX, RGCUBEXX, TrimUI Brick</div>
-					</div>
-					<div class="device-card" onclick="selectMustardOSResolution('muosUltra')">
-						<img src="assets/images/devices/smartpro.png" alt="Trimui Smart Pro" class="device-image">
-						<div class="device-name">Ultra</div>
-						<div class="device-desc">(450px)</div>
-						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">TrimUI Smart Pro, RG40XX H/V</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Onion OS Device Selector Modal -->
-		<div class="modal-overlay" id="onionosDeviceModal">
-			<div class="modal-box" style="max-width: 600px;">
-				<div class="modal-header">
-					<h3><span class="icon solid fa-gamepad"></span> Select Onion OS Device</h3>
-					<button class="close-btn" onclick="closeModal('onionosDeviceModal')">&times;</button>
-				</div>
-				<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5em; text-align: center;">All devices use 250×360px box art.</p>
-				<div class="device-grid" style="grid-template-columns: 1fr 1fr;">
-					<div class="device-card" onclick="selectOnionOSDevice('onionStandard')">
-						<img src="assets/images/devices/miyoo-mini.png" alt="Miyoo Mini" class="device-image">
-						<div class="device-name">Miyoo Mini</div>
-					</div>
-					<div class="device-card" onclick="selectOnionOSDevice('onionStandard')">
-						<img src="assets/images/devices/miyoominiplus.png" alt="Miyoo Mini Plus" class="device-image">
-						<div class="device-name">Miyoo Mini Plus</div>
-					</div>
-					<div class="device-card" onclick="selectOnionOSDevice('onionStandard')">
-						<img src="assets/images/devices/miyoo-flip.png" alt="Miyoo Flip" class="device-image">
-						<div class="device-name">Miyoo Flip</div>
-					</div>
-					<div class="device-card" onclick="selectOnionOSDevice('onionStandard')">
-						<img src="assets/images/devices/miyoominiflip.png" alt="Miyoo Mini Flip" class="device-image">
-						<div class="device-name">Miyoo Mini Flip</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- DrUm78 Device Selector Modal -->
-		<div class="modal-overlay" id="drum78DeviceModal">
-			<div class="modal-box" style="max-width: 600px;">
-				<div class="modal-header">
-					<h3><span class="icon solid fa-gamepad"></span> Select DrUm78 Device</h3>
-					<button class="close-btn" onclick="closeModal('drum78DeviceModal')">&times;</button>
-				</div>
-				<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5em; text-align: center;">All devices use 240×240px box art.</p>
-				<div class="device-grid" style="grid-template-columns: 1fr 1fr;">
-					<div class="device-card" onclick="selectDrUm78Device('drum78Micro')">
-						<img src="assets/images/devices/rgnano.png" alt="RG Nano" class="device-image">
-						<div class="device-name">RG Nano</div>
-					</div>
-					<div class="device-card" onclick="selectDrUm78Device('drum78Micro')">
-						<img src="assets/images/devices/funkey.png" alt="FunKey S" class="device-image">
-						<div class="device-name">FunKey S</div>
-					</div>
-					<div class="device-card" onclick="selectDrUm78Device('drum78Micro')">
-						<img src="assets/images/devices/q36mini.png" alt="Q36 Mini" class="device-image">
-						<div class="device-name">Q36 Mini</div>
-					</div>
-					<div class="device-card" onclick="selectDrUm78Device('drum78Micro')">
-						<img src="assets/images/devices/gbamini.png" alt="GBA Mini" class="device-image">
-						<div class="device-name">GBA Mini</div>
+						<div class="device-desc">400px images</div>
+						<div style="margin-top: 0.5em; font-size: 0.85em; color: rgba(255,255,255,0.5);">Trimui Smart Pro (1280x720)</div>
 					</div>
 				</div>
 			</div>
@@ -2592,6 +2594,37 @@
 			</div>
 		</div>
 
+		<!-- Batch Libretro Progress Modal -->
+		<div class="modal-overlay" id="batchLibretroModal">
+			<div class="modal-box" style="max-width: 600px;">
+				<div class="modal-header">
+					<h3><span class="icon solid fa-download" style="color: #8b5cf6;"></span> Batch Libretro Processing</h3>
+					<button class="close-btn" onclick="cancelBatchProcessing()">&times;</button>
+				</div>
+				<div style="margin-bottom: 1em;">
+					<p style="margin-bottom: 1em;">Downloading box art for all games without images...</p>
+					<div style="background: rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden;">
+						<div id="batchProgressBar" style="height: 8px; width: 0%; background: var(--theme-primary); transition: width 0.3s;"></div>
+					</div>
+				</div>
+				<div style="margin-bottom: 1em; display: flex; justify-content: space-between;">
+					<span>Progress: <span id="batchProgressText">0/0</span></span>
+					<span>Success: <span id="batchSuccessCount" style="color: #4ade80;">0</span></span>
+					<span>Failed: <span id="batchFailCount" style="color: #f87171;">0</span></span>
+				</div>
+				<div id="batchCurrentGame" style="margin-bottom: 1em; color: rgba(255,255,255,0.7);"></div>
+				<div id="batchLog" style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 0.5em; border-radius: 8px; font-size: 0.8em;"></div>
+				<div style="display: flex; justify-content: flex-end; gap: 0.5em; margin-top: 1em;">
+					<button class="btn-3d small red" id="batchCancelBtn" onclick="cancelBatchProcessing()">
+						<span class="icon solid fa-times"></span> Cancel
+					</button>
+					<button class="btn-3d small gray" id="batchCloseBtn" onclick="closeBatchModal()" style="display: none;">
+						<span class="icon solid fa-check"></span> Close
+					</button>
+				</div>
+			</div>
+		</div>
+
 		<!-- Save Manager Modal -->
 		<div class="modal-overlay" id="saveModal">
 			<div class="modal-box" style="max-width: 600px;">
@@ -2621,7 +2654,7 @@
 		<!-- Footer -->
 		<footer id="footer" class="wrapper style1-alt">
 			<div class="inner">
-				<span class="version-number">v1.7</span>
+				<span class="version-number">v1.5</span>
 			</div>
 		</footer>
 
@@ -2645,7 +2678,7 @@
 			let currentSort = 'az';
 			let contextMenuTarget = null;
 			let contextMenuConsole = null;
-			let currentDevice = 'muosStandard';
+			let currentDevice = 'rgnano';
 			let objectURLs = []; // Track object URLs for cleanup
 			let currentTheme = 'blue';
 
@@ -3037,7 +3070,7 @@
 			nextui1280: {
 				name: 'NextUI (Ultra)',
 				emoji: '⚡',
-				imageSize: 500,
+				imageSize: 400,
 				isNextUI: true,
 				resolution: 'ultra',
 				folderMap: {
@@ -3059,315 +3092,6 @@
 					'Pokemon Mini': ['Pokemon Mini (POKE)'],
 					'Pico-8': ['Pico-8 (PICO)'],
 					'WonderSwan': ['Bandai WonderSwan (WS)', 'WonderSwan (WS)', 'WonderSwan Color (WS)']
-				}
-			},
-			muosStandard: {
-				name: 'MustardOS (Standard)',
-				emoji: '🥔',
-				imageSize: 324,
-				catalogueStructure: true,
-				resolution: 'standard',
-				folderMap: {
-					// Handheld
-					'GB': ['gameboy', 'gb'],
-					'GBC': ['gbc'],
-					'GBA': ['gba'],
-					'Game Gear': ['gamegear'],
-					'Atari Lynx': ['lynx'],
-					'WonderSwan': ['wonderswan'],
-					'Neo Geo Pocket': ['neogeopocket'],
-					'NDS': ['nds'],
-					'PSP': ['psp'],
-					'Pokemon Mini': ['pokemini'],
-					'Mega Duck': ['megaduck'],
-					'Watara Supervision': ['supervision'],
-					'Arduboy': ['arduboy'],
-					'Game and Watch': ['gameandwatch'],
-					'VeMUlator': ['vemulator'],
-					'TI-83': ['ti83'],
-					'Java J2ME': ['java'],
-					// Home Console
-					'NES': ['nes'],
-					'FDS': ['fds'],
-					'SNES': ['snes'],
-					'N64': ['n64'],
-					'Virtual Boy': ['virtualboy'],
-					'Genesis': ['segamd'],
-					'Master System': ['mastersystem'],
-					'Sega CD': ['segamdcd'],
-					'Sega 32X': ['sega32x'],
-					'Saturn': ['saturn'],
-					'Dreamcast': ['dreamcast'],
-					'SG-1000': ['sg1000'],
-					'Sega Pico': ['segapico'],
-					'PS1': ['ps1'],
-					'PCE': ['pcengine'],
-					'PCE CD': ['pcenginecd'],
-					'SuperGrafx': ['supergrafx'],
-					'PC-FX': ['pcfx'],
-					'Neo Geo': ['neogeo'],
-					'Neo Geo CD': ['neogeocd'],
-					'Atari 2600': ['atari2600'],
-					'Atari 5200': ['atari5200'],
-					'Atari 7800': ['atari7800'],
-					'Atari Jaguar': ['jaguar'],
-					'Coleco': ['colecovision'],
-					'Intellivision': ['intellivision'],
-					'Vectrex': ['vectrex'],
-					'3DO': ['3do'],
-					'CDi': ['cdi'],
-					'Channel F': ['channelf'],
-					'Odyssey': ['odyssey'],
-					// Computer
-					'MSX': ['msx'],
-					'Commodore 64': ['c64'],
-					'Commodore VIC-20': ['vic20'],
-					'Commodore C128': ['c128'],
-					'Commodore PET': ['pet'],
-					'Commodore CBM-II': ['cbm'],
-					'Amiga': ['amiga'],
-					'DOS': ['dos'],
-					'Amstrad': ['amstrad'],
-					'Atari ST': ['atarist'],
-					'ZX Spectrum': ['zxspectrum'],
-					'ZX 81': ['zx81'],
-					'PC-8000/8800': ['pc8000'],
-					'PC98': ['pc98'],
-					'Sharp X1': ['x1'],
-					'Sharp X68000': ['x68000'],
-					'Galaksija': ['galaksija'],
-					'Spectravision SVI': ['svi'],
-					// Arcade
-					'Arcade': ['arcade'],
-					'Atomiswave/Naomi': ['naomi'],
-					// Fantasy Console
-					'PICO-8': ['pico8'],
-					'TIC-80': ['tic80'],
-					'LowRes NX': ['lowresnx'],
-					'Vircon32': ['vircon32'],
-					'WASM-4': ['wasm4'],
-					// Misc
-					'ScummVM': ['scummvm'],
-					'OpenBOR': ['openbor'],
-					'EasyRPG': ['easyrpg'],
-					'Cave Story': ['cavestory'],
-					'Doom': ['doom'],
-					'Quake': ['quake'],
-					'Wolfenstein 3D': ['wolfenstein'],
-					'CHIP-8': ['chip8'],
-					'Uzebox': ['uzebox']
-				}
-			},
-			muosHigh: {
-				name: 'MustardOS (High-Res)',
-				emoji: '🥔',
-				imageSize: 380,
-				catalogueStructure: true,
-				resolution: 'high-res',
-				folderMap: {
-					'GB': ['gameboy', 'gb'],
-					'GBC': ['gbc'],
-					'GBA': ['gba'],
-					'Game Gear': ['gamegear'],
-					'Atari Lynx': ['lynx'],
-					'WonderSwan': ['wonderswan'],
-					'Neo Geo Pocket': ['neogeopocket'],
-					'NDS': ['nds'],
-					'PSP': ['psp'],
-					'Pokemon Mini': ['pokemini'],
-					'Mega Duck': ['megaduck'],
-					'Watara Supervision': ['supervision'],
-					'Arduboy': ['arduboy'],
-					'Game and Watch': ['gameandwatch'],
-					'VeMUlator': ['vemulator'],
-					'TI-83': ['ti83'],
-					'Java J2ME': ['java'],
-					'NES': ['nes'],
-					'FDS': ['fds'],
-					'SNES': ['snes'],
-					'N64': ['n64'],
-					'Virtual Boy': ['virtualboy'],
-					'Genesis': ['segamd'],
-					'Master System': ['mastersystem'],
-					'Sega CD': ['segamdcd'],
-					'Sega 32X': ['sega32x'],
-					'Saturn': ['saturn'],
-					'Dreamcast': ['dreamcast'],
-					'SG-1000': ['sg1000'],
-					'Sega Pico': ['segapico'],
-					'PS1': ['ps1'],
-					'PCE': ['pcengine'],
-					'PCE CD': ['pcenginecd'],
-					'SuperGrafx': ['supergrafx'],
-					'PC-FX': ['pcfx'],
-					'Neo Geo': ['neogeo'],
-					'Neo Geo CD': ['neogeocd'],
-					'Atari 2600': ['atari2600'],
-					'Atari 5200': ['atari5200'],
-					'Atari 7800': ['atari7800'],
-					'Atari Jaguar': ['jaguar'],
-					'Coleco': ['colecovision'],
-					'Intellivision': ['intellivision'],
-					'Vectrex': ['vectrex'],
-					'3DO': ['3do'],
-					'CDi': ['cdi'],
-					'Channel F': ['channelf'],
-					'Odyssey': ['odyssey'],
-					'MSX': ['msx'],
-					'Commodore 64': ['c64'],
-					'Commodore VIC-20': ['vic20'],
-					'Commodore C128': ['c128'],
-					'Commodore PET': ['pet'],
-					'Commodore CBM-II': ['cbm'],
-					'Amiga': ['amiga'],
-					'DOS': ['dos'],
-					'Amstrad': ['amstrad'],
-					'Atari ST': ['atarist'],
-					'ZX Spectrum': ['zxspectrum'],
-					'ZX 81': ['zx81'],
-					'PC-8000/8800': ['pc8000'],
-					'PC98': ['pc98'],
-					'Sharp X1': ['x1'],
-					'Sharp X68000': ['x68000'],
-					'Galaksija': ['galaksija'],
-					'Spectravision SVI': ['svi'],
-					'Arcade': ['arcade'],
-					'Atomiswave/Naomi': ['naomi'],
-					'PICO-8': ['pico8'],
-					'TIC-80': ['tic80'],
-					'LowRes NX': ['lowresnx'],
-					'Vircon32': ['vircon32'],
-					'WASM-4': ['wasm4'],
-					'ScummVM': ['scummvm'],
-					'OpenBOR': ['openbor'],
-					'EasyRPG': ['easyrpg'],
-					'Cave Story': ['cavestory'],
-					'Doom': ['doom'],
-					'Quake': ['quake'],
-					'Wolfenstein 3D': ['wolfenstein'],
-					'CHIP-8': ['chip8'],
-					'Uzebox': ['uzebox']
-				}
-			},
-			muosUltra: {
-				name: 'MustardOS (Ultra)',
-				emoji: '🥔',
-				imageSize: 450,
-				catalogueStructure: true,
-				resolution: 'ultra',
-				folderMap: {
-					'GB': ['gameboy', 'gb'],
-					'GBC': ['gbc'],
-					'GBA': ['gba'],
-					'Game Gear': ['gamegear'],
-					'Atari Lynx': ['lynx'],
-					'WonderSwan': ['wonderswan'],
-					'Neo Geo Pocket': ['neogeopocket'],
-					'NDS': ['nds'],
-					'PSP': ['psp'],
-					'Pokemon Mini': ['pokemini'],
-					'Mega Duck': ['megaduck'],
-					'Watara Supervision': ['supervision'],
-					'Arduboy': ['arduboy'],
-					'Game and Watch': ['gameandwatch'],
-					'VeMUlator': ['vemulator'],
-					'TI-83': ['ti83'],
-					'Java J2ME': ['java'],
-					'NES': ['nes'],
-					'FDS': ['fds'],
-					'SNES': ['snes'],
-					'N64': ['n64'],
-					'Virtual Boy': ['virtualboy'],
-					'Genesis': ['segamd'],
-					'Master System': ['mastersystem'],
-					'Sega CD': ['segamdcd'],
-					'Sega 32X': ['sega32x'],
-					'Saturn': ['saturn'],
-					'Dreamcast': ['dreamcast'],
-					'SG-1000': ['sg1000'],
-					'Sega Pico': ['segapico'],
-					'PS1': ['ps1'],
-					'PCE': ['pcengine'],
-					'PCE CD': ['pcenginecd'],
-					'SuperGrafx': ['supergrafx'],
-					'PC-FX': ['pcfx'],
-					'Neo Geo': ['neogeo'],
-					'Neo Geo CD': ['neogeocd'],
-					'Atari 2600': ['atari2600'],
-					'Atari 5200': ['atari5200'],
-					'Atari 7800': ['atari7800'],
-					'Atari Jaguar': ['jaguar'],
-					'Coleco': ['colecovision'],
-					'Intellivision': ['intellivision'],
-					'Vectrex': ['vectrex'],
-					'3DO': ['3do'],
-					'CDi': ['cdi'],
-					'Channel F': ['channelf'],
-					'Odyssey': ['odyssey'],
-					'MSX': ['msx'],
-					'Commodore 64': ['c64'],
-					'Commodore VIC-20': ['vic20'],
-					'Commodore C128': ['c128'],
-					'Commodore PET': ['pet'],
-					'Commodore CBM-II': ['cbm'],
-					'Amiga': ['amiga'],
-					'DOS': ['dos'],
-					'Amstrad': ['amstrad'],
-					'Atari ST': ['atarist'],
-					'ZX Spectrum': ['zxspectrum'],
-					'ZX 81': ['zx81'],
-					'PC-8000/8800': ['pc8000'],
-					'PC98': ['pc98'],
-					'Sharp X1': ['x1'],
-					'Sharp X68000': ['x68000'],
-					'Galaksija': ['galaksija'],
-					'Spectravision SVI': ['svi'],
-					'Arcade': ['arcade'],
-					'Atomiswave/Naomi': ['naomi'],
-					'PICO-8': ['pico8'],
-					'TIC-80': ['tic80'],
-					'LowRes NX': ['lowresnx'],
-					'Vircon32': ['vircon32'],
-					'WASM-4': ['wasm4'],
-					'ScummVM': ['scummvm'],
-					'OpenBOR': ['openbor'],
-					'EasyRPG': ['easyrpg'],
-					'Cave Story': ['cavestory'],
-					'Doom': ['doom'],
-					'Quake': ['quake'],
-					'Wolfenstein 3D': ['wolfenstein'],
-					'CHIP-8': ['chip8'],
-					'Uzebox': ['uzebox']
-				}
-			},
-			onionStandard: {
-				name: 'Onion OS',
-				emoji: '🧅',
-				imageSize: 250,
-				romsFolder: 'Roms',
-				folderMap: onionFolderMap
-			},
-			drum78Micro: {
-				name: 'DrUm78 (FunKey-OS)',
-				emoji: '🔑',
-				imageSize: 240,
-				folderMap: {
-					'GB': ['GB'],
-					'GBC': ['GBC'],
-					'GBA': ['GBA'],
-					'NES': ['NES'],
-					'SNES': ['SNES'],
-					'Genesis': ['Genesis'],
-					'Game Gear': ['Game Gear'],
-					'Master System': ['SMS'],
-					'PS1': ['PS'],
-					'PCE': ['PCE'],
-					'Neo Geo': ['Neo Geo'],
-					'Atari 2600': ['Atari 2600'],
-					'Atari Lynx': ['Lynx'],
-					'WonderSwan': ['WonderSwan'],
-					'Neo Geo Pocket': ['Neo Geo Pocket'],
-					'Pokemon Mini': ['Pokemon Mini']
 				}
 			}
 		};
@@ -4257,7 +3981,7 @@
 				return new Promise((resolve, reject) => {
 					const tx = db.transaction(STORE_NAME, 'readonly');
 					const request = tx.objectStore(STORE_NAME).get('deviceType');
-					request.onsuccess = () => resolve(request.result || 'muosStandard');
+					request.onsuccess = () => resolve(request.result || 'rgnano');
 					request.onerror = () => reject(request.error);
 				});
 			}
@@ -4326,36 +4050,6 @@
 				selectDevice(deviceType);
 			}
 
-			function showMustardOSResolutionModal() {
-				closeModal('deviceModal');
-				document.getElementById('mustardosResolutionModal').classList.add('active');
-			}
-
-			function selectMustardOSResolution(deviceType) {
-				closeModal('mustardosResolutionModal');
-				selectDevice(deviceType);
-			}
-
-			function showOnionOSDeviceModal() {
-				closeModal('deviceModal');
-				document.getElementById('onionosDeviceModal').classList.add('active');
-			}
-
-			function selectOnionOSDevice(deviceType) {
-				closeModal('onionosDeviceModal');
-				selectDevice(deviceType);
-			}
-
-			function showDrUm78DeviceModal() {
-				closeModal('deviceModal');
-				document.getElementById('drum78DeviceModal').classList.add('active');
-			}
-
-			function selectDrUm78Device(deviceType) {
-				closeModal('drum78DeviceModal');
-				selectDevice(deviceType);
-			}
-
 			async function selectDevice(deviceType) {
 				currentDevice = deviceType;
 				await saveDevice(deviceType);
@@ -4379,8 +4073,8 @@
 				} else if (profile.emoji === '🧅') {
 					// Miyoo devices with Onion OS - select root so we can access Saves folder too
 					message = 'Please select the <strong>ROOT of your SD card</strong><br><small style="color: rgba(255,255,255,0.6);">The folder containing Roms, Saves, RetroArch, etc.</small>';
-				} else if (profile.emoji === '🔑' || deviceType === 'rgnano' || deviceType === 'drum78Micro') {
-					// DrUm78 (FunKey-OS) devices
+				} else if (deviceType === 'rgnano') {
+					// RG Nano with Drum78 CFW
 					message = 'Please select the <strong>ROOT of your SD card</strong><br><small style="color: rgba(255,255,255,0.6);">Your system folders (GB, GBA, NES, etc.) should be at the root level</small>';
 				} else {
 					// Generic device
@@ -4405,9 +4099,6 @@
 				const skipNames = ['gamelist', 'miyoogamelist'];
 
 				for await (const entry of dirHandle.values()) {
-					// Skip hidden files and folders (starting with .), EXCEPT .res and .media (used by MinUI/NextUI)
-					if (entry.name.startsWith('.') && entry.name !== '.res' && entry.name !== '.media') continue;
-
 					if (entry.kind === 'file') {
 						// Skip files without extensions
 						if (!entry.name.includes('.')) continue;
@@ -5145,6 +4836,7 @@
 				// Update game count badge and Top 25 button visibility
 				updateGameCountBadge();
 				updateTop25Button();
+				updateBatchLibretroButton();
 				await renderGames();
 			}
 
@@ -5167,6 +4859,7 @@
 				// Update game count badge and hide Top 25 button for All Games view
 				updateGameCountBadge();
 				updateTop25Button();
+				updateBatchLibretroButton();
 				await renderGames();
 			}
 
@@ -5583,6 +5276,18 @@
 				const consoleKey = getConsoleKey(currentConsole);
 				btn.style.display = topGamesData[consoleKey] ? '' : 'none';
 			}
+			
+			function updateBatchLibretroButton() {
+				const btn = document.getElementById('batchLibretroBtn');
+				if (!currentConsole || currentConsole === '__all__' || !consoles[currentConsole]) {
+					btn.style.display = 'none';
+					return;
+				}
+				
+				// Show button only if there are games without art
+				const gamesWithoutArt = consoles[currentConsole].games.filter(game => !game.hasImage);
+				btn.style.display = gamesWithoutArt.length > 0 ? '' : 'none';
+			}
 
 			let gameConsole = null; // Track which console the current game belongs to
 
@@ -5743,6 +5448,70 @@
 				document.getElementById('imagePicker').classList.remove('active');
 			}
 
+			// Search RDB database for game names
+			async function searchRDBDatabase(q) {
+				const images = [];
+				
+				try {
+					// Fetch RDB game name database
+					const response = await fetch('rdb_gamename.json');
+					if (!response.ok) {
+						throw new Error(`Failed to fetch RDB database: ${response.status}`);
+					}
+					
+					const rdbData = await response.json();
+					const queryLower = q.toLowerCase();
+					const matchedKeys = [];
+					
+					// Find matching keys (fuzzy matching)
+					for (const key in rdbData) {
+						if (key.toLowerCase().includes(queryLower)) {
+							matchedKeys.push(key);
+						}
+						
+						// If we have more than 50 matches, stop searching
+						if (matchedKeys.length > 50) {
+							break;
+						}
+					}
+					
+					// If more than 50 matches, return an error message object
+					if (matchedKeys.length > 50) {
+						return {
+							error: '搜索范围过大，请缩小搜索范围',
+							results: []
+						};
+					}
+					
+					// Create image URLs for matched keys using Libretro URL format
+					for (const key of matchedKeys) {
+						const gameInfo = rdbData[key];
+						if (gameInfo && gameInfo.system) {
+							// Keep system name as is, but encode spaces as %20 for URL compatibility
+							const system = gameInfo.system.replace(/ /g, '%20');
+							
+							// Create Libretro-style URL
+							const name = key; // Use full key as name
+							const imageUrl = `https://thumbnails.libretro.com/${system}/Named_Boxarts/${encodeURIComponent(name)}.png`;
+							
+							images.push({
+								thumb: imageUrl,
+								full: imageUrl,
+								source: 'RDB',
+								name: name
+							});
+						}
+					}
+					
+				} catch (error) {
+					console.error('Error searching RDB database:', error);
+				}
+				
+				return images;
+			}
+			
+
+
 			async function searchImagesInPicker() {
 				const q = document.getElementById('pickerSearchQuery').value.trim();
 				if (!q) return;
@@ -5751,32 +5520,127 @@
 				grid.innerHTML = '<div class="loading">Searching for covers...</div>';
 				document.getElementById('pickerSelectBtn').disabled = true;
 				selectedPickerUrl = null;
+				
+				// Get selected search source
+				const searchSource = document.getElementById('pickerSearchSource').value;
 
 				try {
 					const images = [];
 					const parser = new DOMParser();
 					const consoleName = gameConsole || currentConsole;
 
-					// Search all sources in parallel
-					const [gamesDbResults, gameFaqsResults, coverProjectResults] = await Promise.allSettled([
-						searchTheGamesDB(q, parser),
-						searchGameFAQs(q, parser, consoleName),
-						searchTheCoverProject(q, parser)
-					]);
+					// Define which sources to search based on selection
+					const searchPromises = [];
+					
+					if (searchSource === 'all' || searchSource === 'rdb') {
+						searchPromises.push(
+							searchRDBDatabase(q).then(results => {
+								// Handle error case when too many results are found
+								if (results && results.error) {
+									return { 
+										source: 'rdb', 
+										value: results.results,
+										error: results.error
+									};
+								}
+								return { source: 'rdb', value: results };
+							})
+						);
+					}
+					if (searchSource === 'all' || searchSource === 'gamesdb') {
+						searchPromises.push(
+							searchTheGamesDB(q, parser).then(results => ({ source: 'gamesdb', value: results }))
+						);
+					}
+					if (searchSource === 'all' || searchSource === 'gamefaqs') {
+						searchPromises.push(
+							searchGameFAQs(q, parser, consoleName).then(results => ({ source: 'gamefaqs', value: results }))
+						);
+					}
+					if (searchSource === 'all' || searchSource === 'coverproject') {
+						searchPromises.push(
+							searchTheCoverProject(q, parser).then(results => ({ source: 'coverproject', value: results }))
+						);
+					}
 
+					// Execute all search promises in parallel
+					const searchResults = await Promise.allSettled(searchPromises);
+					
 					// Combine results from all sources
-					if (gamesDbResults.status === 'fulfilled') {
-						images.push(...gamesDbResults.value);
+					let errorMessage = null;
+					for (const result of searchResults) {
+						if (result.status === 'fulfilled' && result.value) {
+							// Check for error message
+							if (result.value.error) {
+								errorMessage = result.value.error;
+							}
+							// Add images if they exist
+							if (result.value.value && Array.isArray(result.value.value)) {
+								images.push(...result.value.value);
+							}
+						}
 					}
-					if (gameFaqsResults.status === 'fulfilled') {
-						images.push(...gameFaqsResults.value);
-					}
-					if (coverProjectResults.status === 'fulfilled') {
-						images.push(...coverProjectResults.value);
+
+					// If no images found and searching all sources, try fallback search methods
+					if (images.length === 0 && searchSource === 'all') {
+						try {
+							// Try a simple Google Images search as ultimate fallback
+							const fallbackUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q + ' box art cover')}`;
+							
+							// Try direct fetch first
+							let response = null;
+							try {
+								response = await fetch(fallbackUrl, {
+									method: 'GET',
+									mode: 'cors',
+									credentials: 'omit',
+									headers: {
+										'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+									}
+								});
+							} catch (directError) {
+								console.log('Direct Google Images fetch failed:', directError);
+								// Try alternative proxy as last resort
+								try {
+									response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(fallbackUrl)}`);
+								} catch (proxyError) {
+									console.log('Google Images proxy also failed:', proxyError);
+								}
+							}
+							
+							if (response && response.ok) {
+								let html;
+								if (response.url && response.url.includes('allorigins')) {
+									// Handle JSON response from allorigins
+									const result = await response.json();
+									html = result.contents;
+								} else {
+									// Handle direct response
+									html = await response.text();
+								}
+								
+								const doc = new DOMParser().parseFromString(html, 'text/html');
+								
+								// Extract image URLs from Google Images results (simple approach)
+								doc.querySelectorAll('img').forEach(img => {
+									const src = img.getAttribute('src');
+									if (src && (src.startsWith('http') || src.startsWith('//')) && !src.includes('gstatic.com')) {
+										const fullSrc = src.startsWith('//') ? 'https:' + src : src;
+										images.push({ thumb: fullSrc, full: fullSrc });
+									}
+								});
+							}
+						} catch (fallbackError) {
+							console.log('Fallback search failed:', fallbackError);
+						}
 					}
 
 					if (images.length === 0) {
-						grid.innerHTML = '<div class="no-results">No images found. Try Google Images instead.</div>';
+						if (errorMessage) {
+							grid.innerHTML = `<div class="no-results">${errorMessage}</div>`;
+						} else {
+							grid.innerHTML = '<div class="no-results">No images found. Try Google Images instead.</div>';
+						}
 						return;
 					}
 
@@ -5785,9 +5649,11 @@
 						arr.findIndex(i => i.full === img.full) === idx
 					);
 
-					grid.innerHTML = uniqueImages.slice(0, 30).map(img =>
-						`<img src="${img.thumb}" data-url="${img.full}" onclick="selectPickerImage(this)" ondblclick="selectPickerImage(this); confirmImageSelection();" title="Click to select, double-click to use" onerror="this.style.display='none'">`
-					).join('');
+					grid.innerHTML = uniqueImages.slice(0, 30).map(img => {
+						const source = img.source || 'unknown';
+						const title = img.source ? `Source: ${img.source}` : 'Click to select, double-click to use';
+						return `<img src="${img.thumb}" data-url="${img.full}" onclick="selectPickerImage(this)" ondblclick="selectPickerImage(this); confirmImageSelection();" title="${title}" onerror="this.style.display='none'">`;
+					}).join('');
 				} catch (e) {
 					grid.innerHTML = '<div class="no-results">Search unavailable. Try Google Images instead.</div>';
 				}
@@ -5795,61 +5661,178 @@
 
 			async function searchTheGamesDB(q, parser) {
 				const images = [];
-				const searchUrl = `https://thegamesdb.net/search.php?name=${encodeURIComponent(q)}`;
-				const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(searchUrl)}`);
-
-				if (!response.ok) return images;
-
-				const html = await response.text();
-				const doc = parser.parseFromString(html, 'text/html');
-
-				// Find all game images in search results
-				const gameImgs = doc.querySelectorAll('img[src*="cdn.thegamesdb.net"]');
-				gameImgs.forEach(img => {
-					const thumbUrl = img.getAttribute('src');
-					if (thumbUrl && thumbUrl.includes('/boxart/')) {
-						const fullUrl = thumbUrl.replace('/thumb/', '/original/');
-						images.push({ thumb: thumbUrl, full: fullUrl });
-					}
-				});
-
-				// Also check for game detail links to get more images
-				const gameLinks = doc.querySelectorAll('a[href*="game.php?id="]');
-				const uniqueIds = [...new Set(Array.from(gameLinks).map(a => {
-					const match = a.getAttribute('href').match(/id=(\d+)/);
-					return match ? match[1] : null;
-				}).filter(Boolean))];
-
-				// Fetch additional images from first few game pages
-				for (const gameId of uniqueIds.slice(0, 3)) {
+				
+				try {
+					const searchUrl = `https://thegamesdb.net/search.php?name=${encodeURIComponent(q)}`;
+					
+					// Try direct fetch first with relaxed headers
+					let response = null;
 					try {
-						const gameUrl = `https://thegamesdb.net/game.php?id=${gameId}`;
-						const gameResponse = await fetch(`https://corsproxy.io/?${encodeURIComponent(gameUrl)}`);
-						if (gameResponse.ok) {
-							const gameHtml = await gameResponse.text();
-							const gameDoc = parser.parseFromString(gameHtml, 'text/html');
-
-							const boxartImgs = gameDoc.querySelectorAll('img[src*="cdn.thegamesdb.net"]');
-							boxartImgs.forEach(img => {
-								const src = img.getAttribute('src');
-								if (src && (src.includes('/boxart/') || src.includes('/screenshot'))) {
-									const fullUrl = src.replace('/thumb/', '/original/');
-									if (!images.find(i => i.full === fullUrl)) {
-										images.push({ thumb: src, full: fullUrl });
-									}
-								}
-							});
+						response = await fetch(searchUrl, {
+							method: 'GET',
+							mode: 'cors',
+							credentials: 'omit',
+							headers: {
+								'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+							}
+						});
+					} catch (directError) {
+						console.log('Direct fetch failed, trying proxy:', directError);
+						// If direct fetch fails, try alternative proxy
+						try {
+							response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(searchUrl)}`);
+						} catch (proxyError) {
+							console.log('Proxy fetch also failed:', proxyError);
 						}
-					} catch (e) { /* Ignore errors */ }
-					if (images.length >= 15) break;
+					}
+					
+					if (!response || !response.ok) return images;
+
+					let html;
+					if (response.url && response.url.includes('allorigins')) {
+						// Handle JSON response from allorigins
+						const result = await response.json();
+						html = result.contents;
+					} else {
+						// Handle direct response
+						html = await response.text();
+					}
+					
+					const doc = parser.parseFromString(html, 'text/html');
+
+					// Find all game images in search results
+					const gameImgs = doc.querySelectorAll('img[src*="cdn.thegamesdb.net"]');
+					gameImgs.forEach(img => {
+						const thumbUrl = img.getAttribute('src');
+						if (thumbUrl && thumbUrl.includes('/boxart/')) {
+							const fullUrl = thumbUrl.replace('/thumb/', '/original/');
+							images.push({ thumb: thumbUrl, full: fullUrl });
+						}
+					});
+
+					// Also check for game detail links to get more images
+					const gameLinks = doc.querySelectorAll('a[href*="game.php?id="]');
+					const uniqueIds = [...new Set(Array.from(gameLinks).map(a => {
+						const match = a.getAttribute('href').match(/id=(\d+)/);
+						return match ? match[1] : null;
+					}).filter(Boolean))];
+
+					// Fetch additional images from first few game pages
+					for (const gameId of uniqueIds.slice(0, 3)) {
+						try {
+							const gameUrl = `https://thegamesdb.net/game.php?id=${gameId}`;
+							
+							// Try direct fetch for game page
+							let gameResponse = null;
+							try {
+								gameResponse = await fetch(gameUrl, {
+									method: 'GET',
+									mode: 'cors',
+									credentials: 'omit',
+									headers: {
+										'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+									}
+								});
+							} catch (directError) {
+								console.log('Direct game page fetch failed, trying proxy:', directError);
+								// If direct fetch fails, try alternative proxy
+								try {
+									gameResponse = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(gameUrl)}`);
+								} catch (proxyError) {
+									console.log('Game page proxy fetch also failed:', proxyError);
+								}
+							}
+							
+							if (gameResponse && gameResponse.ok) {
+								let gameHtml;
+								if (gameResponse.url && gameResponse.url.includes('allorigins')) {
+									// Handle JSON response from allorigins
+									const result = await gameResponse.json();
+									gameHtml = result.contents;
+								} else {
+									// Handle direct response
+									gameHtml = await gameResponse.text();
+								}
+								
+								const gameDoc = parser.parseFromString(gameHtml, 'text/html');
+
+								const boxartImgs = gameDoc.querySelectorAll('img[src*="cdn.thegamesdb.net"]');
+								boxartImgs.forEach(img => {
+									const src = img.getAttribute('src');
+									if (src && (src.includes('/boxart/') || src.includes('/screenshot'))) {
+										const fullUrl = src.replace('/thumb/', '/original/');
+										if (!images.find(i => i.full === fullUrl)) {
+											images.push({ thumb: src, full: fullUrl });
+										}
+									}
+								});
+							}
+						} catch (e) { /* Ignore errors */ }
+						if (images.length >= 15) break;
+					}
+				} catch (e) {
+					console.log('TheGamesDB search error:', e);
 				}
 				return images;
 			}
 
 			async function searchTheCoverProject(q, parser) {
-				// The Cover Project's CDN blocks CORS proxies, so we can't reliably fetch their images
-				// Return empty array - TheGamesDB will be the primary source
-				return [];
+				const images = [];
+				
+				try {
+					// Attempt to search The Cover Project with multiple approaches
+					const searchUrl = `https://thecoverproject.net/view.php?search=${encodeURIComponent(q)}`;
+					
+					// Try direct fetch first with relaxed headers
+					let response = null;
+					try {
+						response = await fetch(searchUrl, {
+							method: 'GET',
+							mode: 'cors',
+							credentials: 'omit',
+							headers: {
+								'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+							}
+						});
+					} catch (directError) {
+						console.log('Direct The Cover Project fetch failed, trying proxy:', directError);
+						// If direct fetch fails, try alternative proxy
+						try {
+							response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(searchUrl)}`);
+						} catch (proxyError) {
+							console.log('The Cover Project proxy fetch also failed:', proxyError);
+						}
+					}
+					
+					if (!response || !response.ok) return images;
+					
+					let html;
+					if (response.url && response.url.includes('allorigins')) {
+						// Handle JSON response from allorigins
+						const result = await response.json();
+						html = result.contents;
+					} else {
+						// Handle direct response
+						html = await response.text();
+					}
+					
+					const doc = parser.parseFromString(html, 'text/html');
+					
+					// Find cover images
+					const coverImages = doc.querySelectorAll('img[src*="thecoverproject.net"]');
+					coverImages.forEach(img => {
+						const src = img.getAttribute('src');
+						if (src && src.includes('/cover/')) {
+							// Try to get full size image
+							const fullUrl = src.replace('_thumb', '').replace('_small', '');
+							images.push({ thumb: src, full: fullUrl });
+						}
+					});
+				} catch (e) {
+					console.log('The Cover Project search error:', e);
+				}
+				
+				return images;
 			}
 
 			// GameFAQs platform code mapping
@@ -5904,10 +5887,40 @@
 				try {
 					// Use GameFAQs JSON search API
 					const searchUrl = `https://gamefaqs.gamespot.com/ajax/home_game_search?term=${encodeURIComponent(q)}`;
-					const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(searchUrl)}`);
-					if (!response.ok) return images;
-
-					const data = await response.json();
+					
+					// Try direct fetch first with relaxed headers
+					let response = null;
+					try {
+						response = await fetch(searchUrl, {
+							method: 'GET',
+							mode: 'cors',
+							credentials: 'omit',
+							headers: {
+								'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+							}
+						});
+					} catch (directError) {
+						console.log('Direct GameFAQs fetch failed, trying proxy:', directError);
+						// If direct fetch fails, try alternative proxy
+						try {
+							response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(searchUrl)}`);
+						} catch (proxyError) {
+							console.log('GameFAQs proxy fetch also failed:', proxyError);
+						}
+					}
+					
+					if (!response || !response.ok) return images;
+					
+					let data;
+					if (response.url && response.url.includes('allorigins')) {
+						// Handle JSON response from allorigins
+						const result = await response.json();
+						data = JSON.parse(result.contents);
+					} else {
+						// Handle direct response
+						data = await response.json();
+					}
+					
 					if (!Array.isArray(data)) return images;
 
 					// Filter results by platform and collect game URLs
@@ -5953,23 +5966,53 @@
 						try {
 							// Go directly to the /boxes page for box art
 							const boxesPageUrl = `https://gamefaqs.gamespot.com${gameUrl}/boxes`;
-							const boxesResponse = await fetch(`https://corsproxy.io/?${encodeURIComponent(boxesPageUrl)}`);
-							if (!boxesResponse.ok) continue;
-
-							const boxesHtml = await boxesResponse.text();
-							const boxesDoc = parser.parseFromString(boxesHtml, 'text/html');
-
-							// Find all box art images
-							boxesDoc.querySelectorAll('img[src*="/a/box/"]').forEach(img => {
-								const src = img.getAttribute('src');
-								if (src) {
-									const thumbUrl = toAbsoluteUrl(src);
-									const imgFullUrl = thumbUrl.replace('_thumb.jpg', '_front.jpg');
-									if (!images.find(i => i.full === imgFullUrl)) {
-										images.push({ thumb: thumbUrl, full: imgFullUrl });
+							
+							// Try direct fetch first with relaxed headers
+							let boxesResponse = null;
+							try {
+								boxesResponse = await fetch(boxesPageUrl, {
+									method: 'GET',
+									mode: 'cors',
+									credentials: 'omit',
+									headers: {
+										'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 									}
+								});
+							} catch (directError) {
+								console.log('Direct GameFAQs boxes page fetch failed, trying proxy:', directError);
+								// If direct fetch fails, try alternative proxy
+								try {
+									boxesResponse = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(boxesPageUrl)}`);
+								} catch (proxyError) {
+									console.log('GameFAQs boxes page proxy fetch also failed:', proxyError);
 								}
-							});
+							}
+							
+							if (boxesResponse && boxesResponse.ok) {
+								let boxesHtml;
+								if (boxesResponse.url && boxesResponse.url.includes('allorigins')) {
+									// Handle JSON response from allorigins
+									const result = await boxesResponse.json();
+									boxesHtml = result.contents;
+								} else {
+									// Handle direct response
+									boxesHtml = await boxesResponse.text();
+								}
+								
+								const boxesDoc = parser.parseFromString(boxesHtml, 'text/html');
+
+								// Find all box art images
+								boxesDoc.querySelectorAll('img[src*="/a/box/"]').forEach(img => {
+									const src = img.getAttribute('src');
+									if (src) {
+										const thumbUrl = toAbsoluteUrl(src);
+										const imgFullUrl = thumbUrl.replace('_thumb.jpg', '_front.jpg');
+										if (!images.find(i => i.full === imgFullUrl)) {
+											images.push({ thumb: thumbUrl, full: imgFullUrl });
+										}
+									}
+								});
+							}
 						} catch (e) { /* Ignore errors */ }
 
 						if (images.length >= 10) break;
@@ -6019,10 +6062,40 @@
 
 					// Search for the game
 					const searchUrl = `https://gamefaqs.gamespot.com/ajax/home_game_search?term=${encodeURIComponent(gameName)}`;
-					const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(searchUrl)}`);
-					if (!response.ok) return;
-
-					const data = await response.json();
+					
+					// Try direct fetch first with relaxed headers
+					let response = null;
+					try {
+						response = await fetch(searchUrl, {
+							method: 'GET',
+							mode: 'cors',
+							credentials: 'omit',
+							headers: {
+								'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+							}
+						});
+					} catch (directError) {
+						console.log('Direct GameFAQs info fetch failed, trying proxy:', directError);
+						// If direct fetch fails, try alternative proxy
+						try {
+							response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(searchUrl)}`);
+						} catch (proxyError) {
+							console.log('GameFAQs info proxy fetch also failed:', proxyError);
+							return; // If both fail, exit early
+						}
+					}
+					
+					if (!response || !response.ok) return;
+					
+					let data;
+					if (response.url && response.url.includes('allorigins')) {
+						// Handle JSON response from allorigins
+						const result = await response.json();
+						data = JSON.parse(result.contents);
+					} else {
+						// Handle direct response
+						data = await response.json();
+					}
 					if (!Array.isArray(data)) return;
 
 					// Find best matching game
@@ -6052,10 +6125,40 @@
 
 					// Fetch the game page
 					const gamePageUrl = `https://gamefaqs.gamespot.com${bestMatch.url}`;
-					const gameResponse = await fetch(`https://corsproxy.io/?${encodeURIComponent(gamePageUrl)}`);
-					if (!gameResponse.ok) return;
-
-					const html = await gameResponse.text();
+					
+					// Try direct fetch first with relaxed headers
+					let gameResponse = null;
+					try {
+						gameResponse = await fetch(gamePageUrl, {
+							method: 'GET',
+							mode: 'cors',
+							credentials: 'omit',
+							headers: {
+								'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+							}
+						});
+					} catch (directError) {
+						console.log('Direct GameFAQs game page fetch failed, trying proxy:', directError);
+						// If direct fetch fails, try alternative proxy
+						try {
+							gameResponse = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(gamePageUrl)}`);
+						} catch (proxyError) {
+							console.log('GameFAQs game page proxy fetch also failed:', proxyError);
+							return; // If both fail, exit early
+						}
+					}
+					
+					if (!gameResponse || !gameResponse.ok) return;
+					
+					let html;
+					if (gameResponse.url && gameResponse.url.includes('allorigins')) {
+						// Handle JSON response from allorigins
+						const result = await gameResponse.json();
+						html = result.contents;
+					} else {
+						// Handle direct response
+						html = await gameResponse.text();
+					}
 
 					// Parse rating with count
 					let rating = null;
@@ -6491,40 +6594,736 @@
 				const status = document.getElementById('imageStatus');
 				if (!url) { status.className = 'status-msg error'; status.textContent = 'Enter a URL'; return; }
 				status.textContent = 'Downloading...'; status.style.display = 'block'; status.className = 'status-msg';
+				
+				// Special handling for Libretro URLs
+				if (url.includes('thumbnails.libretro.com')) {
+					await downloadLibretroImage(url, status);
+					return;
+				}
+				
+				// Try multiple methods for general URLs
 				try {
-					// Always use CORS proxy for external URLs to avoid CORS blocking
-					const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-
-					// Add timeout for fetch (30 seconds)
+					// Method 1: Direct fetch first for better compatibility
+					status.textContent = 'Trying direct download...';
 					const controller = new AbortController();
 					const timeout = setTimeout(() => controller.abort(), 30000);
 
-					const r = await fetch(proxyUrl, { signal: controller.signal });
+					const r = await fetch(url, { 
+						signal: controller.signal,
+						referrerPolicy: 'no-referrer',
+						headers: { 
+							'Accept': 'image/*',
+							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+						},
+						cache: 'no-cache'
+					});
 					clearTimeout(timeout);
 
-					if (!r.ok) throw new Error('Failed');
-					await processAndSaveImage(await r.blob());
+					if (r.ok) {
+						await processAndSaveImage(await r.blob());
+						return;
+					}
 				} catch (e) {
-					status.className = 'status-msg error';
-					status.textContent = e.name === 'AbortError' ? 'Download timed out' : 'Error. Try Local instead.';
+					console.log('Direct download failed:', e.message);
 				}
+				
+				// Method 2: Try CORS proxy
+				try {
+					status.textContent = 'Direct download failed, trying CORS proxy...';
+					const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+					const r2 = await fetch(proxyUrl, { 
+						headers: { 
+							'Cache-Control': 'no-cache',
+							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+						}
+					});
+					if (r2.ok) {
+						await processAndSaveImage(await r2.blob());
+						return;
+					} else {
+						throw new Error(`Proxy failed with status ${r2.status}`);
+					}
+				} catch (e) {
+					console.log('CORS proxy failed:', e.message);
+				}
+				
+				// Method 3: Try alternative CORS proxy
+				try {
+					status.textContent = 'Trying alternative proxy...';
+					const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+					const r3 = await fetch(proxyUrl, { 
+						method: 'GET',
+						cache: 'no-cache',
+						headers: { 
+							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+						}
+					});
+					if (r3.ok) {
+						const arrayBuffer = await r3.arrayBuffer();
+						const blob = new Blob([arrayBuffer], {type: 'image/png'});
+						await processAndSaveImage(blob);
+						return;
+					} else {
+						throw new Error(`Alternative proxy failed with status ${r3.status}`);
+					}
+				} catch (e) {
+					console.log('Alternative proxy failed:', e.message);
+				}
+				
+				// If all methods failed
+				status.className = 'status-msg error';
+				status.textContent = 'Error downloading image. Try Local instead.';
+			}
+
+			async function downloadLibretroImage(url, status) {
+				// Enhanced approach for Libretro URLs with better error handling and debugging
+				console.log('Attempting to download Libretro image from:', url);
+				status.textContent = 'Downloading Libretro image...';
+				
+				// Method 1: Try with a more compatible approach using XMLHttpRequest
+				try {
+					status.textContent = 'Trying XMLHttpRequest method...';
+					const blob = await new Promise((resolve, reject) => {
+						const xhr = new XMLHttpRequest();
+						xhr.open('GET', url, true);
+						xhr.responseType = 'blob';
+						xhr.timeout = 30000; // 30 second timeout
+						
+						xhr.onload = function() {
+							if (xhr.status === 200) {
+								resolve(xhr.response);
+							} else {
+								reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+							}
+						};
+						
+						xhr.onerror = function() {
+							reject(new Error('Network error'));
+						};
+						
+						xhr.ontimeout = function() {
+							reject(new Error('Request timeout'));
+						};
+						
+						xhr.send();
+					});
+					
+					console.log('XMLHttpRequest successful, blob size:', blob.size);
+					if (blob.size === 0) throw new Error('Empty image received');
+					await processAndSaveImage(blob);
+					return;
+				} catch (e) {
+					console.log('XMLHttpRequest method failed:', e.message);
+					status.textContent = `XHR failed: ${e.message.substring(0, 30)}...`;
+				}
+				
+				// Method 2: Try with referrer policy and custom headers
+				try {
+					status.textContent = 'Trying with custom headers...';
+					const controller = new AbortController();
+					const timeoutId = setTimeout(() => controller.abort(), 30000);
+					
+					const response = await fetch(url, { 
+						signal: controller.signal,
+						referrerPolicy: 'no-referrer',
+						mode: 'no-cors', // Try no-cors mode
+						cache: 'no-cache',
+						headers: {
+							'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
+							'Accept-Language': 'en-US,en;q=0.9',
+							'Cache-Control': 'no-cache',
+							'Pragma': 'no-cache',
+							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+						}
+					});
+					clearTimeout(timeoutId);
+					
+					console.log('Custom headers fetch response status:', response.status);
+					// With no-cors mode, we can't check response.ok, but we can try to process the response
+					const blob = await response.blob();
+					console.log('Custom headers blob size:', blob.size);
+					if (blob.size === 0) throw new Error('Empty image received');
+					await processAndSaveImage(blob);
+					return;
+				} catch (e) {
+					console.log('Custom headers fetch failed:', e.message);
+					status.textContent = `Headers failed: ${e.message.substring(0, 30)}...`;
+				}
+				
+				// Method 3: CORS proxy with different approach
+				try {
+					status.textContent = 'Using CORS proxy (method 1)...';
+					const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
+					console.log('Trying CORS proxy with URL:', proxyUrl);
+					const response = await fetch(proxyUrl, {
+						method: 'GET',
+						cache: 'no-cache'
+					});
+					console.log('Proxy response status:', response.status);
+					if (!response.ok) throw new Error(`Proxy error: HTTP ${response.status}`);
+					const blob = await response.blob();
+					console.log('Proxy blob size:', blob.size);
+					if (blob.size === 0) throw new Error('Empty proxy image');
+					await processAndSaveImage(blob);
+					return;
+				} catch (e) {
+					console.log('CORS proxy (method 1) failed:', e.message);
+					status.textContent = `Proxy 1 failed: ${e.message.substring(0, 30)}...`;
+				}
+				
+				// Method 4: Alternative CORS proxy
+				try {
+					status.textContent = 'Using CORS proxy (method 2)...';
+					const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+					console.log('Trying alternative proxy with URL:', proxyUrl);
+					const response = await fetch(proxyUrl, { 
+						method: 'GET',
+						cache: 'no-cache',
+						headers: { 
+							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+						}
+					});
+					console.log('Alternative proxy response status:', response.status);
+					if (!response.ok) throw new Error(`Alt proxy error: HTTP ${response.status}`);
+					const arrayBuffer = await response.arrayBuffer();
+					console.log('Alternative proxy array buffer byte length:', arrayBuffer.byteLength);
+					if (arrayBuffer.byteLength === 0) throw new Error('Empty image from alt proxy');
+					const blob = new Blob([arrayBuffer], {type: 'image/png'});
+					await processAndSaveImage(blob);
+					return;
+				} catch (e) {
+					console.log('Alternative CORS proxy failed:', e.message);
+					status.textContent = `Alt proxy failed: ${e.message.substring(0, 30)}...`;
+				}
+				
+				// Method 5: Try with different CORS proxy
+				try {
+					status.textContent = 'Using CORS proxy (method 3)...';
+					const proxyUrl = `https://cors-anywhere.herokuapp.com/${url}`;
+					console.log('Trying different proxy with URL:', proxyUrl);
+					const response = await fetch(proxyUrl, {
+						method: 'GET',
+						cache: 'no-cache',
+						headers: {
+							'Origin': 'https://nanoadcade.local',
+							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+						}
+					});
+					console.log('Different proxy response status:', response.status);
+					if (!response.ok) throw new Error(`Diff proxy error: HTTP ${response.status}`);
+					const blob = await response.blob();
+					console.log('Different proxy blob size:', blob.size);
+					if (blob.size === 0) throw new Error('Empty image from diff proxy');
+					await processAndSaveImage(blob);
+					return;
+				} catch (e) {
+					console.log('Different CORS proxy failed:', e.message);
+					status.textContent = `Diff proxy failed: ${e.message.substring(0, 30)}...`;
+				}
+				
+				// Method 6: Try with boxart URL as fallback (common alternative)
+				try {
+					status.textContent = 'Trying boxart URL...';
+					// Convert Named_Boxarts URL to Boxarts URL
+					const boxartUrl = url.replace('/Named_Boxarts/', '/Boxarts/');
+					if (boxartUrl !== url) {
+						console.log('Trying boxart URL:', boxartUrl);
+						const controller = new AbortController();
+						const timeoutId = setTimeout(() => controller.abort(), 30000);
+						
+						const response = await fetch(boxartUrl, { 
+							signal: controller.signal,
+							referrerPolicy: 'no-referrer',
+							mode: 'cors',
+							cache: 'no-cache',
+							headers: {
+								'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
+								'Accept-Language': 'en-US,en;q=0.9',
+								'Cache-Control': 'no-cache',
+								'Pragma': 'no-cache',
+								'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+							}
+						});
+						clearTimeout(timeoutId);
+						
+						console.log('Boxart URL response status:', response.status);
+						if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+						const blob = await response.blob();
+						console.log('Boxart URL blob size:', blob.size);
+						if (blob.size === 0) throw new Error('Empty image received from boxart URL');
+						await processAndSaveImage(blob);
+						return;
+					}
+				} catch (e) {
+					console.log('Boxart URL failed:', e.message);
+					status.textContent = `Boxart URL failed: ${e.message.substring(0, 30)}...`;
+				}
+				
+				// Method 7: Try with Image element and canvas conversion (bypasses some CORS issues)
+				try {
+					status.textContent = 'Trying image element method...';
+					const img = new Image();
+					
+					// Try loading with a timeout
+					const loadImage = new Promise((resolve, reject) => {
+						const timeoutId = setTimeout(() => {
+							img.src = '';
+							reject(new Error('Image load timeout'));
+						}, 30000);
+						
+						img.onload = () => {
+							clearTimeout(timeoutId);
+							// Create canvas and convert to blob
+							try {
+								const canvas = document.createElement('canvas');
+								canvas.width = img.naturalWidth;
+								canvas.height = img.naturalHeight;
+								const ctx = canvas.getContext('2d');
+								ctx.drawImage(img, 0, 0);
+								canvas.toBlob((blob) => {
+									if (blob) {
+										resolve(blob);
+									} else {
+										reject(new Error('Failed to create blob from canvas'));
+									}
+								}, 'image/png');
+							} catch (canvasError) {
+								reject(new Error(`Canvas error: ${canvasError.message}`));
+							}
+						};
+						
+						img.onerror = () => {
+							clearTimeout(timeoutId);
+							reject(new Error('Image failed to load'));
+						};
+						
+						// Try loading the image
+						img.src = url;
+					});
+					
+					const blob = await loadImage;
+					await processAndSaveImage(blob);
+					return;
+				} catch (e) {
+					console.log('Image element method failed:', e.message);
+					status.textContent = `Image method failed: ${e.message.substring(0, 30)}...`;
+				}
+				
+				// Method 8: Try multiple proxy services in sequence
+				try {
+					status.textContent = 'Trying multiple proxy services...';
+					const proxyServices = [
+						`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+						`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+						`https://corsproxy.io/?${encodeURIComponent(url)}`
+					];
+					
+					for (let i = 0; i < proxyServices.length; i++) {
+						try {
+							status.textContent = `Trying proxy service ${i+1}/${proxyServices.length}...`;
+							const proxyUrl = proxyServices[i];
+							console.log(`Trying proxy service ${i+1}:`, proxyUrl);
+							
+							const response = await fetch(proxyUrl, {
+								method: 'GET',
+								cache: 'no-cache',
+								headers: {
+									'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+								}
+							});
+							
+							if (response.ok) {
+								const contentType = response.headers.get('content-type');
+								console.log(`Proxy service ${i+1} response content-type:`, contentType);
+								
+								let blob;
+								if (contentType && contentType.includes('application/json')) {
+									// Handle JSON response from allorigins
+									const data = await response.json();
+									if (data.contents) {
+										// Convert base64 data to blob
+										const byteString = atob(data.contents.split(',')[1]);
+										const mimeString = data.contents.split(',')[0].split(':')[1].split(';')[0];
+										const ab = new ArrayBuffer(byteString.length);
+										const ia = new Uint8Array(ab);
+										for (let j = 0; j < byteString.length; j++) {
+											ia[j] = byteString.charCodeAt(j);
+										}
+										blob = new Blob([ab], {type: mimeString});
+									} else {
+										throw new Error('Invalid JSON response from proxy');
+									}
+								} else {
+									// Handle direct binary response
+									blob = await response.blob();
+								}
+								
+								if (blob && blob.size > 0) {
+									console.log(`Proxy service ${i+1} successful, blob size:`, blob.size);
+									await processAndSaveImage(blob);
+									return;
+								}
+							}
+						} catch (proxyError) {
+							console.log(`Proxy service ${i+1} failed:`, proxyError.message);
+							// Continue to next proxy service
+						}
+					}
+				} catch (e) {
+					console.log('Multiple proxy services failed:', e.message);
+					status.textContent = `Proxies failed: ${e.message.substring(0, 30)}...`;
+				}
+				
+				// Method 9: Try with a hidden iframe approach (bypasses some restrictions)
+				try {
+					status.textContent = 'Trying iframe approach...';
+					
+					// Create a temporary iframe to load the image
+					const iframe = document.createElement('iframe');
+					iframe.style.display = 'none';
+					iframe.src = url;
+					
+					// Add to DOM temporarily
+					document.body.appendChild(iframe);
+					
+					// Wait a bit for the iframe to load
+					await new Promise(resolve => setTimeout(resolve, 3000));
+					
+					// Remove iframe
+					document.body.removeChild(iframe);
+					
+					// Try direct fetch again after iframe load
+					status.textContent = 'Retrying direct download after iframe...';
+					const response = await fetch(url, {
+						method: 'GET',
+						cache: 'no-cache',
+						referrerPolicy: 'no-referrer',
+						headers: {
+							'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
+							'Accept-Language': 'en-US,en;q=0.9',
+							'Cache-Control': 'no-cache',
+							'Pragma': 'no-cache',
+							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+						}
+					});
+					
+					if (response.ok) {
+						const blob = await response.blob();
+						if (blob.size > 0) {
+							await processAndSaveImage(blob);
+							return;
+						}
+					}
+				} catch (iframeError) {
+					console.log('Iframe approach failed:', iframeError.message);
+				}
+				
+				// Method 10: Last resort - try to fetch through a data URL approach
+				try {
+					status.textContent = 'Trying data URL approach...';
+					
+					// Create an image element and try to convert to data URL
+					const img = new Image();
+					img.crossOrigin = 'Anonymous';
+					
+					const dataUrlPromise = new Promise((resolve, reject) => {
+						const timeoutId = setTimeout(() => {
+							reject(new Error('Data URL conversion timeout'));
+						}, 10000);
+						
+						img.onload = () => {
+							clearTimeout(timeoutId);
+							try {
+								const canvas = document.createElement('canvas');
+								canvas.width = img.naturalWidth;
+								canvas.height = img.naturalHeight;
+								const ctx = canvas.getContext('2d');
+								ctx.drawImage(img, 0, 0);
+								
+								canvas.toBlob((blob) => {
+									if (blob) {
+										resolve(blob);
+									} else {
+										reject(new Error('Failed to create blob'));
+									}
+								}, 'image/png');
+							} catch (canvasError) {
+								reject(new Error(`Canvas error: ${canvasError.message}`));
+							}
+						};
+						
+						img.onerror = () => {
+							clearTimeout(timeoutId);
+							reject(new Error('Image failed to load for data URL conversion'));
+						};
+						
+						img.src = url;
+					});
+					
+					const blob = await dataUrlPromise;
+					await processAndSaveImage(blob);
+					return;
+				} catch (dataUrlError) {
+					console.log('Data URL approach failed:', dataUrlError.message);
+				}
+				
+				// If we reach here, all methods failed
+				console.error('All download methods failed for Libretro image');
+				status.className = 'status-msg error';
+				status.innerHTML = 'Error downloading Libretro image. <a href="'+url+'" target="_blank" style="color:#60a5fa;text-decoration:underline;">Try opening in new tab</a>, then save and upload manually.';
 			}
 
 			function selectLocalImage() { document.getElementById('localImageInput').click(); }
 			async function handleLocalImage(e) { if (e.target.files[0]) await processAndSaveImage(e.target.files[0]); }
+			
+			// Calculate CRC32 for a specific game file (used when needed)
+			async function calculateGameCRC(gameName, consoleName, forceRecalculate = false) {
+				try {
+					const consoleData = consoles[consoleName];
+					if (!consoleData) return null;
+					
+					// Find game object
+					const game = consoleData.games.find(g => g.name === gameName);
+					if (!game) return null;
+					
+					// Check if CRC already calculated (unless forced)
+					if (game.crc32 && !forceRecalculate) return game.crc32;
+					
+					// Get file handle and calculate CRC
+					// Try direct handle first (for games in console root)
+					let fileHandle;
+					try {
+						fileHandle = await consoleData.handle.getFileHandle(gameName);
+					} catch (e) {
+						// If direct access fails, try using game's directory handle (for games in subdirectories)
+						if (game.dirHandle) {
+							fileHandle = await game.dirHandle.getFileHandle(gameName);
+						} else {
+							throw e; // Re-throw if no directory handle available
+						}
+					}
+					
+					const file = await fileHandle.getFile();
+					const buffer = await file.arrayBuffer();
+					const crc32 = calculateCRC32(buffer);
+					
+					// Store CRC in game object
+					game.crc32 = crc32;
+					return crc32;
+				} catch (e) {
+					console.log('Error calculating CRC:', e);
+					return null;
+				}
+			}
+			
+			// CRC32 calculation function for file integrity checking
+			function calculateCRC32(buffer) {
+				const crcTable = new Uint32Array(256);
+				
+				// Generate CRC table
+				for (let i = 0; i < 256; i++) {
+					let c = i;
+					for (let j = 0; j < 8; j++) {
+						c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+					}
+					crcTable[i] = c;
+				}
+				
+				// Calculate CRC32
+				let crc = 0 ^ (-1);
+				const view = new Uint8Array(buffer);
+				for (let i = 0; i < view.length; i++) {
+					crc = (crc >>> 8) ^ crcTable[(crc ^ view[i]) & 0xFF];
+				}
+				
+				// Convert to unsigned 32-bit integer
+				return (crc ^ (-1)) >>> 0;
+			}
+			
+			// Function to download Libretro artwork based on CRC32
+			async function downloadLibretroByCRC() {
+				const status = document.getElementById('imageStatus');
+				status.textContent = 'Getting game CRC32...';
+				status.style.display = 'block';
+				status.className = 'status-msg';
+				
+				try {
+					// First get the current game's CRC32
+					const crc32 = await calculateGameCRC(currentGame, gameConsole, false);
+					if (!crc32) {
+						status.className = 'status-msg error';
+						status.textContent = 'Could not calculate CRC32. Game file may be missing.';
+						return;
+					}
+					
+					const crcHex = crc32.toString(16).toUpperCase();
+					status.textContent = `CRC32: ${crcHex} - Looking up in database...`;
+					
+					// Fetch the rdb_entries.json file with retry logic
+					let rdbData = null;
+					let retries = 3;
+					while (retries > 0) {
+						try {
+							const response = await fetch('rdb_entries.json');
+							if (response.ok) {
+								rdbData = await response.json();
+								break;
+							} else {
+								throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+							}
+						} catch (e) {
+							retries--;
+							if (retries === 0) throw e;
+							await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
+						}
+					}
+					
+					if (!rdbData) {
+						status.className = 'status-msg error';
+						status.textContent = 'Failed to load rdb_entries.json after multiple attempts';
+						return;
+					}
+					
+					const gameInfo = rdbData[crcHex];
+					
+					if (!gameInfo) {
+						status.className = 'status-msg error';
+						status.textContent = `No entry found for CRC32: ${crcHex}`;
+						return;
+					}
+					
+					status.textContent = `Found: ${gameInfo.name}`;
+					
+					// Construct the Libretro URL based on system and name
+					// Format: https://thumbnails.libretro.com/{system}/Named_Boxarts/{name}.png
+					const system = encodeURIComponent(gameInfo.system);
+					const name = encodeURIComponent(gameInfo.name);
+					const imageUrl = `https://thumbnails.libretro.com/${system}/Named_Boxarts/${name}.png`;
+					
+					// Also try the boxart URL as a fallback
+					const boxartUrl = `https://thumbnails.libretro.com/${system}/Boxarts/${name}.png`;
+					
+					// Try the main URL first
+					document.getElementById('imageUrl').value = imageUrl;
+					
+					// Trigger the download
+					try {
+						await downloadAndResizeImage();
+					} catch (error) {
+						console.log('Primary Libretro URL failed, trying boxart URL');
+						// If the primary URL fails, try the boxart URL
+						document.getElementById('imageUrl').value = boxartUrl;
+						try {
+							await downloadAndResizeImage();
+						} catch (secondError) {
+							// If both URLs fail, try constructing URL without encoding
+							console.log('Both encoded URLs failed, trying unencoded versions');
+							const unencodedImageUrl = `https://thumbnails.libretro.com/${gameInfo.system}/Named_Boxarts/${gameInfo.name}.png`;
+							const unencodedBoxartUrl = `https://thumbnails.libretro.com/${gameInfo.system}/Boxarts/${gameInfo.name}.png`;
+							
+							document.getElementById('imageUrl').value = unencodedImageUrl;
+							try {
+								await downloadAndResizeImage();
+							} catch (thirdError) {
+								document.getElementById('imageUrl').value = unencodedBoxartUrl;
+								await downloadAndResizeImage();
+							}
+						}
+					}
+					
+				} catch (error) {
+					console.error('Error downloading from Libretro by CRC32:', error);
+					status.className = 'status-msg error';
+					status.textContent = `Error: ${error.message}`;
+				}
+			}
 
-			async function processAndSaveImage(blob) {
+			async function processAndSaveImage(inputData) {
 				const status = document.getElementById('imageStatus');
 				const targetConsole = gameConsole || currentConsole;
+				let blob = null;
+				
 				try {
-					const img = await createImageBitmap(blob);
+					// Handle different input types
+					if (inputData instanceof Blob) {
+						blob = inputData;
+					} else if (typeof inputData === 'string') {
+						// If it's a string, assume it's a data URL
+						try {
+							const response = await fetch(inputData);
+							blob = await response.blob();
+						} catch (e) {
+							throw new Error('Failed to convert data URL to blob');
+						}
+					} else {
+						throw new Error('Invalid input type');
+					}
+					
+					// Make sure blob is valid
+					if (!blob || blob.size === 0) {
+						throw new Error('Invalid image blob');
+					}
+					
+					let img;
+					try {
+						// Try to create image bitmap from blob
+						img = await createImageBitmap(blob);
+					} catch (e) {
+						console.log('createImageBitmap failed, using fallback:', e);
+						
+						// Create object URL for the blob
+						const objectURL = URL.createObjectURL(blob);
+						
+						try {
+							// Try loading as an Image element
+							img = await new Promise((resolve, reject) => {
+								const imgEl = new Image();
+								imgEl.onload = () => {
+									// Clean up the object URL
+									URL.revokeObjectURL(objectURL);
+									
+									// Create a canvas to get the image as a bitmap
+									const canvas = document.createElement('canvas');
+									canvas.width = imgEl.naturalWidth || imgEl.width;
+									canvas.height = imgEl.naturalHeight || imgEl.height;
+									const ctx = canvas.getContext('2d');
+									ctx.drawImage(imgEl, 0, 0);
+									
+									// Try to get the image bitmap from the canvas
+									try {
+										resolve(createImageBitmap(canvas));
+									} catch (bitmapError) {
+										// Final fallback: just use the Image element directly
+										console.log('Canvas bitmap creation failed, using Image element directly');
+										resolve(imgEl);
+									}
+								};
+								
+								imgEl.onerror = () => {
+									URL.revokeObjectURL(objectURL);
+									reject(new Error('Image loading failed'));
+								};
+								
+								imgEl.src = objectURL;
+							});
+						} catch (e) {
+							// Clean up the object URL if something went wrong
+							URL.revokeObjectURL(objectURL);
+							throw e;
+						}
+					}
+					
 					const profile = deviceProfiles[currentDevice];
 					const maxSize = profile.imageSize || 240;
+					
+					// Handle both ImageBitmap and HTMLImageElement
+					const imgWidth = img.width || (img.naturalWidth || img.width);
+					const imgHeight = img.height || (img.naturalHeight || img.height);
 
 					// Calculate scale factor to fit within maxSize while preserving aspect ratio
-					const scale = Math.min(maxSize / img.width, maxSize / img.height);
-					const newWidth = Math.round(img.width * scale);
-					const newHeight = Math.round(img.height * scale);
+					const scale = Math.min(maxSize / imgWidth, maxSize / imgHeight);
+					const newWidth = Math.round(imgWidth * scale);
+					const newHeight = Math.round(imgHeight * scale);
 
 					const canvas = document.createElement('canvas');
 					canvas.width = newWidth;
@@ -7061,6 +7860,524 @@
 				} catch (e) {
 					alert('Error uploading save: ' + e.message);
 				}
+			}
+
+			// Batch Libretro processing
+			let batchProcessing = false;
+			let batchCancelled = false;
+			let batchSuccessCount = 0;
+			let batchFailCount = 0;
+			let batchTotalCount = 0;
+			let batchCurrentIndex = 0;
+			let batchGames = [];
+			let batchConcurrency = 15; // Process 15 games at a time
+
+			let rdbData = null;
+			async function batchFetchLibretroImages() {
+				if (!currentConsole || !consoles[currentConsole]) {
+					alert('No console selected');
+					return;
+				}
+
+				// Get games without images
+				const consoleGames = consoles[currentConsole].games;
+				const gamesWithoutArt = consoleGames.filter(game => !game.hasImage);
+				
+				if (gamesWithoutArt.length === 0) {
+					alert('All games in this console already have artwork!');
+					return;
+				}
+
+				// Reset batch variables
+				batchProcessing = true;
+				batchCancelled = false;
+				batchSuccessCount = 0;
+				batchFailCount = 0;
+				batchTotalCount = gamesWithoutArt.length;
+				batchCurrentIndex = 0;
+				batchGames = [...gamesWithoutArt];
+
+				// Load rdb_entries.json once
+				try {
+					const response = await fetch('rdb_entries.json');
+					if (response.ok) {
+						rdbData = await response.json();
+					} else {
+						throw new Error('Failed to load rdb_entries.json');
+					}
+				} catch (e) {
+					alert('Could not load rdb_entries.json file. Please try again later.');
+					batchProcessing = false;
+					return;
+				}
+
+				// Show batch modal
+				document.getElementById('batchLibretroModal').classList.add('active');
+				updateBatchProgress();
+
+				// Start batch processing
+				await processBatchQueue();
+
+				// Check if processing was completed (not cancelled)
+				if (!batchCancelled) {
+					// Show final status
+					setTimeout(() => {
+						alert(`Batch processing complete!\n\nSuccessfully downloaded: ${batchSuccessCount}\nFailed: ${batchFailCount}`);
+						// Change Cancel button to Close button
+						document.getElementById('batchCancelBtn').style.display = 'none';
+						document.getElementById('batchCloseBtn').style.display = 'inline-flex';
+						// Update status text
+						document.getElementById('batchCurrentGame').textContent = 'Batch processing complete!';
+					}, 500);
+				} else {
+					// If cancelled was already handled, make sure Close button is visible
+					document.getElementById('batchCancelBtn').style.display = 'none';
+					document.getElementById('batchCloseBtn').style.display = 'inline-flex';
+				}
+
+				// Cleanup
+				batchProcessing = false;
+			}
+
+			// Process games in batches with true concurrency
+			async function processBatchQueue() {
+				const activePromises = new Set();
+				let queueIndex = 0;
+
+				// 并发处理游戏，保持最多2个并发
+				while (queueIndex < batchGames.length && !batchCancelled) {
+					// 填充并发槽位，最多同时处理batchConcurrency个游戏
+					while (activePromises.size < batchConcurrency && queueIndex < batchGames.length && !batchCancelled) {
+						const gameIndex = queueIndex++;
+						const promise = processBatchGame(gameIndex)
+							.then(result => {
+								activePromises.delete(promise);
+								batchCurrentIndex++;
+								updateBatchProgress();
+								return result;
+							})
+							.catch(error => {
+								activePromises.delete(promise);
+								batchCurrentIndex++;
+								updateBatchProgress();
+								console.error('Error processing game:', error);
+								return { success: false, error };
+							});
+						
+						activePromises.add(promise);
+					}
+
+					// 等待至少一个任务完成
+					if (activePromises.size > 0) {
+						await Promise.race(activePromises);
+					}
+				}
+
+				// 等待所有剩余任务完成
+				if (activePromises.size > 0) {
+					await Promise.allSettled(activePromises);
+				}
+			}
+
+			// Process a single game in the batch
+			async function processBatchGame(index) {
+				try {
+					const game = batchGames[index];
+					const gameName = game.name;
+					const baseName = gameName.substring(0, gameName.lastIndexOf('.'));
+					
+					// Find the game card for this game
+					const gameCard = document.querySelector(`#gamesGrid .game-card[data-game-name="${gameName}"]`);
+					if (gameCard) {
+						// Add loading overlay to the game card
+						const imgContainer = gameCard.querySelector('.image-container');
+						if (imgContainer && !imgContainer.querySelector('.batch-loading-overlay')) {
+							const loadingOverlay = document.createElement('div');
+							loadingOverlay.className = 'batch-loading-overlay';
+							loadingOverlay.innerHTML = `
+								<div class="batch-spinner"></div>
+								<div class="batch-loading-text">处理中...</div>
+							`;
+							imgContainer.appendChild(loadingOverlay);
+						}
+					}
+					
+					// Update current game display
+					document.getElementById('batchCurrentGame').textContent = `Processing: ${baseName}`;
+					
+					// Add to log
+					addToBatchLog(`<div style="color: rgba(255,255,255,0.7); margin-bottom: 0.25em;">Processing: ${baseName}</div>`);
+					
+					// Calculate CRC32
+					const crc32 = await calculateGameCRC(gameName, currentConsole, false);
+					if (!crc32) {
+						throw new Error('Could not calculate CRC32');
+					}
+					
+					const crcHex = crc32.toString(16).toUpperCase();
+					addToBatchLog(`<div style="color: rgba(255,255,255,0.5); margin-bottom: 0.25em; margin-left: 1em;">CRC32: ${crcHex}</div>`);
+					
+					// Lookup in database
+					const gameInfo = rdbData[crcHex];
+					if (!gameInfo) {
+						throw new Error(`No entry found for CRC32: ${crcHex}`);
+					}
+					
+					addToBatchLog(`<div style="color: rgba(255,255,255,0.5); margin-bottom: 0.25em; margin-left: 1em;">Found: ${gameInfo.name}</div>`);
+					
+					// Construct Libretro URL
+					const system = encodeURIComponent(gameInfo.system);
+					const name = encodeURIComponent(gameInfo.name);
+					const imageUrl = `https://thumbnails.libretro.com/${system}/Named_Boxarts/${name}.png`;
+					const boxartUrl = `https://thumbnails.libretro.com/${system}/Boxarts/${name}.png`;
+					
+					// Try to download image
+					let imageDownloaded = false;
+					
+					// Try main URL first
+					try {
+						addToBatchLog(`<div style="color: rgba(96,165,250,0.7); margin-bottom: 0.25em; margin-left: 1em;">Trying main URL...</div>`);
+						await downloadImageForBatch(imageUrl, gameName, baseName);
+						imageDownloaded = true;
+					} catch (e) {
+						addToBatchLog(`<div style="color: rgba(245,158,11,0.7); margin-bottom: 0.25em; margin-left: 1em;">Main URL failed: ${e.message.substring(0, 50)}...</div>`);
+						
+						// Try boxart URL as fallback
+						try {
+							addToBatchLog(`<div style="color: rgba(96,165,250,0.7); margin-bottom: 0.25em; margin-left: 1em;">Trying boxart URL...</div>`);
+							await downloadImageForBatch(boxartUrl, gameName, baseName);
+							imageDownloaded = true;
+						} catch (e2) {
+							addToBatchLog(`<div style="color: rgba(245,158,11,0.7); margin-bottom: 0.25em; margin-left: 1em;">Boxart URL failed: ${e2.message.substring(0, 50)}...</div>`);
+							
+							// Try unencoded URLs
+							try {
+								addToBatchLog(`<div style="color: rgba(96,165,250,0.7); margin-bottom: 0.25em; margin-left: 1em;">Trying unencoded URL...</div>`);
+								const unencodedImageUrl = `https://thumbnails.libretro.com/${gameInfo.system}/Named_Boxarts/${gameInfo.name}.png`;
+								await downloadImageForBatch(unencodedImageUrl, gameName, baseName);
+								imageDownloaded = true;
+							} catch (e3) {
+								addToBatchLog(`<div style="color: rgba(245,158,11,0.7); margin-bottom: 0.25em; margin-left: 1em;">Unencoded URL failed</div>`);
+							}
+						}
+					}
+					
+					if (imageDownloaded) {
+						batchSuccessCount++;
+						addToBatchLog(`<div style="color: #4ade80; margin-bottom: 0.25em; margin-left: 1em;">✓ Success!</div>`);
+						
+						// Update game object
+						game.hasImage = true;
+						game.imageExt = '.png';
+						
+						// Remove loading overlay
+						if (gameCard) {
+							const imgContainer = gameCard.querySelector('.image-container');
+							const loadingOverlay = imgContainer?.querySelector('.batch-loading-overlay');
+							if (loadingOverlay) {
+								loadingOverlay.remove();
+							}
+						}
+						
+						// Refresh the game image in the UI
+						if (gameCard) {
+							setTimeout(() => {
+								refreshGameCard(gameCard, gameName, game);
+							}, 500);
+						}
+						
+						return { success: true, game };
+					} else {
+						throw new Error('All URL attempts failed');
+					}
+				} catch (e) {
+					batchFailCount++;
+					addToBatchLog(`<div style="color: #f87171; margin-bottom: 0.25em; margin-left: 1em;">✗ Failed: ${e.message}</div>`);
+					
+					// Remove loading overlay on error
+					if (gameCard) {
+						const imgContainer = gameCard.querySelector('.image-container');
+						const loadingOverlay = imgContainer?.querySelector('.batch-loading-overlay');
+						if (loadingOverlay) {
+							loadingOverlay.remove();
+						}
+					}
+					
+					return { success: false, error: e.message };
+				}
+			}
+
+			// Refresh a game card after image download
+			function refreshGameCard(gameCard, gameName, game) {
+				const imgContainer = gameCard.querySelector('.image-container');
+				
+				// Get the correct image path based on device profile
+				const profile = deviceProfiles[currentDevice];
+				let imagePath;
+				
+				if (profile.catalogueStructure) {
+					// Trimui Brick / MustardOS
+					const baseName = gameName.substring(0, gameName.lastIndexOf('.'));
+					imagePath = `images/${currentConsole}/${baseName}.png?${Date.now()}`;
+				} else if (profile.isMinUI) {
+					// MinUI
+					imagePath = `images/${currentConsole}/${gameName}.png?${Date.now()}`;
+				} else if (profile.isNextUI) {
+					// NextUI
+					const baseName = gameName.substring(0, gameName.lastIndexOf('.'));
+					imagePath = `images/${currentConsole}/${baseName}.png?${Date.now()}`;
+				} else if (profile.emoji === '🧅') {
+					// Onion OS
+					const baseName = gameName.substring(0, gameName.lastIndexOf('.'));
+					imagePath = `images/${currentConsole}/${baseName}.png?${Date.now()}`;
+				} else {
+					// Generic
+					const baseName = gameName.substring(0, gameName.lastIndexOf('.'));
+					imagePath = `images/${currentConsole}/${baseName}.png?${Date.now()}`;
+				}
+				
+				// Create new image element
+				const img = document.createElement('img');
+				img.onload = function() {
+					imgContainer.innerHTML = '';
+					imgContainer.appendChild(img);
+				};
+				img.onerror = function() {
+					// If image fails to load, show missing image
+					imgContainer.innerHTML = `<div class="no-image"><span class="icon solid fa-image"></span></div>`;
+				};
+				img.src = imagePath;
+			}
+
+			// Download and save image for batch processing
+			async function downloadImageForBatch(url, gameName, baseName) {
+				// Try multiple download methods, similar to the main downloadLibretroImage function
+				let blob = null;
+				
+				// Method 1: Direct fetch
+				try {
+					console.log('Batch download: Trying direct fetch method');
+					const response = await fetch(url, {
+						referrerPolicy: 'no-referrer',
+						headers: { 
+							'Accept': 'image/*',
+							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+						},
+						cache: 'no-cache'
+					});
+					
+					if (response.ok) {
+						blob = await response.blob();
+						if (blob.size === 0) {
+							throw new Error('Empty image received');
+						}
+						console.log('Batch download: Direct fetch succeeded');
+					}
+				} catch (e) {
+					console.log('Batch download: Direct fetch failed, trying CORS proxy methods');
+				}
+				
+				// Method 2: CORS proxy with codetabs
+				if (!blob || blob.size === 0) {
+					try {
+						console.log('Batch download: Trying CORS proxy (method 1)');
+						const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
+						const response = await fetch(proxyUrl, {
+							method: 'GET',
+							cache: 'no-cache'
+						});
+						if (response.ok) {
+							blob = await response.blob();
+							if (blob.size === 0) {
+								throw new Error('Empty proxy image');
+							}
+							console.log('Batch download: CORS proxy (method 1) succeeded');
+						}
+					} catch (e) {
+						console.log('Batch download: CORS proxy (method 1) failed');
+					}
+				}
+				
+				// Method 3: Alternative CORS proxy
+				if (!blob || blob.size === 0) {
+					try {
+						console.log('Batch download: Trying CORS proxy (method 2)');
+						const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+						const response = await fetch(proxyUrl, { 
+							method: 'GET',
+							cache: 'no-cache',
+							headers: { 
+								'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+							}
+						});
+						if (response.ok) {
+							const arrayBuffer = await response.arrayBuffer();
+							if (arrayBuffer.byteLength > 0) {
+								blob = new Blob([arrayBuffer], {type: 'image/png'});
+								console.log('Batch download: CORS proxy (method 2) succeeded');
+							}
+						}
+					} catch (e) {
+						console.log('Batch download: Alternative CORS proxy failed');
+					}
+				}
+				
+				// Method 4: corsproxy.io proxy
+				if (!blob || blob.size === 0) {
+					try {
+						console.log('Batch download: Trying CORS proxy (method 3)');
+						const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+						const response = await fetch(proxyUrl);
+						if (response.ok) {
+							blob = await response.blob();
+							console.log('Batch download: CORS proxy (method 3) succeeded');
+						}
+					} catch (e) {
+						console.log('Batch download: corsproxy.io failed');
+					}
+				}
+				
+				if (!blob || blob.size === 0) {
+					throw new Error('All download methods failed');
+				}
+				
+				// Create image bitmap to verify
+				const img = await createImageBitmap(blob);
+				
+				// Get device profile and resize image
+				const profile = deviceProfiles[currentDevice];
+				const maxSize = profile.imageSize || 240;
+				
+				const imgWidth = img.width;
+				const imgHeight = img.height;
+				
+				// Calculate scale factor
+				const scale = Math.min(maxSize / imgWidth, maxSize / imgHeight);
+				const newWidth = Math.round(imgWidth * scale);
+				const newHeight = Math.round(imgHeight * scale);
+				
+				const canvas = document.createElement('canvas');
+				canvas.width = newWidth;
+				canvas.height = newHeight;
+				
+				const ctx = canvas.getContext('2d');
+				ctx.imageSmoothingEnabled = true;
+				ctx.imageSmoothingQuality = 'high';
+				ctx.drawImage(img, 0, 0, newWidth, newHeight);
+				
+				const resized = await new Promise(r => canvas.toBlob(r, 'image/png'));
+				
+				// Determine where to save the image based on device profile
+				let imageDir;
+				let imageFileName;
+				
+				if (profile.catalogueStructure) {
+					// Trimui Brick / MustardOS
+					if (consoles[currentConsole].boxHandle) {
+						imageDir = consoles[currentConsole].boxHandle;
+					} else {
+						try {
+							const muosDir = await directoryHandle.getDirectoryHandle('MUOS', { create: true });
+							const infoDir = await muosDir.getDirectoryHandle('info', { create: true });
+							const catalogueDir = await infoDir.getDirectoryHandle('catalogue', { create: true });
+							const catalogueName = consoles[currentConsole].catalogueName || currentConsole;
+							const systemDir = await catalogueDir.getDirectoryHandle(catalogueName, { create: true });
+							const boxDir = await systemDir.getDirectoryHandle('box', { create: true });
+							consoles[currentConsole].boxHandle = boxDir;
+							imageDir = boxDir;
+						} catch (e) {
+							const boxDir = await consoles[currentConsole].handle.getDirectoryHandle('box', { create: true });
+							consoles[currentConsole].boxHandle = boxDir;
+							imageDir = boxDir;
+						}
+					}
+					imageFileName = baseName + '.png';
+				} else if (profile.isMinUI) {
+					// MinUI
+					if (consoles[currentConsole].resHandle) {
+						imageDir = consoles[currentConsole].resHandle;
+					} else {
+						imageDir = await consoles[currentConsole].handle.getDirectoryHandle('.res', { create: true });
+						consoles[currentConsole].resHandle = imageDir;
+					}
+					imageFileName = gameName + '.png'; // Include ROM extension
+				} else if (profile.isNextUI) {
+					// NextUI
+					if (consoles[currentConsole].mediaHandle) {
+						imageDir = consoles[currentConsole].mediaHandle;
+					} else {
+						imageDir = await consoles[currentConsole].handle.getDirectoryHandle('.media', { create: true });
+						consoles[currentConsole].mediaHandle = imageDir;
+					}
+					imageFileName = baseName + '.png';
+				} else if (profile.emoji === '🧅') {
+					// Onion OS
+					imageDir = consoles[currentConsole].imgsHandle || consoles[currentConsole].handle;
+					if (!consoles[currentConsole].imgsHandle) {
+						imageDir = await consoles[currentConsole].handle.getDirectoryHandle('Imgs', { create: true });
+						consoles[currentConsole].imgsHandle = imageDir;
+					}
+					imageFileName = baseName + '.png';
+				} else {
+					// Generic
+					imageDir = consoles[currentConsole].handle;
+					imageFileName = baseName + '.png';
+				}
+				
+				// Save the image
+				const fh = await imageDir.getFileHandle(imageFileName, { create: true });
+				const w = await fh.createWritable();
+				await w.write(resized);
+				await w.close();
+			}
+
+			// Update batch progress display
+			function updateBatchProgress() {
+				const progress = ((batchSuccessCount + batchFailCount) / batchTotalCount) * 100;
+				document.getElementById('batchProgressBar').style.width = `${progress}%`;
+				document.getElementById('batchProgressText').textContent = `${batchSuccessCount + batchFailCount}/${batchTotalCount}`;
+				document.getElementById('batchSuccessCount').textContent = batchSuccessCount;
+				document.getElementById('batchFailCount').textContent = batchFailCount;
+			}
+
+			// Add message to batch log
+			function addToBatchLog(message) {
+				const logElement = document.getElementById('batchLog');
+				logElement.innerHTML += message;
+				logElement.scrollTop = logElement.scrollHeight;
+			}
+
+			// Cancel batch processing
+			function cancelBatchProcessing() {
+				if (!batchProcessing) {
+					// If not processing, just close the modal
+					closeBatchModal();
+					return;
+				}
+				
+				if (confirm('Are you sure you want to cancel batch processing?')) {
+					batchCancelled = true;
+					batchProcessing = false;
+					// Update status
+					document.getElementById('batchCurrentGame').textContent = 'Batch processing cancelled!';
+					// Change Cancel button to Close button
+					document.getElementById('batchCancelBtn').style.display = 'none';
+					document.getElementById('batchCloseBtn').style.display = 'inline-flex';
+					
+					// Refresh games list to show any that were processed
+					renderGames();
+					updateStats();
+					updateGameCountBadge();
+				}
+			}
+
+			// Close batch modal and refresh UI
+			function closeBatchModal() {
+				closeModal('batchLibretroModal');
+				// Refresh games list to show any that were processed
+				renderGames();
+				updateStats();
+				updateGameCountBadge();
 			}
 
 			// PWA Install functionality
