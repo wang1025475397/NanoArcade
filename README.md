@@ -6,15 +6,15 @@ A beautiful, browser-based tool to manage your retro game collection across mult
 
 ## Try It Now
 
-**[Launch Live App](https://audioslayer.github.io/NanoArcade/)** - Use instantly in your browser, no download required
+**[Launch Live App](https://wang1025475397.github.io/NanoArcade/)** - Use instantly in your browser, no download required
 
 Or download this repository for offline use.
 
 ---
 
-## :joystick: What's New in v1.7
+## :joystick: What's New in v1.6.branch
 
-**OS-First Approach** - Instead of selecting individual devices, NanoArcade now organizes by **operating system** (MustardOS, Onion OS, DrUm78, MinUI, NextUI), with resolution tiers optimized for each OS's supported devices. This provides a more intuitive workflow matching how users actually configure their handhelds.
+it now supports batch fetching of cover art from Libretro and searching for cover art directly via **Libretro**, delivering a more intuitive workflow that aligns with how users actually configure their handhelds while streamlining cover art management.
 
 ## Supported Operating Systems & Devices
 
@@ -240,29 +240,6 @@ The app recognizes and displays icons for:
 - JavaScript enabled
 
 ## Changelog
-
-### v1.7 - OS-First Revolution
-
-:star2: **Operating System-Based Organization** - Complete restructure from device-specific selection to OS-based workflow (MustardOS, Onion OS, DrUm78, MinUI, NextUI). This matches the real-world usage pattern where users choose firmware first, then configure for their specific device.
-
-:potato: **MustardOS (muOS) Support** - Full support for MustardOS multi-device firmware with 3 resolution tiers:
-- Standard (324px) for 640×480 devices (RG28XX H, RG35XX series)
-- High-Res (380px) for 720p-1024p devices (RG34XX, RGCUBEXX, TrimUI Brick)
-- Ultra (450px) for 720p devices (TrimUI Smart Pro, RG40XX H/V)
-
-:key: **DrUm78 (FunKey-OS) Support** - Support for micro handheld custom firmware (240px) on RG Nano, FunKey S, Q36 Mini, and GBA Mini
-
-:onion: **Enhanced Onion OS** - Comprehensive device support including Miyoo Mini, Mini Plus, Flip, and Mini Flip (250px)
-
-:zap: **MinUI Enhanced Tiers** - Expanded device coverage with Standard (200px) and High-Res (300px) options
-
-:rocket: **NextUI 3-Tier System** - Enhanced NextUI support with Standard (200px), High-Res (300px), and Ultra (500px) resolution tiers optimized for screen resolutions
-
-:art: **Resolution Optimization** - Each OS tier uses box art sizes scientifically matched to device screen resolutions for optimal display quality
-
-:heart: **Supporter Recognition** - Buy Me a Coffee integration with supporter count display
-
-:see_no_evil: **Hidden File Filtering** - Automatically ignores hidden files and folders (starting with `.`) to prevent scanning ScummVM data and other system files, while preserving `.res` and `.media` folders needed by MinUI/NextUI
 
 ### v1.6
 :rocket: **MinUI Support** - Full support for MinUI operating system with `.res` folder structure and console tag parsing (e.g., "Game Boy (GB)")
