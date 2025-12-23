@@ -2,6 +2,8 @@
 
 A beautiful, browser-based tool to manage your retro game collection across multiple operating systems and devices.
 
+base: https://github.com/audioslayer/NanoArcade
+
 ![NanoArcade](assets/images/logo.png)
 
 ## Try It Now
